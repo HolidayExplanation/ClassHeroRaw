@@ -8,8 +8,9 @@
       </button>
 
       <!-- Teachers Input -->
-      <div id="inputContainer" v-if="inputsActive">
+      <div id="inputContainer" v-if="inputsActive" @click="focusInput()">
         <input v-model="teacherForPush" @keyup.enter="pushTeacher()"
+        ref="teacherInput"
         placeholder="Vorname Name (mit Enter bestätigen)">
         <ul>
           <li class="tag" v-for="(teacher, o) in teachers" :key="o">
@@ -65,6 +66,9 @@ export default {
   methods: {
     toggleInputs() {
       this.inputsActive = !this.inputsActive
+    },
+    focusInput() {
+      this.$refs.teacherInput.focus()
     },
     pushTeacher() {
       this.teachers.push(this.teacherForPush)
@@ -136,6 +140,7 @@ div#inputContainer {
   border-bottom-left-radius: 5px;
   background-color: white;
   box-shadow: 1px 2px 6px 2px rgba(0, 0, 0, 0.1);
+  cursor: text;
   ul {
     float: left;
     margin-right: 10px;
