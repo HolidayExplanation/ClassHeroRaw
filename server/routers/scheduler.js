@@ -172,4 +172,19 @@ router.post('/delete-room', (req, res, next) => {
   }
 })
 
+router.get('/get-classes', (req, res, next) => {
+  auth(req, res, next, 'scheduler')
+}, async(req, res) => {
+  const schoolID = req.scheduler.school
+
+  try {
+      const classes = await Class.find({ school: schoolID }, '_id name')
+
+      return res.send(classes)
+  } catch(err) {
+      log(err)
+      return res.send(err)
+  }
+})
+
 module.exports = router

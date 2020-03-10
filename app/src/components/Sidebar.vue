@@ -24,7 +24,7 @@ export default {
       pics: {
         admin: ['benachrichtigungen', 'klassenverwaltung', 
         'lehrerverwaltung', 'planerkonto'],
-        planer: ['benachrichtigungen', 'raumverwaltung', 'stundendauer']
+        planer: ['benachrichtigungen', 'raumverwaltung', 'stundendauer', 'vertretungen']
       }
     }
   },

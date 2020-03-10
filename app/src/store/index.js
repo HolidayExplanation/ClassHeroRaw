@@ -11,9 +11,13 @@ export default new Vuex.Store({
     updateInfo: {
       msg: null,
       type: null
-    }
+    },
+    classes: []
   },
   getters: {
+    getClasses(state) {
+      return state.classes
+    },
     getUser(state) {
       return state.user
     },
