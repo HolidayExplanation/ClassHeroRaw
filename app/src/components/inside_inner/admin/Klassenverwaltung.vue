@@ -5,19 +5,30 @@
       <section id="ClassAdder">
 
         <!-- Class Name Show/Edit -->
-        <input id="adder_className" v-model="newClass.name" placeholder="Klassenbezeichnung">
+        <div id="adder_className">
+          <input v-model="newClass.name" 
+          placeholder="Klassenbezeichnung">
+        </div>
+        
         <!-- Select Year -->
-        <select id="adder_selectYear" v-model="newClass.year">
-          <option v-for="year in years" :key="year">
-            {{ year }}
-          </option>
-        </select>
+        <div id="adder_selectYear">
+          <select v-model="newClass.year">
+            <option v-for="year in years" :key="year">
+              {{ year }}
+            </option>
+          </select>
+        </div>
         <!-- Select HalfYear -->
-        <select id="adder_selectHalfYear" v-model="newClass.halfYear">
-          <option>1. Halbjahr</option>
-          <option>2. Halbjahr</option>
-        </select>
-        <button id="addClass" @click="addClass()">Klasse hinzufügen</button>
+        <div id="adder_selectHalfYear">
+          <select  v-model="newClass.halfYear">
+            <option>1. Halbjahr</option>
+            <option>2. Halbjahr</option>
+          </select>
+        </div>
+       
+       <div id="addClass">
+         <button @click="addClass()">Klasse hinzufügen</button>
+       </div>
 
       </section>
 
@@ -53,10 +64,10 @@
           </select>
 
            <!-- Show Entire Class Data -->
-          <button class="toggleClassDetails" @click="toggleClassDetails()">Show</button>
+          <button class="toggleClassDetails" @click="toggleClassDetails(c)">Show</button>
 
           <!-- Class Details -->
-          <div class="ClassDetails">
+          <div class="ClassDetails" v-if="!classes[c].detailsShown">
 
             <div class="Subjects">
               <!-- Subject Adder -->
@@ -138,7 +149,8 @@ export default {
       newClass: {
         name: null,
         year: new Date().getFullYear(),
-        halfYear: '1. Halbjahr'
+        halfYear: '1. Halbjahr',
+        detailsShown: false
       },
       subjAdderA: false,
       classes: [],
@@ -183,6 +195,11 @@ export default {
     log(this.subjects)
   },
   methods: {
+    toggleClassDetails(i) {
+      this.classes[i].detailsShown = !this.classes[i].detailsShown
+      log(this.classes[i])
+      this.$forceUpdate()
+    },
     pushStudent() {
       this.studentsForPush.push(this.studentForPush)
 
@@ -250,7 +267,7 @@ export default {
     },
     async addClass() {
       // No newClass.name Error
-      if (this.newClass.name === null) {
+      if (this.newClass.name === null || this.newClass.name === '') {
         this.setInfo('Bitte geben Sie eine Klassenbezeichnung ein.', 'bad')
         throw new Error('No newClass.name detected')
       }
@@ -289,6 +306,30 @@ export default {
 @import '@/includes/scss/centerY';
 @import '@/includes/scss/centerXY';
 
+section#ClassAdder {
+  display: grid;
+  grid-template-columns: 1fr .5fr 1fr 1fr;
+  border-radius: 15px;
+  div#adder_className {
+    background-color: maroon;
+     input {
+      padding: 10px;
+      width: 140px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      border-radius: 3px;
+    }
+  }
+  div:nth-child(2) {background-color: rgb(5, 126, 120);}
+  div:nth-child(3) {background-color: rgb(19, 158, 77);}
+  div:nth-child(4) {background-color: rgb(138, 131, 39);}
+  div {
+    position: relative;
+    display: flex; 
+    justify-content:center;
+    align-items: center;
+  }
+}
+
 .selectedItem {
   display:table;
   width: 90%;
@@ -323,9 +364,6 @@ ul#ClassList {
   }
 }
 
-section#ClassAdder {
-  background-color: rgb(77, 77, 77);
-}
 section#Classes {
   background-color: rgb(105, 105, 105);
   ul {
