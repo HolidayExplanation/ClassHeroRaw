@@ -10,7 +10,10 @@
             </option>
           </select>
         </div>
-        <div class="Date">2</div>
+        <div class="Date">
+          <span>{{ calendarData.selectedDate }}</span>
+          <FunctionalCalendar @click="toggleCalendar()" v-if="calendarOpen" v-model="calendarData" :configs="calendarConfigs" />
+        </div>
         <div class="Hours">3</div>
         <div class="Class">
           <select>
@@ -36,21 +39,40 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import {FunctionalCalendar} from 'vue-functional-calendar';
+Vue.use(FunctionalCalendar, {
+    dayNames: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
+})
+
 import axios from 'axios'
 import config from '@/includes/js/config'
 const log = console.log
 
 export default {
-  name: '',
+  name: 'Vertretungen',
+  components: { FunctionalCalendar },
   data() {
     return {
       types: ['Vertretung', 'Entfall', 'Raumänderung', 'Info', 'Betreuung', 'Vert. ohne Lehrer'],
       loaded: [],
-      classes: []
+      classes: [],
+      calendarData: {},
+      calendarConfigs: {
+        sundayStart: false,
+        dateFormat: 'dd/mm/yyyy',
+        isDatePicker: true,
+        isDateRange: false,
+        isDark: true,
+        isAutoCloseable: true
+      },
+      calendarOpen: false
     }
   },
   methods: {
-
+    toggleCalendar() {
+      this.calendarOpen = !this.calendarOpen
+    }
   },
   async created() {
     this.classes = this.$store.getters.getClasses

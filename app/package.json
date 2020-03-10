@@ -8,11 +8,12 @@
     "start": "vue-cli-service serve"
   },
   "dependencies": {
-    "node": "12.14.0",
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
+    "node": "12.14.0",
     "register-service-worker": "^1.6.2",
     "vue": "^2.6.11",
+    "vue-functional-calendar": "^2.8.61",
     "vue-router": "^3.1.5",
     "vuex": "^3.1.2"
   },
