@@ -18,7 +18,7 @@
               <span>{{ teacher.username }}</span>
             </div>
             <div id="resetPassword" @click="sendPwReset(i)">
-              <span>Kennwort resettieren</span>
+              <img src="@/assets/icons/reset_password.svg" alt="">
             </div>
           </div>
           <div class="subjects">
@@ -333,19 +333,19 @@ ul {
     }
     div#resetPassword {
       @include insideList(20%);
-      background-color: green;
+      position: relative;
       img {
         cursor: pointer;
         @include centerY;
-        width: 30px;
-        height: 30px;
+        width: 25px;
+        height: 25px;
         right: 6px;
         padding: 5px;
         border-radius: 6px;
-        background-color: rgba(29, 187, 29, 0.75);
+        background-color: rgb(24, 149, 24);
         transition: .2s ease;
         &:hover {
-          background-color: rgba(0, 255, 0, 0.6);
+          background-color: rgba(29, 187, 29, 0.75);
         }
       }
     }
