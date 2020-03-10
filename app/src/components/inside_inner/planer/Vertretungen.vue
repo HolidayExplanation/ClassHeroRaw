@@ -1,6 +1,16 @@
 <template>
   <div>
     <ul id="Vertretungen">
+      <li class="TopperInfo">
+        <div>Art</div>
+        <div>Datum</div>
+        <div>Stunden</div>
+        <div>Klasse</div>
+        <div>Fach</div>
+        <div>Raum</div>
+        <div>Info</div>
+        <div></div>
+      </li>
       <li class="Vertretung">
 
         <div class="Type">
@@ -14,10 +24,9 @@
           <span v-if="calendarData">{{ calendarDataFixed }}</span>
           <span v-else>{{ getTodaysDate }}</span>
           <img src="@/assets/icons/calendar.svg" @click="toggleCalendar()">
-          <div @click="toggleCalendar()">
+          <div @click="toggleCalendar()" class="calendarToggler">
             <FunctionalCalendar id="_FunctionalCalendar" v-if="calendarOpen" v-model="calendarData" :configs="calendarConfigs" />
           </div>
-          
         </div>
         <div class="Hours">3</div>
         <div class="Class">
@@ -27,8 +36,7 @@
             </option>
           </select>
         </div>
-        <div class="Subject">5</div>
-        <div class="Teacher">6</div>
+        <div class="Fach">5</div>
         <div class="Room">7</div>
         <div class="Info">8</div>
         <div class="Delete">9</div>
@@ -118,6 +126,14 @@ export default {
 <style lang="scss" scoped>
 @import '@/includes/scss/centerXY';
 
+.TopperInfo {
+  display: flex; justify-content:center; align-items: center;
+  background-color: gray;
+  display: grid;
+  height: 50px;
+  grid-template-columns: 3fr 4fr 2fr 1fr 3fr 1fr 3fr 1fr;
+}
+
 ul#Vertretungen {
   @include centerXY;
   width: 85%;
@@ -127,9 +143,18 @@ ul#Vertretungen {
     display: flex; justify-content:center; align-items: center;
     background-color: rgba(0, 0, 0, 0.2);
     display: grid;
-    height: 40px;
-    grid-template-columns: 3fr 4fr 1fr 2.5fr 1fr 3fr 1fr 3fr 1fr;
+    height: 35px;
+    grid-template-columns: 3fr 4fr 2fr 1fr 3fr 1fr 3fr 1fr;
+    div {
+      display: flex; justify-content:center; align-items: center;
+      height: 100%;
+      border: 1px solid black;
+    }
   }
+}
+
+.calendarToggler {
+  border: none !important;
 }
 
 #_FunctionalCalendar {
