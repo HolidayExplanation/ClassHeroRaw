@@ -11,8 +11,12 @@
           </select>
         </div>
         <div class="Date">
-          <span>{{ calendarData.selectedDate }}</span>
-          <FunctionalCalendar @click="toggleCalendar()" v-if="calendarOpen" v-model="calendarData" :configs="calendarConfigs" />
+          <span v-if="calendarData">{{ calendarData.selectedDate }}</span>
+          <span v-else>{{ getTodaysDate }}</span>
+          <div @click="toggleCalendar()">
+            <FunctionalCalendar  v-if="calendarOpen" v-model="calendarData" :configs="calendarConfigs" />
+          </div>
+          
         </div>
         <div class="Hours">3</div>
         <div class="Class">
@@ -57,16 +61,25 @@ export default {
       types: ['Vertretung', 'Entfall', 'Raumänderung', 'Info', 'Betreuung', 'Vert. ohne Lehrer'],
       loaded: [],
       classes: [],
-      calendarData: {},
+      calendarData: null,
       calendarConfigs: {
         sundayStart: false,
-        dateFormat: 'dd/mm/yyyy',
+        dateFormat: 'dd.mm',
         isDatePicker: true,
         isDateRange: false,
         isDark: true,
         isAutoCloseable: true
       },
-      calendarOpen: false
+      calendarOpen: true
+    }
+  },
+  computed: {
+    getTodaysDate() {
+      const date = new Date()
+
+      const todaysDate = (('0' + (date.getDay()+1)).slice(-2) + '.' + ('0' + (date.getMonth()+1)).slice(-2))
+
+      return todaysDate
     }
   },
   methods: {
