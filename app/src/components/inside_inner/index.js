@@ -1,0 +1,5 @@
+export { default as Lehrerverwaltung } from './admin/Lehrerverwaltung.vue'
+export { default as Klassenverwaltung } from './admin/Klassenverwaltung.vue'
+export { default as Planerkonto } from './admin/Planerkonto.vue'
+export { default as Raumverwaltung } from './planer/Raumverwaltung.vue'
+export { default as Stundendauer } from './planer/Stundendauer.vue'
