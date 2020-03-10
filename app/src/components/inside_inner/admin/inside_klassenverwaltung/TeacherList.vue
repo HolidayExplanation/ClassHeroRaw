@@ -1,14 +1,9 @@
 <template>
   <div id="main">
     <div id="Center">
-      <!-- <span id="title">Lehrerliste</span> -->
-      <ul v-if="teachers === null">
-        <li v-for="index in 5" :key="index">
-          <div class="teacher"></div>
-          <div class="subjects"></div>
-        </li>
-      </ul>
-      <ul v-else id="teacherList">
+
+      <!-- Teacher List -->
+      <ul id="teacherList">
         <li v-for="(teacher, i) in teachers" :key="i">
           <div class="teacher">
             <div id="name">
@@ -18,16 +13,22 @@
               <span>{{ teacher.username }}</span>
             </div>
             <div id="resetPassword" @click="sendPwReset(i)">
-              <img src="@/assets/icons/reset_password.svg" alt="">
+              <img src="@/assets/icons/reset_password.svg"
+              :class="{passwordResetSent: passwordResetSent[i]}">
             </div>
           </div>
+          <!-- Subjects -->
           <div class="subjects">
             <div class="subjectsContainer">
+              <!-- Subject Adder -->
               <div class="subjectPusher">
                 <span>Fächer</span>
                 <input v-model="subjectName[i]" placeholder="Fachname">
-                <button @click="createSubject(i)">+</button>
+                <button id="createSubject" @click="createSubject(i)">
+                  <img src="@/assets/icons/add.svg">
+                </button>
               </div>
+              <!-- Subject List -->
               <ul class="subjectsFolder">
                 <li class="subjectItem" v-for="(subject, y) in teacher.subjects" :key="y">
                   <div class="subjectItemLayoutSplit">
@@ -38,10 +39,12 @@
                   </div>
                 </li>
               </ul>
+
             </div>
           </div>
         </li>
       </ul>
+
     </div>
   </div>
 </template>
@@ -55,7 +58,7 @@ const log = console.log
 
 export default {
   name: 'TeacherList',
-  components: { },
+  components: {},
   data() {
     return {
       teachers: null,
@@ -71,12 +74,9 @@ export default {
       }
     })
   },
-  computed: {},
   methods: {
     sendPwReset(index) {
-      log(index)
       this.passwordResetSent[index] = true
-      log(this.passwordResetSent)
       this.$forceUpdate()
     },
     sortTeachersByLastName() {
@@ -95,7 +95,6 @@ export default {
     async createSubject(index) {
       if (this.subjectName[index] != '') {
         try {
-          log(this.teachers[index])
           let response = await axios.post(`${config.domain}/create-subject`, {
             name: this.subjectName[index],
             teacherID: this.teachers[index]._id,
@@ -159,6 +158,17 @@ export default {
 @import '@/includes/scss/centerXY';
 @import '@/includes/scss/centerX';
 @import '@/includes/scss/centerY';
+
+button#createSubject {
+  background-color: limegreen;
+  padding: 4px 10px 4px 10px;
+  border-radius: 3px;
+  box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.1);
+  img {
+    height: 12px;
+    width: 12px;
+  }
+}
 
 $teacherHeight: 40px;
 $subjectHeight: 35px;

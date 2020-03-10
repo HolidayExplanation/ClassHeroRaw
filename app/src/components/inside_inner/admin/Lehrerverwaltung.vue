@@ -20,7 +20,6 @@ export default {
   methods: {
     checkTeacherCount() {
       this.teachers = this.$store.getters.hasTeacherAccounts
-      console.log(this.teachers)
     }
   },
   created() {

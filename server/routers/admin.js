@@ -9,7 +9,6 @@ const Student = require('../models/users/student')
 const Subject = require('../models/subject')
 const Class = require('../models/class')
 const scheduleTimes = require('../models/schedule/scheduleTimes')
-const log = console.log
 
 router.post('/create-class', (req, res, next) => {
     auth(req, res, next, 'admin')
@@ -26,13 +25,12 @@ router.post('/create-class', (req, res, next) => {
 
         return res.send(_class._id)
     } catch(err) {
-        log(err)
         return res.send(err)
     }
 })
 
 router.post('/assign-class-teacher', (req, res, next) => {
-  auth(req, res, next, 'admin', req.body.authToken)
+  auth(req, res, next, 'admin')
 }, async(req, res) => {
   const classID = req.body.classID
   const teacherID = req.body.teacherID
@@ -50,10 +48,9 @@ router.post('/assign-class-teacher', (req, res, next) => {
 })
 
 router.post('/create-school', (req, res, next) => {
-  auth(req, res, next, 'admin', req.body.authToken)
+  auth(req, res, next, 'admin')
 }, async (req, res) => {
   const schoolData = req.body.data.school
-  log(req.body)
   
   const school = new School({
       ...schoolData,
@@ -78,11 +75,8 @@ router.post('/create-school', (req, res, next) => {
       const schedule_times = new scheduleTimes({ schoolID: savedSchool._id })
       const savedTimes = await schedule_times.save()
 
-      log(savedTimes)
-
       res.send({savedScheduler})
   } catch(err) {
-      log(err)
       res.status(400).send(err)
   }
 })
@@ -90,13 +84,11 @@ router.post('/create-school', (req, res, next) => {
 router.post('/create-student-accounts', (req, res, next) => {
   auth(req, res, next, 'admin')
 }, async (req, res) => {
-  log(req.body)
   const classID = req.body.classID
   const students = req.body.students
 
   try {
       const schoolID = req.admin.schoolID
-      log(students)
 
       let student = {
         name: null,
@@ -113,13 +105,11 @@ router.post('/create-student-accounts', (req, res, next) => {
         // Generate Username
         await Admin.generateUsername(student.name).then(async (generatedUsername) => {
             student.username = generatedUsername
-            log("single student", student)
             const newStudent = new Student(student)
             await newStudent.save() 
         }) 
       }))
   } catch(err) {
-      log(err)
       res.status(500).send(err)
   }
 
@@ -148,8 +138,6 @@ router.post('/create-subject', (req, res, next) => {
               created: subject.created
           })
           const saved_student_data = await student_data.save()
-
-          console.log(saved_student_data)
       }))
 
       res.status(201).send(subject)
@@ -159,10 +147,9 @@ router.post('/create-subject', (req, res, next) => {
 })
 
 router.post('/create-teacher-accounts', (req, res, next) => {
-  auth(req, res, next, 'admin', req.body.authToken)
+  auth(req, res, next, 'admin')
 }, async (req, res) => {
   let teachers = req.body.teachers
-  log(teachers)
 
   if (teachers  === []) {
       throw new Error()
@@ -178,10 +165,8 @@ router.post('/create-teacher-accounts', (req, res, next) => {
 
       let savedTeachers = []
       await Promise.all(teachers.map(async (singleTeacher) => {
-        // log(singleTeacher)
           teacher.name = singleTeacher
           teacher.school = schoolID
-          // log(teacher)
           // Generate Username
           await Admin.generateUsername(teacher.name).then(async (generatedUsername) => {
             teacher.username = generatedUsername
@@ -195,7 +180,6 @@ router.post('/create-teacher-accounts', (req, res, next) => {
 
                   savedTeachers.push(savedTeacher)
               } catch(err) {
-                  log(err)
                   return res.status(400).send(err)
               }
           })      
@@ -203,7 +187,6 @@ router.post('/create-teacher-accounts', (req, res, next) => {
       // return only username
       return res.status(201).send(savedTeachers)
   } catch(err) {
-      log(err)
       return res.status(500).send({ msg: err })
   }
 })
@@ -219,26 +202,21 @@ router.get('/fetch-teacher-accounts', (req, res, next) => {
 })
 
 router.post('/fetch-admin-data', (req, res, next) => {
-  log("body: " + req.body.authToken)
-  auth(req, res, next, 'admin', req.body.authToken)
+  auth(req, res, next, 'admin')
 }, async(req, res) => {
   res.send(req.admin)
 })
 
 router.post('/delete-subject', (req, res, next) => {
-  auth(req, res, next, 'admin', req.body.authToken)   
+  auth(req, res, next, 'admin')   
 }, async(req, res) => {
   const _id = req.body._id
 
-  log("subject id: " + _id)
-
   try {
       const deleted = await Subject.deleteOne({ _id })
-      log(deleted)
   
       res.send(deleted)
   } catch(err) {
-      log(err)
       res.send(err)
   }   
 
@@ -265,11 +243,8 @@ router.post('/fetch-teacher-manager-subjects', (req, res, next) => {
 router.patch('/assign-subject-to-class', (req, res, next) => {
   auth(req, res, next, 'admin')
 }, async(req, res) => {
-  log(req.body)
   const classID = req.body.classID
   const subject = req.body.subject
-
-  log(subject, classID)
 
   try {
     await Class.updateOne(
@@ -281,7 +256,6 @@ router.patch('/assign-subject-to-class', (req, res, next) => {
 
     return res.send()
   } catch(err) {
-    log("error", err)
     return res.send(err)
   }
 })

@@ -1,10 +1,8 @@
 const express = require('express')
 const router = new express.Router()
 const Admin = require('../../models/users/admin')
-const log = console.log
 
 router.post('/recover-account', async (req, res) => {
-    log(req.body)
     try {
         const admin = await Admin.findByRecoveryKey(req.body.username, req.body.recoveryKey)
        

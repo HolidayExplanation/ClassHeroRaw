@@ -2,7 +2,7 @@ const express = require('express')
 const router = new express.Router()
 const auth = require('../../middleware/auth')
 
-//logout all (receive accountType from front-end)
+// Logout all (receive accountType from front-end)
 router.post('/logout-all', (req, res, next) => {
     const accountType = req.body.accountType
     auth(req, res, next, accountType)

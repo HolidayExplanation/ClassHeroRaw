@@ -25,7 +25,6 @@ export default {
   },
   created() {
     this.user = func.getUser()
-    log(this.user)
   }
 }
 </script>

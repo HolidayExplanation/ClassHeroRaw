@@ -6,7 +6,6 @@ const School = require('../../models/school')
 const ScheduleTimes = require('../../models/schedule/scheduleTimes')
 const RoomList = require('../../models/roomList')
 const generate = require('../../generator')
-const log = console.log
 
 router.post('/create-admin', async (req, res) => {
     const creatorKey = req.body.creatorKey
@@ -18,16 +17,14 @@ router.post('/create-admin', async (req, res) => {
     }
 
     try {
-        log("creator code", process.env.CREATOR_CODE)
         if (!(creatorKey === process.env.CREATOR_CODE)) throw new Error()
-        log("hello")
          // Create Admin Account
         const generatedUsername = await Admin.generateAdminUsername('admin', adminObject.schoolName, adminObject.city)
-        log("1")
         adminObject.username = generatedUsername
+
         admin = new Admin(adminObject)
-        const savedAdminAccount = await admin.save() 
-        log("2")
+        await admin.save()
+
          // Create School
         const school = new School({
             name: req.body.adminObject.schoolName,
@@ -35,10 +32,8 @@ router.post('/create-admin', async (req, res) => {
             owner: admin._id
         })
         const savedSchool = await school.save()
-        log("3")
         admin.schoolID = savedSchool._id
         await admin.save() // assign School to Admin
-        log("4")
 
         // Create Scheduler Account 
         let generatedSchedulerUsername = await Admin.generateAdminUsername('planer', adminObject.schoolName, adminObject.city)
@@ -50,7 +45,7 @@ router.post('/create-admin', async (req, res) => {
         }
 
         const scheduler = new Scheduler(schedulerObject)
-        let savedSchedulerAccount = await scheduler.save()
+        await scheduler.save()
 
         // Create Schedule Times
         const scheduleTimes = new ScheduleTimes({ schoolID: savedSchool._id })
@@ -67,7 +62,6 @@ router.post('/create-admin', async (req, res) => {
             roomList: savedRoomList
         })
     } catch(err) {
-        log(err)
         return res.status(500).send(err)
     }
 })

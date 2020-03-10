@@ -67,8 +67,6 @@ export default new Vuex.Store({
       })
     },
     setUpdateInfoMsg(state, payload) {
-      // console.log(payload)
-
       state.updateInfo.msg = payload.msg
       state.updateInfo.type = payload.type
     }
@@ -77,4 +75,5 @@ export default new Vuex.Store({
   },
   modules: {
   }
+  
 })

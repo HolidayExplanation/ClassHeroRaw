@@ -1,31 +1,36 @@
 <template>
   <div>
     <div id="Center">
-      <button id="toggleMenu" @click="toggleInputs()">
-      Lehrer hinzufügen
-    </button>
-    <div id="inputContainer" v-if="inputsActive">
-      <input v-model="teacherForPush" @keyup.enter="pushTeacher()"
-      placeholder="Vorname Name (mit Enter bestätigen)">
-      <ul>
-        <li class="tag" v-for="(teacher, o) in teachers" :key="o">
-          <span>{{ teacher }}</span>
-          <button @click="removeTeacherFromPush(o)">
-            <span>&#10005;</span>
-          </button>
-        </li>
-      </ul>
-    </div>
 
-    <button id="downButton" @click="pushToDB()" v-if="teachersNotEmpty && inputsActive">
-      <div v-if="!pushPending">
-        <span v-if="!multipleAccountsForPush">Konto anlegen</span>
-        <span v-else>Konten anlegen</span>
+      <!-- Toggle Teachers Input -->
+      <button id="toggleMenu" @click="toggleInputs()">
+        Lehrer hinzufügen
+      </button>
+
+      <!-- Teachers Input -->
+      <div id="inputContainer" v-if="inputsActive">
+        <input v-model="teacherForPush" @keyup.enter="pushTeacher()"
+        placeholder="Vorname Name (mit Enter bestätigen)">
+        <ul>
+          <li class="tag" v-for="(teacher, o) in teachers" :key="o">
+            <span>{{ teacher }}</span>
+            <button @click="removeTeacherFromPush(o)">
+              <span>&#10005;</span>
+            </button>
+          </li>
+        </ul>
       </div>
-      <LoadingIcon id="LoadingIcon" v-if="pushPending" />
-    </button>
+
+      <!-- Push Teachers To DB Button -->
+      <button id="downButton" @click="pushToDB()" v-if="teachersNotEmpty && inputsActive">
+        <div v-if="!pushPending">
+          <span v-if="!multipleAccountsForPush">Konto anlegen</span>
+          <span v-else>Konten anlegen</span>
+        </div>
+        <LoadingIcon id="LoadingIcon" v-if="pushPending" />
+      </button>
+
     </div>
-   
   </div>
 </template>
 
@@ -83,8 +88,6 @@ export default {
         const receivedTeachers = response.data
         this.$store.commit('addTeachers', receivedTeachers)
         this.inputsActive = false
-        const gotTeachers = this.$store.getters.getDBTeachers
-        log('got: ' + JSON.stringify(gotTeachers))
       }
     }
   },
@@ -212,6 +215,5 @@ div#inputContainer {
     transform: scale(1.02);
   }
 }
-
 
 </style>
