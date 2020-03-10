@@ -306,6 +306,15 @@ export default {
 @import '@/includes/scss/centerY';
 @import '@/includes/scss/centerXY';
 
+.ClassDetails {
+  width: 80%;
+  background-color: sandybrown;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5px;
+}
+
 section#ClassAdder {
   display: grid;
   grid-template-columns: 1fr .5fr 1fr 1fr;
@@ -331,9 +340,12 @@ section#ClassAdder {
 }
 
 .selectedItem {
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
   display:table;
   width: 90%;
-  height: 35px;
+  height: 30px;
   border: none;
   border-bottom: 3px solid rgba(0, 0, 0, 0.3);
   border-top-left-radius: 5px;
@@ -359,8 +371,10 @@ section#ClassAdder {
 }
 
 ul#ClassList {
+  padding: 10px;
+  background-color: black;
   li.Class {
-    background-color: black;
+    background-color: rgb(58, 58, 58);
   }
 }
 
