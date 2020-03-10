@@ -11,10 +11,11 @@
           </select>
         </div>
         <div class="Date">
-          <span v-if="calendarData">{{ calendarData.selectedDate }}</span>
+          <span v-if="calendarData">{{ calendarDataFixed }}</span>
           <span v-else>{{ getTodaysDate }}</span>
+          <img src="@/assets/icons/calendar.svg" @click="toggleCalendar()">
           <div @click="toggleCalendar()">
-            <FunctionalCalendar  v-if="calendarOpen" v-model="calendarData" :configs="calendarConfigs" />
+            <FunctionalCalendar id="_FunctionalCalendar" v-if="calendarOpen" v-model="calendarData" :configs="calendarConfigs" />
           </div>
           
         </div>
@@ -45,9 +46,7 @@
 <script>
 import Vue from 'vue'
 import {FunctionalCalendar} from 'vue-functional-calendar';
-Vue.use(FunctionalCalendar, {
-    dayNames: ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
-})
+Vue.use(FunctionalCalendar)
 
 import axios from 'axios'
 import config from '@/includes/js/config'
@@ -64,22 +63,35 @@ export default {
       calendarData: null,
       calendarConfigs: {
         sundayStart: false,
-        dateFormat: 'dd.mm',
+        dateFormat: 'mm-dd-yyyy',
         isDatePicker: true,
-        isDateRange: false,
-        isDark: true,
-        isAutoCloseable: true
+        isDateRange: false
       },
-      calendarOpen: true
+      calendarOpen: false,
+      weekdays: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa']
     }
   },
   computed: {
+    calendarDataFixed() {
+      const calendarDate = this.calendarData.selectedDate
+
+      const day = new Date(calendarDate).getDay(); 
+
+      const weekday = this.weekdays[day]
+
+      const dateArr = calendarDate.split('-')
+      const formattedDay = `${dateArr[1]}.${dateArr[0]}`
+
+
+      return `${formattedDay} (${weekday})`
+    },
     getTodaysDate() {
       const date = new Date()
+      const day = date.getDay()+1
+      const month = date.getMonth()+1 
+      const weekday = this.weekdays[date.getDay()]
 
-      const todaysDate = (('0' + (date.getDay()+1)).slice(-2) + '.' + ('0' + (date.getMonth()+1)).slice(-2))
-
-      return todaysDate
+      return `${day}.${month} (${weekday})`
     }
   },
   methods: {
@@ -112,8 +124,21 @@ ul#Vertretungen {
   height: 80%;
   background-color: gray;
   li.Vertretung {
+    display: flex; justify-content:center; align-items: center;
+    background-color: rgba(0, 0, 0, 0.2);
     display: grid;
-    grid-template-columns: 3fr 2.5fr 1fr 2.5fr 1fr 3fr 1fr 3fr 1fr;
+    height: 40px;
+    grid-template-columns: 3fr 4fr 1fr 2.5fr 1fr 3fr 1fr 3fr 1fr;
+  }
+}
+
+#_FunctionalCalendar {
+  position: absolute;
+}
+
+.Date {
+  img {
+    height: 30px;
   }
 }
 
