@@ -106,7 +106,7 @@ router.post('/create-student-accounts', (req, res, next) => {
         await Admin.generateUsername(student.name).then(async (generatedUsername) => {
             student.username = generatedUsername
             const newStudent = new Student(student)
-            await newStudent.save() 
+            await newStudent.save()
         }) 
       }))
   } catch(err) {

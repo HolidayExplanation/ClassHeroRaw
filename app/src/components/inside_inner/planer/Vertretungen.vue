@@ -61,7 +61,14 @@
             </option>
           </select>
         </div>
-        <div class="Room">7</div>
+        <div class="Room">
+          <select>
+            <option>-</option>
+            <option v-for="(room, i) in rooms" :key="i">
+              {{ `${room.name} (${room.type})` }}
+            </option>
+          </select>
+        </div>
         <div class="Info">
           <input placeholder="Info Text...">
         </div>
@@ -106,7 +113,8 @@ export default {
       },
       calendarOpen: false,
       weekdays: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
-      teachers: []
+      teachers: [],
+      rooms: []
     }
   },
   computed: {
@@ -129,7 +137,7 @@ export default {
 
       const dayOfMonth = date.getDate()
       const month = date.getMonth()+1 
-      
+
       const weekday = this.weekdays[date.getDay()]
       
       log(dayOfMonth)
@@ -162,6 +170,12 @@ export default {
       this.teachers.sort(function(a, b) {
         return (a.lastName > b.lastName) ? 1 : ((b.lastName > a.lastName) ? -1 : 0)
       })
+    },
+    async fetchRooms() {
+      const res = await axios.get(`${config.domain}/get-rooms`)
+
+      this.rooms = res.data
+      log(this.rooms)
     }
   },
   async created() {
@@ -173,6 +187,7 @@ export default {
     }
 
     this.fetchTeacherAccounts()
+    this.fetchRooms()
   }
 }
 </script>
