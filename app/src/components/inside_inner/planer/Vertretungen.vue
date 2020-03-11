@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div id="blurVertretungen" v-if="!dayIsClicked"></div>
     <ul id="Vertretungen">
       <li class="TopperInfo">
         <div>Art</div>
@@ -79,7 +80,7 @@
       </li>
     </ul>
 
-    <div id="CalendarContainer" v-if="!dayIsClicked">
+    <div v-if="!dayIsClicked">
       <FunctionalCalendar id="_FunctionalCalendar" 
       v-model="calendarData" 
       :configs="calendarConfigs" />
@@ -143,7 +144,7 @@ export default {
     }
   },
   methods: {
-     calendarDataFixed(selectedDate) {
+    calendarDataFixed(selectedDate) {
       const calendarDate = selectedDate
 
       const day = new Date(calendarDate).getDay(); 
@@ -155,6 +156,17 @@ export default {
 
 
       return `${formattedDay} (${weekday})`
+    },
+    toggleCalendar(vertretungIndex) {
+      this.vertretungIndex = vertretungIndex
+      this.dayIsClicked = false
+      this.$store.commit('setDayClicked', false)
+    },
+    sortTeachersByLastName() {
+      // Sort teacher array by first name
+      this.teachers.sort(function(a, b) {
+        return (a.lastName > b.lastName) ? 1 : ((b.lastName > a.lastName) ? -1 : 0)
+      })
     },
     addVertretung() {
       this.vertretungen.unshift({
@@ -168,10 +180,13 @@ export default {
         info: null
       })
     },
-    toggleCalendar(vertretungIndex) {
-      this.vertretungIndex = vertretungIndex
-      this.dayIsClicked = false
-      this.$store.commit('setDayClicked', false)
+    async fetchClasses() {
+      this.classes = this.$store.getters.getClasses
+
+      if (this.classes.length === 0) {
+        const classes = await axios.get(`${config.domain}/get-classes`)
+        this.classes = classes.data
+      }
     },
     async fetchTeacherAccounts() {
       const teachers = this.$store.getters.getDBTeachers
@@ -185,12 +200,6 @@ export default {
     
         this.sortTeachersByLastName()
       }
-    },
-    sortTeachersByLastName() {
-      // Sort teacher array by first name
-      this.teachers.sort(function(a, b) {
-        return (a.lastName > b.lastName) ? 1 : ((b.lastName > a.lastName) ? -1 : 0)
-      })
     },
     async fetchRooms() {
       const res = await axios.get(`${config.domain}/get-rooms`)
@@ -206,13 +215,7 @@ export default {
       }
     })
 
-    this.classes = this.$store.getters.getClasses
-
-    if (this.classes.length === 0) {
-      const classes = await axios.get(`${config.domain}/get-classes`)
-      this.classes = classes.data
-    }
-
+    this.fetchClasses()
     this.fetchTeacherAccounts()
     this.fetchRooms()
   }
@@ -222,8 +225,17 @@ export default {
 <style lang="scss" scoped>
 @import '@/includes/scss/centerXY';
 
-#CalendarContainer {
-  position: relative;
+#blurVertretungen {
+  z-index: 10;
+  @include centerXY;
+  width: 85%;
+  height: 80%;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+#_FunctionalCalendar {
+  z-index: 20;
+  @include centerXY;
 }
 
 .TopperInfo {
