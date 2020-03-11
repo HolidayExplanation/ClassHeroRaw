@@ -46,19 +46,23 @@
         </div>
         <div class="Class">
           <select v-model="vertretung.class">
+            <option>-</option>
             <option v-for="(_class, i) in classes" :key="i">
               {{ _class.name }}
             </option>
           </select>
         </div>
         <div class="Subject">
+          <div class="blurOption" v-if="showOption(v, 'Teacher')"></div>
           <select class="withoutSubj">
+            <option>-</option>
             <option v-for="(teacher, i) in teachers" :key="i">
               {{ teacher.name }}
             </option>
           </select>
         </div>
         <div class="Room">
+          <div class="blurOption" v-if="showOption(v, 'Room')"></div>
           <select v-model="vertretung.room">
             <option>-</option>
             <option v-for="(room, i) in rooms" :key="i">
@@ -67,6 +71,7 @@
           </select>
         </div>
         <div class="Info">
+          <div class="blurOption" v-if="showOption(v, 'Info')"></div>
           <input placeholder="Info Text...">
         </div>
         <div class="Delete">
@@ -144,6 +149,38 @@ export default {
     }
   },
   methods: {
+    showOption(i, optionType) {
+      switch (this.vertretungen[i].type) {
+        case 'Entfall':
+          if (optionType === 'Teacher' || 
+              optionType === 'Room' || 
+              optionType === 'Info')
+          {
+            return true
+          }
+        case 'Raumänderung':
+          if (optionType === 'Teacher' || optionType === 'Info') {
+            this.$forceUpdate()
+            return true
+          }
+          if (optionType === 'Room') {
+            this.$forceUpdate()
+            return false
+          }
+        case 'Info':
+          if (optionType === 'Teacher' || optionType === 'Room') {
+            this.$forceUpdate()
+             return true
+          }
+        case 'Vert. ohne Lehrer':
+          if (optionType === 'Teacher') {
+            this.$forceUpdate()
+             return true
+          }
+        default:
+          return false
+      }
+    },
     calendarDataFixed(selectedDate) {
       const calendarDate = selectedDate
 
@@ -262,8 +299,16 @@ ul#Vertretungen {
     grid-template-columns: 3fr 3fr 2.5fr 1fr 3fr 3fr 2fr 1fr;
     div {
       display: flex; justify-content:center; align-items: center;
+      position: relative;
       height: 100%;
+      width: 100%;
       border: 1px solid black;
+      .blurOption {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4) !important;
+      }
     }
   }
 }
