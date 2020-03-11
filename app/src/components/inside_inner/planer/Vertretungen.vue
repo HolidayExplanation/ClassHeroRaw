@@ -62,8 +62,12 @@
           </select>
         </div>
         <div class="Room">7</div>
-        <div class="Info">8</div>
-        <div class="Delete">9</div>
+        <div class="Info">
+          <input placeholder="Info Text...">
+        </div>
+        <div class="Delete">
+          <button>del</button>
+        </div>
 
       </li>
       <!-- Add new Vertretung -->
@@ -209,6 +213,15 @@ ul#Vertretungen {
 .Date {
   img {
     height: 30px;
+  }
+}
+.Delete {
+  button {
+    background-color: red;
+    padding: 3px;
+    border: 1px solid black;
+    border-radius: 3px;
+    box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
   }
 }
 

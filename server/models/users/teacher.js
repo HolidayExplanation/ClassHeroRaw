@@ -7,6 +7,10 @@ const teacherSchema = new mongoose.Schema({
         type: Array,
         default: []
     },
+    dynamicNotAvailable: {
+        type: Array,
+        default: []
+    },
     name: {
         type: String,
         required: true,

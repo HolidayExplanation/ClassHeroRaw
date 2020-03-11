@@ -193,7 +193,7 @@ router.get('/fetch-teacher-accounts-scheduler', (req, res, next) => {
 }, async(req, res) => {
   try {
     const teachers = await Teacher.find(
-      { school: req.scheduler.school }
+      { school: req.scheduler.school }, `_id name username dynamicNotAvailable`
     )
 
     let teachersWithSubjects = []
@@ -202,12 +202,13 @@ router.get('/fetch-teacher-accounts-scheduler', (req, res, next) => {
         { teacher: teacher._id }, '_id name'
       )
 
-      log(subjects)
+      log(teacher)
       
       let teacherObj = {
         name: teacher.name,
         _id: teacher._id,
         username: teacher.username,
+        dynamicNotAvailable: teacher.dynamicNotAvailable,
         subjects
       }
 
