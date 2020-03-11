@@ -194,11 +194,16 @@ router.post('/create-teacher-accounts', (req, res, next) => {
 router.get('/fetch-teacher-accounts', (req, res, next) => {
   auth(req, res, next, 'admin')
 }, async(req, res) => {
-  const fetchedTeachers = await Teacher.find(
-    { school: req.admin.schoolID }, '_id name username'
-  )
-  
-  res.send(fetchedTeachers)
+  try {
+    const fetchedTeachers = await Teacher.find(
+      { school: req.admin.schoolID }, '_id name username'
+    )
+
+    return res.send(fetchedTeachers)
+  } catch(err) {
+    log(err)
+    return res.send(err)
+  }
 })
 
 router.post('/fetch-admin-data', (req, res, next) => {

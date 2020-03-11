@@ -1,6 +1,7 @@
 const express = require('express')
 const router = new express.Router()
 const auth = require('../middleware/auth')
+const Teacher = require('../models/users/teacher')
 const Subject = require('../models/subject')
 const Class = require('../models/class')
 const RoomList = require('../models/roomList')
@@ -184,6 +185,39 @@ router.get('/get-classes', (req, res, next) => {
   } catch(err) {
       log(err)
       return res.send(err)
+  }
+})
+
+router.get('/fetch-teacher-accounts-scheduler', (req, res, next) => {
+  auth(req, res, next, 'scheduler')
+}, async(req, res) => {
+  try {
+    const teachers = await Teacher.find(
+      { school: req.scheduler.school }
+    )
+
+    let teachersWithSubjects = []
+    await Promise.all(teachers.map(async (teacher) => {
+      let subjects = await Subject.find(
+        { teacher: teacher._id }, '_id name'
+      )
+
+      log(subjects)
+      
+      let teacherObj = {
+        name: teacher.name,
+        _id: teacher._id,
+        username: teacher.username,
+        subjects
+      }
+
+      teachersWithSubjects.push(teacherObj)
+    }))
+
+    return res.send(teachersWithSubjects)
+  } catch(err) {
+    log(err)
+    return res.send(err)
   }
 })
 

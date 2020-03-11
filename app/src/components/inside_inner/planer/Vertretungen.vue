@@ -28,7 +28,25 @@
             <FunctionalCalendar id="_FunctionalCalendar" v-if="calendarOpen" v-model="calendarData" :configs="calendarConfigs" />
           </div>
         </div>
-        <div class="Hours">3</div>
+        <div class="Hours">
+          <!-- From -->
+          <select>
+            <option>-</option>
+            <option v-for="num in 12" :key="num">
+              {{ num }}
+            </option>
+          </select>
+
+          <span>&</span>
+
+          <!-- From -->
+          <select>
+            <option>-</option>
+            <option v-for="num in 12" :key="num">
+              {{ num }}
+            </option>
+          </select>
+        </div>
         <div class="Class">
           <select>
             <option v-for="(_class, i) in classes" :key="i">
@@ -36,7 +54,13 @@
             </option>
           </select>
         </div>
-        <div class="Fach">5</div>
+        <div class="Fach">
+          <select class="withoutSubj">
+            <option v-for="(teacher, i) in teachers" :key="i">
+              {{ teacher.name }}
+            </option>
+          </select>
+        </div>
         <div class="Room">7</div>
         <div class="Info">8</div>
         <div class="Delete">9</div>
@@ -44,7 +68,7 @@
       </li>
       <!-- Add new Vertretung -->
       <li>
-        <button>Add</button>
+        <button @click="addVertretung()">Add</button>
       </li>
     </ul>
 
@@ -65,6 +89,7 @@ export default {
   components: { FunctionalCalendar },
   data() {
     return {
+      vertretungen: [],
       types: ['Vertretung', 'Entfall', 'Raumänderung', 'Info', 'Betreuung', 'Vert. ohne Lehrer'],
       loaded: [],
       classes: [],
@@ -76,7 +101,8 @@ export default {
         isDateRange: false
       },
       calendarOpen: false,
-      weekdays: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa']
+      weekdays: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
+      teachers: []
     }
   },
   computed: {
@@ -103,8 +129,30 @@ export default {
     }
   },
   methods: {
+    addVertretung() {
+      this.vertretungen
+    },
     toggleCalendar() {
       this.calendarOpen = !this.calendarOpen
+    },
+    async fetchTeacherAccounts() {
+      const teachers = this.$store.getters.getDBTeachers
+
+      if (teachers.length === 0) {
+        // Attempt getting Teachers from Database
+        let response = await axios.get(`${config.domain}/fetch-teacher-accounts-scheduler`)
+        this.$store.commit('addTeachers', response.data)
+
+        this.teachers = response.data
+    
+        this.sortTeachersByLastName()
+      }
+    },
+    sortTeachersByLastName() {
+      // Sort teacher array by first name
+      this.teachers.sort(function(a, b) {
+        return (a.lastName > b.lastName) ? 1 : ((b.lastName > a.lastName) ? -1 : 0)
+      })
     }
   },
   async created() {
@@ -115,10 +163,7 @@ export default {
       this.classes = classes.data
     }
 
-    const data = {
-      
-    }
-    // const res = await axios.post(`${config.domain}/name`, data)
+    this.fetchTeacherAccounts()
   }
 }
 </script>
