@@ -126,10 +126,15 @@ export default {
     getTodaysDate() {
       const date = new Date()
       const day = date.getDay()+1
-      const month = date.getMonth()+1 
-      const weekday = this.weekdays[date.getDay()]
 
-      return `${day}.${month} (${weekday})`
+      const dayOfMonth = date.getDate()
+      const month = date.getMonth()+1 
+      
+      const weekday = this.weekdays[date.getDay()]
+      
+      log(dayOfMonth)
+
+      return `${dayOfMonth}.${month} (${weekday})`
     }
   },
   methods: {
