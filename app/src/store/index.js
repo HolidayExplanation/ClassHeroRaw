@@ -12,7 +12,8 @@ export default new Vuex.Store({
       msg: null,
       type: null
     },
-    classes: []
+    classes: [],
+    dayIsClicked: true
   },
   getters: {
     getClasses(state) {
@@ -54,6 +55,9 @@ export default new Vuex.Store({
     }
   }, 
   mutations: {
+    setDayClicked(state, condition) {
+      state.dayIsClicked = condition
+    },
     setUser(state, user) {
       state.user = user
     },

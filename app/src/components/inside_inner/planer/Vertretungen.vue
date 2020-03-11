@@ -22,12 +22,7 @@
         </div>
         <div class="Date">
           <span>{{ vertretung.date }}</span>
-          <img src="@/assets/icons/calendar.svg" @click="toggleCalendar()">
-          <div @click="toggleCalendar()" class="calendarToggler">
-            <FunctionalCalendar id="_FunctionalCalendar" 
-            v-if="calendarOpen" v-model="calendarData" 
-            :configs="calendarConfigs" />
-          </div>
+          <img src="@/assets/icons/calendar.svg" @click="toggleCalendar(v)">
         </div>
         <div class="Hours">
           <!-- From -->
@@ -84,6 +79,12 @@
       </li>
     </ul>
 
+    <div id="CalendarContainer" v-if="!dayIsClicked">
+      <FunctionalCalendar id="_FunctionalCalendar" 
+      v-model="calendarData" 
+      :configs="calendarConfigs" />
+    </div>
+
   </div>
 </template>
 
@@ -115,23 +116,18 @@ export default {
       calendarOpen: false,
       weekdays: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
       teachers: [],
-      rooms: []
+      rooms: [],
+      dayIsClicked: true,
+      vertretungIndex: 0
+    }
+  },
+  watch: {
+    calendarData: function(calendarData) {
+      log(this.vertretungen[this.vertretungIndex])
+      this.vertretungen[this.vertretungIndex].date = this.calendarDataFixed(calendarData.selectedDate)
     }
   },
   computed: {
-    calendarDataFixed() {
-      const calendarDate = this.calendarData.selectedDate
-
-      const day = new Date(calendarDate).getDay(); 
-
-      const weekday = this.weekdays[day]
-
-      const dateArr = calendarDate.split('-')
-      const formattedDay = `${dateArr[1]}.${dateArr[0]}`
-
-
-      return `${formattedDay} (${weekday})`
-    },
     getTodaysDate() {
       const date = new Date()
       const day = date.getDay()+1
@@ -147,6 +143,19 @@ export default {
     }
   },
   methods: {
+     calendarDataFixed(selectedDate) {
+      const calendarDate = selectedDate
+
+      const day = new Date(calendarDate).getDay(); 
+
+      const weekday = this.weekdays[day]
+
+      const dateArr = calendarDate.split('-')
+      const formattedDay = `${dateArr[1]}.${dateArr[0]}`
+
+
+      return `${formattedDay} (${weekday})`
+    },
     addVertretung() {
       this.vertretungen.unshift({
         type: 'Vertretung',
@@ -159,8 +168,10 @@ export default {
         info: null
       })
     },
-    toggleCalendar() {
-      this.calendarOpen = !this.calendarOpen
+    toggleCalendar(vertretungIndex) {
+      this.vertretungIndex = vertretungIndex
+      this.dayIsClicked = false
+      this.$store.commit('setDayClicked', false)
     },
     async fetchTeacherAccounts() {
       const teachers = this.$store.getters.getDBTeachers
@@ -189,6 +200,12 @@ export default {
     }
   },
   async created() {
+    this.$store.subscribe(async(mutation, state) => {
+      if (mutation.type === 'setDayClicked') {
+        this.dayIsClicked = state.dayIsClicked
+      }
+    })
+
     this.classes = this.$store.getters.getClasses
 
     if (this.classes.length === 0) {
@@ -204,6 +221,10 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/includes/scss/centerXY';
+
+#CalendarContainer {
+  position: relative;
+}
 
 .TopperInfo {
   display: flex; justify-content:center; align-items: center;
