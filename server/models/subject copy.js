@@ -22,7 +22,18 @@ const vertretungSchema = new mongoose.Schema({
         required: false
     },
     room: {
-
+        id: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true
+        },
+        name: {
+            type: String,
+            required: true
+        },
+        type: {
+            type: String,
+            required: true
+        }
     },
     class: {
         id: {
@@ -46,6 +57,6 @@ const vertretungSchema = new mongoose.Schema({
     }
 })
 
-const Vertretung = mongoose.model('Subject', vertretungSchema)
+const Vertretung = mongoose.model('Vertretung', vertretungSchema)
 
 module.exports = Vertretung
