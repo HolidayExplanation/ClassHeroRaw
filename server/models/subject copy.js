@@ -1,22 +1,38 @@
 const mongoose = require('mongoose')
 
 const vertretungSchema = new mongoose.Schema({
-    teacherName: {
+    type: {
         type: String,
         required: true
     },
-    name: {
+    date: {
         type: String,
         required: true
     },
-    teacher: {
+    fHour: {
+        type: Number,
+        required: true
+    },
+    lHour: {
+        type: Number,
+        required: true
+    },
+    subjectID: {
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: 'Teacher'
+        required: false
+    },
+    room: {
+
     },
     class: {
-        type: String,
-        required: true,
+        id: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true
+        },
+        name: {
+            type: String,
+            required: true
+        }
     },
     schoolID: {
         type: mongoose.Schema.Types.ObjectId,

@@ -14,6 +14,7 @@
       </li>
       <li class="Vertretung" v-for="(vertretung, v) in vertretungen" :key="v">
 
+        <!-- Art -->
         <div class="Type">
           <select v-model="vertretung.type">
             <option v-for="(type, i) in types" :key="i">
@@ -21,10 +22,14 @@
             </option>
           </select>
         </div>
+        
+        <!-- Datum -->
         <div class="Date">
           <span>{{ vertretung.date }}</span>
           <img src="@/assets/icons/calendar.svg" @click="toggleCalendar(v)">
         </div>
+
+        <!-- Stunden -->
         <div class="Hours">
           <!-- From -->
           <select v-model="vertretung.fHour">
@@ -44,6 +49,8 @@
             </option>
           </select>
         </div>
+
+        <!-- Klasse -->
         <div class="Class">
           <select v-model="vertretung.class">
             <option>-</option>
@@ -52,6 +59,8 @@
             </option>
           </select>
         </div>
+
+        <!-- Lehrer und/oder Fach -->
         <div class="Subject">
           <div class="blurOption" v-if="showOption(v, 'Teacher')"></div>
           <select class="withoutSubj" v-if="onlyTeacherSelector(v)">
@@ -70,6 +79,8 @@
             </li>
           </ul>
         </div>
+
+        <!-- Raum -->
         <div class="Room">
           <div class="blurOption" v-if="showOption(v, 'Room')"></div>
           <select v-model="vertretung.room">
@@ -79,10 +90,14 @@
             </option>
           </select>
         </div>
+
+        <!-- Info -->
         <div class="Info">
           <div class="blurOption" v-if="showOption(v, 'Info')"></div>
           <input placeholder="Info Text...">
         </div>
+
+        <!-- Löschen -->
         <div class="Delete">
           <button>del</button>
         </div>
