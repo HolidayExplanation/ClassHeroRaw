@@ -11,26 +11,27 @@
         <div>Info</div>
         <div></div>
       </li>
-      <li class="Vertretung">
+      <li class="Vertretung" v-for="(vertretung, v) in vertretungen" :key="v">
 
         <div class="Type">
-          <select>
+          <select v-model="vertretung.type">
             <option v-for="(type, i) in types" :key="i">
               {{ type }}
             </option>
           </select>
         </div>
         <div class="Date">
-          <span v-if="calendarData">{{ calendarDataFixed }}</span>
-          <span v-else>{{ getTodaysDate }}</span>
+          <span>{{ vertretung.date }}</span>
           <img src="@/assets/icons/calendar.svg" @click="toggleCalendar()">
           <div @click="toggleCalendar()" class="calendarToggler">
-            <FunctionalCalendar id="_FunctionalCalendar" v-if="calendarOpen" v-model="calendarData" :configs="calendarConfigs" />
+            <FunctionalCalendar id="_FunctionalCalendar" 
+            v-if="calendarOpen" v-model="calendarData" 
+            :configs="calendarConfigs" />
           </div>
         </div>
         <div class="Hours">
           <!-- From -->
-          <select>
+          <select v-model="vertretung.fHour">
             <option>-</option>
             <option v-for="num in 12" :key="num">
               {{ num }}
@@ -40,7 +41,7 @@
           <span>&</span>
 
           <!-- From -->
-          <select>
+          <select v-model="vertretung.lHour">
             <option>-</option>
             <option v-for="num in 12" :key="num">
               {{ num }}
@@ -48,7 +49,7 @@
           </select>
         </div>
         <div class="Class">
-          <select>
+          <select v-model="vertretung.class">
             <option v-for="(_class, i) in classes" :key="i">
               {{ _class.name }}
             </option>
@@ -62,7 +63,7 @@
           </select>
         </div>
         <div class="Room">
-          <select>
+          <select v-model="vertretung.room">
             <option>-</option>
             <option v-for="(room, i) in rooms" :key="i">
               {{ `${room.name} (${room.type})` }}
@@ -147,7 +148,16 @@ export default {
   },
   methods: {
     addVertretung() {
-      this.vertretungen
+      this.vertretungen.unshift({
+        type: 'Vertretung',
+        date: this.getTodaysDate,
+        fHour: '-',
+        lHour: '-',
+        class: '-',
+        teacher: '-',
+        room: '-',
+        info: null
+      })
     },
     toggleCalendar() {
       this.calendarOpen = !this.calendarOpen
