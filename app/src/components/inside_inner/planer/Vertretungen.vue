@@ -54,12 +54,21 @@
         </div>
         <div class="Subject">
           <div class="blurOption" v-if="showOption(v, 'Teacher')"></div>
-          <select class="withoutSubj">
+          <select class="withoutSubj" v-if="onlyTeacherSelector(v)">
             <option>-</option>
             <option v-for="(teacher, i) in teachers" :key="i">
               {{ teacher.name }}
             </option>
           </select>
+          <ul class="withSubject" v-if="!onlyTeacherSelector(v)">
+            <li v-for="(teacher, i) in teachers" :key="i">
+              <ul>
+                <li v-for="(subj, s) in teacher.subjects" :key="s">
+                  {{ `${teacher.name} ${subj.name}` }}
+                </li>
+              </ul>
+            </li>
+          </ul>
         </div>
         <div class="Room">
           <div class="blurOption" v-if="showOption(v, 'Room')"></div>
@@ -149,6 +158,13 @@ export default {
     }
   },
   methods: {
+    onlyTeacherSelector(i) {
+      if (this.vertretungen[i].type === 'Betreuung') {
+        return true
+      } else {
+        return false
+      }  
+    },
     showOption(i, optionType) {
       switch (this.vertretungen[i].type) {
         case 'Entfall':

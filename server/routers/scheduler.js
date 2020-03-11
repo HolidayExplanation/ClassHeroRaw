@@ -222,4 +222,14 @@ router.get('/fetch-teacher-accounts-scheduler', (req, res, next) => {
   }
 })
 
+router.get('/get-rooms', (req, res, next) => {
+  auth(req, res, next, 'scheduler')
+}, async(req, res) => {
+  try {
+    
+  } catch (err) {
+    
+  }
+})
+
 module.exports = router
