@@ -51,7 +51,7 @@
             </option>
           </select>
         </div>
-        <div class="Fach">
+        <div class="Subject">
           <select class="withoutSubj">
             <option v-for="(teacher, i) in teachers" :key="i">
               {{ teacher.name }}
@@ -240,10 +240,13 @@ export default {
 
 .TopperInfo {
   display: flex; justify-content:center; align-items: center;
-  background-color: gray;
+  background-color: rgb(98, 132, 160);
   display: grid;
   height: 50px;
-  grid-template-columns: 3fr 4fr 2fr 1fr 3fr 1fr 3fr 1fr;
+  grid-template-columns: 3fr 3fr 2.5fr 1fr 3fr 3fr 2fr 1fr;
+  div {
+    border: 1px solid black;
+  }
 }
 
 ul#Vertretungen {
@@ -256,7 +259,7 @@ ul#Vertretungen {
     background-color: rgba(0, 0, 0, 0.2);
     display: grid;
     height: 35px;
-    grid-template-columns: 3fr 4fr 2fr 1fr 3fr 1fr 3fr 1fr;
+    grid-template-columns: 3fr 3fr 2.5fr 1fr 3fr 3fr 2fr 1fr;
     div {
       display: flex; justify-content:center; align-items: center;
       height: 100%;
@@ -273,9 +276,29 @@ ul#Vertretungen {
   position: absolute;
 }
 
+.Type {
+  select {
+    width: 90%;
+  }
+}
 .Date {
   img {
     height: 30px;
+  }
+}
+.Subject {
+  select {
+    width: 90%;
+  }
+}
+.Room {
+  select {
+    width: 90%;
+  }
+}
+.Info {
+  input {
+    width: 90%;
   }
 }
 .Delete {
