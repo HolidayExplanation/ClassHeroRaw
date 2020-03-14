@@ -222,6 +222,7 @@ router.get('/fetch-teacher-accounts-scheduler', (req, res, next) => {
   }
 })
 
+// Wait until we have a Static Schedule where Rooms and Teachers are made unavailable.
 router.get('/get-rooms', (req, res, next) => {
   auth(req, res, next, 'scheduler')
 }, async(req, res) => {
