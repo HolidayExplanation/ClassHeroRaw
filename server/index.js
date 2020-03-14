@@ -1,12 +1,12 @@
-require('dotenv').config();
+require('dotenv').config()
+require('./db/mongoose')
 const express = require('express')
 const cors = require('cors')
-require('./db/mongoose')
 
 // Global
 const register = require('./routers/global/register')
 const login = require('./routers/global/login')
-const recoverAccount = require('./routers/global/recoverAccount')
+const recover_account = require('./routers/global/recover_account')
 const logout = require('./routers/global/logout')
 const logout_all = require('./routers/global/logout_all')
 
@@ -31,7 +31,7 @@ app.use(express.json())
 // Global for Forms
 app.use(register)
 app.use(login)
-app.use(recoverAccount)
+app.use(recover_account)
 app.use(logout)
 app.use(logout_all)
 

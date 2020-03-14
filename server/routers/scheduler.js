@@ -4,9 +4,8 @@ const auth = require('../middleware/auth')
 const Teacher = require('../models/users/teacher')
 const Subject = require('../models/subject')
 const Class = require('../models/class')
-const RoomList = require('../models/roomList')
-const scheduleTimes = require('../models/schedule/scheduleTimes')
-const StaticSchedule = require('../models/schedule/staticSchedule')
+const RoomList = require('../models/room_list')
+const Schedule = require('../models/schedule/schedule')
 const log = console.log
 
 router.post('/fetch-existing-subjects', (req, res, next) => {
@@ -226,8 +225,8 @@ router.post('/get-class-schedule', (req, res, next) => {
   const classID = req.body.classID
 
   try {
-      const staticSchedule = await StaticSchedule.findOne({ classID }, `-_id -classID days`)
-      return res.status(200).send(staticSchedule.days)
+      const schedule = await Schedule.findOne({ classID }, `-_id -classID days`)
+      return res.status(200).send(schedule.days)
   } catch(err) {
       return res.status(400).send(err)
   }

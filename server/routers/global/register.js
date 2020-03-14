@@ -3,8 +3,8 @@ const router = new express.Router()
 const Admin = require('../../models/users/admin')
 const Scheduler = require('../../models/users/scheduler')
 const School = require('../../models/school')
-const ScheduleTimes = require('../../models/schedule/scheduleTimes')
-const RoomList = require('../../models/roomList')
+const ScheduleTimes = require('../../models/schedule/schedule_times')
+const RoomList = require('../../models/room_list')
 const generate = require('../../generator')
 
 router.post('/create-admin', async (req, res) => {
