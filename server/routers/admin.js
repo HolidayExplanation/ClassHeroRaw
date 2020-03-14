@@ -1,6 +1,6 @@
+const auth = require('../middleware/auth')
 const express = require('express')
 const router = new express.Router()
-const auth = require('../middleware/auth')
 const Admin = require('../models/users/admin')
 const School = require('../models/school')
 const Scheduler = require('../models/users/scheduler')
@@ -8,8 +8,8 @@ const Teacher = require('../models/users/teacher')
 const Student = require('../models/users/student')
 const Subject = require('../models/subject')
 const Class = require('../models/class')
-const scheduleTimes = require('../models/schedule/scheduleTimes')
-const StaticSchedule = require('../models/schedule/staticSchedule')
+const ScheduleTimes = require('../models/schedule/schedule_times')
+const Schedule = require('../models/schedule/schedule')
 
 router.post('/create-class', (req, res, next) => {
     auth(req, res, next, 'admin')
@@ -25,8 +25,8 @@ router.post('/create-class', (req, res, next) => {
         const savedClass = await _class.save()
 
         // Create Static Schedule for Class
-        const staticSchedule = new StaticSchedule({ classID: savedClass._id })
-        await staticSchedule.save()
+        const schedule = new Schedule({ classID: savedClass._id })
+        await schedule.save()
 
         return res.send(savedClass._id)
     } catch(err) {
@@ -67,7 +67,7 @@ router.post('/create-school', (req, res, next) => {
       req.admin.schoolID = savedSchool._id
       await req.admin.save()
 
-      // // Create Scheduler Account 
+      // Create Scheduler Account 
       let generateSchedulerUsername = await Admin.generateSchedulerUsername(schoolData.schoolName, schoolData.city)
 
       const scheduler = new Scheduler({
@@ -77,8 +77,8 @@ router.post('/create-school', (req, res, next) => {
       })
       let savedScheduler = await scheduler.save()
      
-      const schedule_times = new scheduleTimes({ schoolID: savedSchool._id })
-      const savedTimes = await schedule_times.save()
+      const scheduleTimes = new ScheduleTimes({ schoolID: savedSchool._id })
+      await scheduleTimes.save()
 
       res.send({savedScheduler})
   } catch(err) {
