@@ -9,6 +9,7 @@ const Student = require('../models/users/student')
 const Subject = require('../models/subject')
 const Class = require('../models/class')
 const scheduleTimes = require('../models/schedule/scheduleTimes')
+const StaticSchedule = require('../models/schedule/staticSchedule')
 
 router.post('/create-class', (req, res, next) => {
     auth(req, res, next, 'admin')
@@ -21,9 +22,13 @@ router.post('/create-class', (req, res, next) => {
             school: req.admin.schoolID,
         })
         
-        await _class.save()
+        const savedClass = await _class.save()
 
-        return res.send(_class._id)
+        // Create Static Schedule for Class
+        const staticSchedule = new StaticSchedule({ classID: savedClass._id })
+        await staticSchedule.save()
+
+        return res.send(savedClass._id)
     } catch(err) {
         return res.send(err)
     }

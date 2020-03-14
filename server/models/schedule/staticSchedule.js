@@ -6,10 +6,6 @@ const staticScheduleSchema = new mongoose.Schema({
     required: true,
     ref: 'Class'
   },
-  weekType: {
-    type: String,
-    default: "gerade"
-  },
   days: {
     monday: [],
     tuesday: [],

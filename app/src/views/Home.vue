@@ -32,7 +32,7 @@ export default {
     }
   },
   async created() {
-    document.title = "Home / ClassHero"
+    document.title = "ClassHero Suite"
 
     const user = func.getUser()
 

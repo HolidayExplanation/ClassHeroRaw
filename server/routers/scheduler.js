@@ -6,21 +6,8 @@ const Subject = require('../models/subject')
 const Class = require('../models/class')
 const RoomList = require('../models/roomList')
 const scheduleTimes = require('../models/schedule/scheduleTimes')
-const staticSchedule = require('../models/schedule/staticSchedule')
+const StaticSchedule = require('../models/schedule/staticSchedule')
 const log = console.log
-
-router.post('/fetch-static-schedule', (req, res, next) => {
-  auth(req, res, next, 'scheduler')
-}, async(req, res) => {
-  const classID = req.body.classID
-
-  try {
-      const fetchedStaticSchedule = await staticSchedule.findOne({ classID }, `-_id days`)
-      return res.status(200).send(fetchedStaticSchedule.days)
-  } catch(err) {
-      return res.status(400).send(err)
-  }
-})
 
 router.post('/fetch-existing-subjects', (req, res, next) => {
   auth(req, res, next, 'scheduler')
@@ -230,6 +217,19 @@ router.get('/get-rooms', (req, res, next) => {
     
   } catch (err) {
     
+  }
+})
+
+router.post('/get-class-schedule', (req, res, next) => {
+  auth(req, res, next, 'scheduler')
+}, async(req, res) => {
+  const classID = req.body.classID
+
+  try {
+      const staticSchedule = await StaticSchedule.findOne({ classID }, `-_id -classID days`)
+      return res.status(200).send(staticSchedule.days)
+  } catch(err) {
+      return res.status(400).send(err)
   }
 })
 
