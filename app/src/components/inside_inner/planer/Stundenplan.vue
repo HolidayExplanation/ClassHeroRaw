@@ -2,7 +2,17 @@
   <div>
     <section id="Main">
 
-      <div id="draggable" draggable ondragover="console.log('hello')">draggable</div>
+      <ul>
+        <li v-for="(teacher, i) in teachers" :key="i">
+          <ul>
+            <li v-for="(subj, s) in teacher.subjects" :key="s">
+              <span class="selectable">
+                {{ `${teacher.name} ${subj.name}` }}
+              </span>
+            </li>
+          </ul>
+        </li>
+      </ul>
 
       <div id="ClassSelector">
         <select>
@@ -54,19 +64,14 @@ export default {
       ],
       classes: [],
       teachers: [],
-      rooms: [],
-      isDragging: false
+      rooms: []
     }
   },
   created() {
   },
   methods: {
-    drag() {
-      this.isDragging = true
-      log(this.isDragging)
-    },
     checkEnter(day, hour) {
-      console.log(day, hour)
+      log(day -1, hour -1)
     },
     selectRoom(value) {
       log(value)
@@ -86,10 +91,10 @@ export default {
 <style lang="scss" scoped>
 @import '@/includes/scss/centerXY';
 
-#draggable {
-  background-color: palevioletred;
-  padding: 5px;
-  display: inline;
+ul {list-style: none}
+
+span.selectable {
+  color: whitesmoke;
 }
 
 #Schedule {
@@ -107,17 +112,18 @@ export default {
     background-color: palegreen;
     ul {
       border: 1px dashed orangered;
+      li {
+        position: relative;
+        height: 30px;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        span, input {
+          @include centerXY;
+        }
+      }
     }
   }
 }
 
-li {
-  position: relative;
-  height: 30px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  span, input {
-    @include centerXY;
-  }
-}
+
 
 </style>
