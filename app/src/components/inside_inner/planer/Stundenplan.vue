@@ -22,6 +22,11 @@
             <ul>
               <li v-for="hour in 12" :key="hour">
                 {{ hours[day - 1][hour - 1] }}
+                <select>
+                  <option v-for="(room, i) in rooms" :key="i">
+                    {{ room.name }}
+                  </option>
+                </select>
               </li>
             </ul>
           </li>
@@ -45,7 +50,9 @@ export default {
       hours: [
         ['benn', 'ebr'], ['ebr'], ['fsa'], ['fsa'], ['fsa']
       ],
-      classes: []
+      classes: [],
+      teachers: [],
+      rooms: []
     }
   },
   methods: {
