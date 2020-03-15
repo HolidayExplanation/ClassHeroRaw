@@ -2,6 +2,8 @@
   <div>
     <section id="Main">
 
+      <div id="draggable" draggable ondragover="console.log('hello')">draggable</div>
+
       <div id="ClassSelector">
         <select>
           <option v-for="(_class, i) in classes" :key="i">
@@ -9,6 +11,8 @@
           </option>
         </select>
       </div>
+
+      <RoomSelector @selected="selectRoom" />
       
       <div id="Schedule">
         <!-- Hours -->
@@ -20,13 +24,9 @@
         <ul id="Days">
           <li v-for="day in 5" :key="day">
             <ul>
-              <li v-for="hour in 12" :key="hour">
+              <li v-for="hour in 12" :key="hour" @mouseover="checkEnter(day, hour)">
                 {{ hours[day - 1][hour - 1] }}
-                <select>
-                  <option v-for="(room, i) in rooms" :key="i">
-                    {{ room.name }}
-                  </option>
-                </select>
+
               </li>
             </ul>
           </li>
@@ -38,6 +38,7 @@
 </template>
 
 <script>
+import RoomSelector from './selectors/RoomSelector'
 import axios from 'axios'
 import config from '@/includes/js/config'
 const log = console.log
@@ -45,6 +46,7 @@ import { mapActions } from 'vuex'
 
 export default {
   name: 'Stundenplan',
+  components: { RoomSelector },
   data() {
     return {
       hours: [
@@ -52,26 +54,43 @@ export default {
       ],
       classes: [],
       teachers: [],
-      rooms: []
+      rooms: [],
+      isDragging: false
     }
   },
+  created() {
+  },
   methods: {
+    drag() {
+      this.isDragging = true
+      log(this.isDragging)
+    },
+    checkEnter(day, hour) {
+      console.log(day, hour)
+    },
+    selectRoom(value) {
+      log(value)
+    },
     ...mapActions([
       'fetchClasses', 
-      'fetchTeachers',
-      'fetchRooms'
+      'fetchTeachers'
     ])
   },
   async created() {
     this.classes = await this.fetchClasses()
     this.teachers = await this.fetchTeachers()
-    this.rooms = await this.fetchRooms()
   }
 }
 </script>
 
 <style lang="scss" scoped>
 @import '@/includes/scss/centerXY';
+
+#draggable {
+  background-color: palevioletred;
+  padding: 5px;
+  display: inline;
+}
 
 #Schedule {
   @include centerXY;
