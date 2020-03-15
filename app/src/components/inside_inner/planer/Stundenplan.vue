@@ -21,12 +21,13 @@
           <li v-for="day in 5" :key="day">
             <ul>
               <li v-for="hour in 12" :key="hour">
-                {{ hour }}
+                {{ hours[day - 1][hour - 1] }}
               </li>
             </ul>
           </li>
         </ul>
       </div>
+      
     </section>
   </div>
 </template>
@@ -41,13 +42,9 @@ export default {
   name: 'Stundenplan',
   data() {
     return {
-      hours: {
-        monday: ['benn', 'ebr'],
-        tuesday: ['benn'],
-        wednesday: [],
-        thursday: [],
-        friday: []
-      },
+      hours: [
+        ['benn', 'ebr'], ['ebr'], ['fsa'], ['fsa'], ['fsa']
+      ],
       classes: []
     }
   },
@@ -60,11 +57,8 @@ export default {
   },
   async created() {
     this.classes = await this.fetchClasses()
-    log(this.classes)
     this.teachers = await this.fetchTeachers()
-    log(this.teachers)
     this.rooms = await this.fetchRooms()
-    log(this.rooms)
   }
 }
 </script>
