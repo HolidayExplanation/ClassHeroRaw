@@ -1,51 +1,38 @@
 const express = require('express')
 const router = new express.Router()
-const Admin = require('../../models/users/admin')
-const Scheduler = require('../../models/users/scheduler')
+const Planer = require('../../models/users/planer')
 const School = require('../../models/school')
 const ScheduleTimes = require('../../models/schedule/schedule_times')
 const RoomList = require('../../models/room_list')
 const generate = require('../../generator')
 
-router.post('/create-admin', async (req, res) => {
+router.post('/create-planer', async (req, res) => {
     const creatorKey = req.body.creatorKey
 
-    let adminObject = {
-        ...req.body.adminObject,
+    let planerObj = {
+        ...req.body.planerObj,
         password: generate('password'),
         recoveryKey: generate('recoveryKey')
     }
 
     try {
         if (!(creatorKey === process.env.CREATOR_CODE)) throw new Error()
-         // Create Admin Account
-        const generatedUsername = await Admin.generateAdminUsername('admin', adminObject.schoolName, adminObject.city)
-        adminObject.username = generatedUsername
+         // Create Planer Account
+        const generatedUsername = await Planer.generatePlanerUsername('planer', planerObj.schoolName, planerObj.city)
+        planerObj.username = generatedUsername
 
-        admin = new Admin(adminObject)
-        await admin.save()
+        planer = new Planer(planerObj)
+        await planer.save()
 
          // Create School
         const school = new School({
-            name: req.body.adminObject.schoolName,
-            city: req.body.adminObject.city,
-            owner: admin._id
+            name: req.body.planerObj.schoolName,
+            city: req.body.planerObj.city,
+            owner: planer._id
         })
         const savedSchool = await school.save()
-        admin.schoolID = savedSchool._id
-        await admin.save() // assign School to Admin
-
-        // Create Scheduler Account 
-        let generatedSchedulerUsername = await Admin.generateAdminUsername('planer', adminObject.schoolName, adminObject.city)
-
-        const schedulerObject = {
-            password: 'password',
-            username: generatedSchedulerUsername,
-            school: savedSchool._id
-        }
-
-        const scheduler = new Scheduler(schedulerObject)
-        await scheduler.save()
+        planer.schoolID = savedSchool._id
+        await planer.save() // assign School to Planer
 
         // Create Schedule Times
         const scheduleTimes = new ScheduleTimes({ schoolID: savedSchool._id })
@@ -56,8 +43,7 @@ router.post('/create-admin', async (req, res) => {
         const savedRoomList = await roomList.save()
 
         return res.status(201).send({
-            admin: adminObject,
-            scheduler: schedulerObject,
+            planer: planerObj,
             scheduleTimes: savedScheduleTimes,
             roomList: savedRoomList
         })

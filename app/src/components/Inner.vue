@@ -19,17 +19,14 @@ export default {
   },
   data() {
     return {
-      view: 'Lehrerverwaltung',
+      view: null,
       notificationsActive: false
     }
   },
   created() {
     const user = func.getUser()
 
-    if (user.accountType == 'admin') this.view = 'Lehrerverwaltung'
-    else if (user.accountType == 'scheduler') {
-      this.view = 'Stundendauer'
-    }
+    if (user.accountType == 'planer') this.view = 'Stundenplan'
 
     this.$store.subscribe(async(mutation, state) => {
       if (mutation.type === 'setView') {

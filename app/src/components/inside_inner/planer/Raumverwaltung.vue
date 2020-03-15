@@ -85,6 +85,8 @@ import axios from 'axios'
 import config from '@/includes/js/config'
 const log = console.log
 
+import { mapActions } from 'vuex'
+
 export default {
   name: 'Raumverwaltung',
   data() {
@@ -107,27 +109,26 @@ export default {
     }
   },
   methods: {
+     ...mapActions([
+      'fetchRooms'
+    ]),
     chooseTypeColor(i) {
       const colors = ['yellowgreen', 'orange', 'skyblue', 'yellow', 
       'purple', 'pink', '#00cc66', '#cc3399', '#ff6699', '#3399ff']
       const roomType = this.rooms[i].type
-
       const pos = this.cats.indexOf(roomType)
       log(pos)
       if (pos === -1) {
         return colors[colors.length - 1]
       }
-
       return colors[pos]
     },
     chooseType2Color(i) {
       const colors = ['yellowgreen', 'orange', 'skyblue', 'yellow', 
       'purple', 'pink', '#00cc66', '#cc3399', '#ff6699', '#3399ff']
-
       if (i === -1) {
         return colors[colors.length - 1]
       }
-
       return colors[i]
     },
     toggleList() {
@@ -141,30 +142,25 @@ export default {
         category: this.newCatName
       }
       const res = await axios.patch(`${config.domain}/add-room-category`, data)
-
       let payload
       if (res.status === 200) {
         this.cats.push(this.newCatName)
         this.newCatName = null
-
         payload = {
           msg: 'Raum Kategorie erstellt.',
           type: 'good'
         }
-
         this.$store.commit('setUpdateInfoMsg', payload)
       } else {
         payload = {
           msg: 'Fehler. Bitte versuchen Sie es nochmal.',
           type: 'bad'
         }
-
         this.$store.commit('setUpdateInfoMsg', payload)
       }
     },
     selectCat(i) {
       const pushedCat = this.selCat
-
       this.selCat = this.cats[i]
       this.listShown = false
       // remove item
@@ -178,7 +174,6 @@ export default {
         type: this.selCat
       }
       const res = await axios.patch(`${config.domain}/add-room`, data)
-
       let payload
       if (res.status === 200) {
         this.rooms.unshift({
@@ -187,12 +182,10 @@ export default {
         })
         
         this.roomName = null
-
         payload = {
           msg: 'Raum erstellt.',
           type: 'good'
         }
-
         this.$store.commit('setUpdateInfoMsg', payload)
       } else {
         payload = {
@@ -205,34 +198,29 @@ export default {
     async deleteRoom(i) {
       const _id = this.rooms[i]._id
       const res = await axios.post(`${config.domain}/delete-room`, {_id})
-
       let payload
       if (res.status === 200) {
         this.rooms.splice(i, 1)
-
         payload = {
           msg: 'Raum gelöscht.',
           type: 'good'
         }
-
         this.$store.commit('setUpdateInfoMsg', payload)
       } else {
         payload = {
           msg: 'Fehler. Bitte versuchen Sie es nochmal.',
           type: 'bad'
         }
-
         this.$store.commit('setUpdateInfoMsg', payload)
       }
     }
   },
   async created() {
     // Get Rooms
-    let rooms = await axios.get(`${config.domain}/get-rooms`)
-    rooms.data.forEach(room => {
+    const rooms = await this.$store.dispatch('fetchRooms')
+    rooms.forEach(room => {
       this.rooms.unshift(room)
     })
-
     // Get Room types
     let cats = await axios.get(`${config.domain}/get-room-types`)
     cats.data.forEach(roomType => {

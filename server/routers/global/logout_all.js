@@ -9,9 +9,9 @@ router.post('/logout-all', (req, res, next) => {
 }, async (req, res) => {
     const accountType = req.body.accountType
     try {
-        if (accountType === 'admin') {
-            req.admin.tokens = []
-            await req.admin.save()
+        if (accountType === 'planer') {
+            req.planer.tokens = []
+            await req.planer.save()
             res.send()
         } else if (accountType === 'teacher') {
             req.teacher.tokens = []
@@ -20,10 +20,6 @@ router.post('/logout-all', (req, res, next) => {
         } else if (accountType === 'student') {
             req.student.tokens = []
             await req.student.save()
-            res.send()
-        } else if (accountType === 'scheduler') {
-            req.scheduler.tokens = []
-            await req.scheduler.save()
             res.send()
         }
     } catch(err) {

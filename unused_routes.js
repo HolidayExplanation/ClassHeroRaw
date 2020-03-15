@@ -1,6 +1,6 @@
 // Add DELETE (Archive)
 router.patch('/update-teacher', (req, res, next) => {
-  auth(req, res, next, 'admin')
+  auth(req, res, next, 'planer')
 }, async (req, res) => {
   const teacher = req.body.teacher
   try {
@@ -10,7 +10,7 @@ router.patch('/update-teacher', (req, res, next) => {
             lastNameChanged = teacher.lastName !== fetchedTeacher.lastName
 
       if (firstNameChanged || lastNameChanged) {
-          let newUsername = await Admin.generateUsername(teacher.firstName, teacher.lastName)
+          let newUsername = await Planer.generateUsername(teacher.firstName, teacher.lastName)
           await Teacher.updateOne({ username: teacher.username}, 
           {
               firstName: teacher.firstName,
@@ -41,7 +41,7 @@ router.patch('/update-teacher', (req, res, next) => {
 
 router.post('/fetch-classes-and-teachers', (req, res, next) => {
   log("body: " + req.body.authToken)
-  auth(req, res, next, 'admin', req.body.authToken)
+  auth(req, res, next, 'planer', req.body.authToken)
 }, async(req, res) => {
   const school = req.body.schoolID
   try {
@@ -71,7 +71,7 @@ router.post('/fetch-classes-and-teachers', (req, res, next) => {
 })
 
 router.post('/cm-fetch-subjects', (req, res, next) => {
-  auth(req, res, next, 'admin', req.body.authToken)
+  auth(req, res, next, 'planer', req.body.authToken)
 }, async (req, res) => {
   try {
       const subjects = await Subject.find({ school: req.body.schoolID }, `teacherName teacherLastName _id name`)

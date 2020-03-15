@@ -2,7 +2,7 @@
   <div id="Main" v-if="user">
     <div id="container">
       <span>
-        {{ user.accountType === 'admin' || user.accountType === 'scheduler' ? 
+        {{ user.accountType === 'planer' ? 
           user.username:
           `${user.name}`
         }}

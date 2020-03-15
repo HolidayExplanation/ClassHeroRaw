@@ -22,19 +22,15 @@ export default {
       connected: true,
       user: null,
       pics: {
-        admin: ['benachrichtigungen', 'klassenverwaltung', 
-        'lehrerverwaltung', 'planerkonto'],
-        planer: ['benachrichtigungen', 'raumverwaltung', 'stundendauer',
+        planer: ['benachrichtigungen', 'klassenverwaltung', 
+        'lehrerverwaltung', 'planerkonto', 'raumverwaltung', 'stundendauer',
         'vertretungen', 'stundenplan']
       }
     }
   },
   computed: {
     picList() {
-      if (this.user.accountType === 'admin') {
-        return this.pics.admin
-      }
-      else if (this.user.accountType === 'scheduler') {
+      if (this.user.accountType === 'planer') {
         return this.pics.planer
       }
     }

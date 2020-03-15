@@ -6,6 +6,7 @@
       <ul id="teacherList">
         <li v-for="(teacher, i) in teachers" :key="i">
           <div class="teacher">
+            <img class="profileImg" src="@/assets/icons/user_green.svg">
             <div id="name">
               <span>{{`${teacher.name}`}}</span>
             </div>
@@ -51,7 +52,7 @@
 
 <script>
 // import LoadingIcon from '@/views/global/LoadingIcon'
-
+import { mapActions } from 'vuex'
 import axios from 'axios'
 import config from '@/includes/js/config'
 const log = console.log
@@ -75,22 +76,12 @@ export default {
     })
   },
   methods: {
+    ...mapActions([
+      'fetchTeachers'
+    ]),
     sendPwReset(index) {
       this.passwordResetSent[index] = true
       this.$forceUpdate()
-    },
-    sortTeachersByLastName() {
-      // Sort teacher array by first name
-      this.teachers.sort(function(a, b) {
-        return (a.lastName > b.lastName) ? 1 : ((b.lastName > a.lastName) ? -1 : 0)
-      })
-    },
-    async fetchTeacherAccounts() {
-      let response = await axios.get(`${config.domain}/fetch-teacher-accounts`)
-
-      this.$store.commit('addTeachers', response.data)
-  
-      this.fetchSubjects()
     },
     async createSubject(index) {
       if (this.subjectName[index] != '') {
@@ -146,10 +137,11 @@ export default {
       }
 
       this.sortTeachersByLastName()
-  }},
+    }
+  },
   async mounted() {
     this.user = localStorage.getItem('user')
-    this.fetchTeacherAccounts()
+    this.teachers = await this.fetchTeachers()
   }
 }
 </script>
@@ -170,8 +162,18 @@ button#createSubject {
   }
 }
 
-$teacherHeight: 40px;
+$teacherHeight: 50px;
 $subjectHeight: 35px;
+
+.teacher > img.profileImg {
+  position: absolute;
+  top: 5px;
+  left: 10px;
+  height: 35px;
+  width: 35px;
+  border: 3px solid rgba(0, 0, 0, 0.2);
+  border-radius: 100%;
+}
 
 #TeacherList {
   position: relative;
@@ -312,7 +314,7 @@ ul {
     padding-bottom: 5px;
   }
   .teacher {
-    border-radius: 5px;
+    border-radius: 0px;
     width: 100%;
     height: $teacherHeight;
     // @include animationBackground;
@@ -324,7 +326,7 @@ ul {
       span {
         @include centerY;
         padding: 5px 20px 5px 20px;
-        margin-left: 20px;
+        margin-left: 70px;
         border: 1px solid rgba(0, 0, 0, 0.2);
         border-radius: 3px;
         left: 0;

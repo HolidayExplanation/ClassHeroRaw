@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section id="Main">
+    <section id="Main" v-if="false">
       <!-- FIRST SHOW ONLY {SELECT CLASS} -->
       <select id="ClassSelector">
         <option v-for="(_class, i) in classes" :key="i">
@@ -20,6 +20,7 @@
 import axios from 'axios'
 import config from '@/includes/js/config'
 const log = console.log
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Stundenplan',
@@ -32,16 +33,19 @@ export default {
     }
   },
   methods: {
-
+    ...mapActions([
+      'fetchClasses', 
+      'fetchTeachers',
+      'fetchRooms'
+    ])
   },
   async created() {
-    // Fetch Classes from localStorage, if not exist
-    // fetch from Server and save to localStorage
-
-    const data = {
-      
-    }
-    const res = await axios.post(`${config.domain}/name`, data)
+    this.classes = await this.fetchClasses()
+    log(this.classes)
+    this.teachers = await this.fetchTeachers()
+    log(this.teachers)
+    this.rooms = await this.fetchRooms()
+    log(this.rooms)
   }
 }
 </script>

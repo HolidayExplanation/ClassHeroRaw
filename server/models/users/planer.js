@@ -1,27 +1,15 @@
 const mongoose = require('mongoose')
-const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const Teacher = require('../users/teacher')
 const Student = require('../users/student')
-const Scheduler = require('../users/scheduler')
 const log = console.log
 
-const adminSchema = new mongoose.Schema({
+const planerSchema = new mongoose.Schema({
     username: {
         type: String,
         trim: true,
         required: true
-    },
-    email: {
-        type: String,
-        trim: true,
-        required: false,
-        validate(value) {
-            if (!validator.isEmail(value)) {
-                throw new Error('Email is invalid.')
-            }
-        } 
     },
     password: {
         type: String,
@@ -41,7 +29,7 @@ const adminSchema = new mongoose.Schema({
     },
     accountType: {
         type: String,
-        default: 'admin'
+        default: 'planer'
     },
     schoolID: {
         type: mongoose.Schema.Types.ObjectId,
@@ -56,86 +44,78 @@ const adminSchema = new mongoose.Schema({
     }]
 })
 
-adminSchema.virtual('schools', {
+planerSchema.virtual('schools', {
     ref: 'School',
     localField: '_id',
     foreignField: 'owner'
 })
 
-adminSchema.methods.toJSON = function() {
-    const admin = this
-    const adminObject = admin.toObject()
+planerSchema.methods.toJSON = function() {
+    const planer = this
+    const planerObj = planer.toObject()
 
-    delete adminObject.password
-    delete adminObject.tokens
+    delete planerObj.password
+    delete planerObj.tokens
 
-    return adminObject
+    return planerObj
 }
 
-adminSchema.methods.generateAuthToken = async function() {
-    const admin = this
-    const token = jwt.sign({ _id: admin._id.toString()}, process.env.SECRET_CODE)
-    admin.tokens = admin.tokens.concat({ token })
+planerSchema.methods.generateAuthToken = async function() {
+    const planer = this
+    const token = jwt.sign({ _id: planer._id.toString()}, process.env.SECRET_CODE)
+    planer.tokens = planer.tokens.concat({ token })
 
-    await admin.save()
+    await planer.save()
     return token
 }
 
 // define findByCredentials func
-adminSchema.statics.findByCredentials = async (username, password) => {
-    const admin = await Admin.findOne({ username })
+planerSchema.statics.findByCredentials = async (username, password) => {
+    const planer = await Planer.findOne({ username })
     let teacher
     let student
-    let scheduler
 
-    if (!admin) {
+    if (!planer) {
         teacher = await Teacher.findOne({ username })
         if (!teacher) {
             student = await Student.findOne({ username })
-            if (!student) {
-                scheduler = await Scheduler.findOne({ username })
-            }
         }
     }
 
-    if (!admin && !teacher && !student && !scheduler) {
+    if (!planer && !teacher && !student) {
         throw new Error('Unable to login.')
     }
 
     let isMatch
 
-    if (admin) {
-        isMatch = await bcrypt.compare(password, admin.password)
+    if (planer) {
+        isMatch = await bcrypt.compare(password, planer.password)
     } else if (teacher) {
         isMatch = await bcrypt.compare(password, teacher.password)
     } else if (student) {
         isMatch = await bcrypt.compare(password, student.password)
-    } else if (scheduler) {
-        isMatch = await bcrypt.compare(password, scheduler.password)
     }
 
     if (!isMatch) {
         throw new Error('Unable to login')
     }
 
-    if (admin) {return admin}
+    if (planer) {return planer}
     else if (teacher) {return teacher}
     else if (student) {return student}
-    else if (scheduler) {return scheduler}
 }
 
-adminSchema.statics.findByRecoveryKey = async (username, recoveryKey) => {
-
-    const admin = await Admin.findOne({ username })
-    const isMatch = await bcrypt.compare(recoveryKey, admin.recoveryKey)
+planerSchema.statics.findByRecoveryKey = async (username, recoveryKey) => {
+    const planer = await Planer.findOne({ username })
+    const isMatch = await bcrypt.compare(recoveryKey, planer.recoveryKey)
 
     log(isMatch)
 
     if (!isMatch) throw new Error()
-    else return admin
+    else return planer
 }
 
-adminSchema.statics.generateAdminUsername = async(accountType, schoolName, city) => {
+planerSchema.statics.generatePlanerUsername = async(accountType, schoolName, city) => {
     schoolName = schoolName.toLowerCase()
     city = city.toLowerCase()
 
@@ -174,12 +154,8 @@ adminSchema.statics.generateAdminUsername = async(accountType, schoolName, city)
 
         generatedUsername = `${generatedSchoolName}.${generatedCityName}.${accountType}.${randNum}`.toLowerCase()
 
-        if (accountType === 'admin') {
-            count = await Admin.countDocuments({ // Check if username exists
-                username: { $regex: new RegExp(generatedUsername) }
-            })
-        } else if (accountType === 'planer') {
-            count = await Scheduler.countDocuments({ // Check if username exists
+        if (accountType === 'planer') {
+            count = await Planer.countDocuments({ // Check if username exists
                 username: { $regex: new RegExp(generatedUsername) }
             })
         }
@@ -194,35 +170,8 @@ adminSchema.statics.generateAdminUsername = async(accountType, schoolName, city)
     }
 }
 
-adminSchema.statics.generateSchedulerUsername = async(schoolName, city) => {
-    schoolName = schoolName.toLowerCase()
-    city = city.toLowerCase()
-
-    let randNum
-    let generatedUsername
-    let count
-    const genUsernameAndCountDocs = async() => {
-        randNum =  Math.floor(Math.random() * Math.floor(999))
-
-        generatedUsername = `${schoolName}.${city}.planer.${randNum}`.toLowerCase()
-
-        count = await Scheduler.countDocuments({ // Check if username exists
-            username: { $regex: new RegExp(generatedUsername) }
-        })
-    }
-
-    genUsernameAndCountDocs()
-
-    if (count >= 1) { // while username taken, generate new
-        genUsernameAndCountDocs()
-    } else {
-        return generatedUsername
-    }
-}
-
-adminSchema.statics.generateUsername = async(name) => {
+planerSchema.statics.generateUsername = async(name) => {
     name = name.split(' ')
-
     name = name.toString()
 
     var newchar = '.'
@@ -257,21 +206,21 @@ adminSchema.statics.generateUsername = async(name) => {
 }
 
 
-adminSchema.pre('save', async function(next) {
-    const admin = this
+planerSchema.pre('save', async function(next) {
+    const planer = this
 
-    if (admin.isModified('password')) {
-        admin.password = await bcrypt.hash(admin.password, 8)
+    if (planer.isModified('password')) {
+        planer.password = await bcrypt.hash(planer.password, 8)
     }
 
-    if (admin.isModified('recoveryKey')) {
-        admin.recoveryKey = await bcrypt.hash(admin.recoveryKey, 8)
+    if (planer.isModified('recoveryKey')) {
+        planer.recoveryKey = await bcrypt.hash(planer.recoveryKey, 8)
     }
     
     next()
 })
 
-const Admin = mongoose.model('Admin', adminSchema)
+const Planer = mongoose.model('Planer', planerSchema)
 
 
-module.exports = Admin
+module.exports = Planer

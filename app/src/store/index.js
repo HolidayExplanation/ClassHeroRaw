@@ -1,23 +1,30 @@
+import axios from 'axios'
+import config from '@/includes/js/config'
 import Vue from 'vue'
 import Vuex from 'vuex'
+const log = console.log
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    view: 'stundenplan',
     user: {},
-    view: 'lehrerverwaltung',
-    dbTeachers: [],
+    classes: [],
+    teachers: [],
+    rooms: [],
     updateInfo: {
       msg: null,
       type: null
     },
-    classes: [],
     dayIsClicked: true
   },
   getters: {
     getClasses(state) {
       return state.classes
+    },
+    getRooms(state) {
+      return state.rooms
     },
     getUser(state) {
       return state.user
@@ -25,30 +32,15 @@ export default new Vuex.Store({
     getView(state) {
       return state.view
     },
-    getDBTeachers(state) {
+    getTeachers(state) {
       // Sort teacher array by last name
-      return state.dbTeachers.sort(function(a, b) {
+      return state.teachers.sort(function(a, b) {
         return (a.lastName > b.lastName) ? 1 : ((b.lastName > a.lastName) ? -1 : 0)
       })
     },
     hasTeacherAccounts(state) {
-      if (state.dbTeachers.length > 0) return true
+      if (state.teachers.length > 0) return true
       else return false
-    },
-    dbTeacherSubjects(state) {
-      const subjects = state.dbTeachers.forEach(teacher => {
-        return teacher.subjects
-      })
-
-      return subjects
-    },
-    getTeacherIDs(state) {
-      let ids = []
-      state.dbTeachers.forEach(teacher => {
-        ids.push(teacher._id)
-      })
-
-      return ids
     },
     getUpdateInfoMsg(state) {
       return state.updateInfo
@@ -58,6 +50,12 @@ export default new Vuex.Store({
     setDayClicked(state, condition) {
       state.dayIsClicked = condition
     },
+    setClasses(state, classes) {
+      state.classes = classes
+    },
+    setRooms(state, rooms) {
+      state.rooms = rooms
+    },
     setUser(state, user) {
       state.user = user
     },
@@ -65,10 +63,10 @@ export default new Vuex.Store({
       state.view = view
     },
     addTeachers(state, teachers) {
-      state.dbTeachers = state.dbTeachers.concat(teachers)
+      state.teachers = state.teachers.concat(teachers)
 
       // add subjects placeholders
-      state.dbTeachers.forEach(teacher => {
+      state.teachers.forEach(teacher => {
         if (!teacher.subjects) {
           teacher.subjects = []
         }
@@ -80,6 +78,30 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    async fetchClasses(context) {
+      if (context.state.classes.length === 0) {
+        const classes = await axios.get(`${config.domain}/get-classes`)
+        context.commit('setClasses', classes.data)
+      }
+
+      return context.state.classes
+    },
+    async fetchTeachers(context) {
+      if (context.state.teachers.length === 0) {
+        let response = await axios.get(`${config.domain}/fetch-teacher-accounts-scheduler`)
+        context.commit('addTeachers', response.data)
+      }
+
+      return context.getters.getTeachers
+    },
+    async fetchRooms(context) {
+      if (context.state.rooms.length === 0) {
+        const rooms = await axios.get(`${config.domain}/get-rooms`)
+        context.commit('setRooms', rooms.data)
+      }
+
+      return context.state.rooms
+    }
   },
   modules: {
   }

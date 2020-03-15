@@ -175,7 +175,7 @@ export default {
     }
   },
   async created() {
-    this.teachers = this.$store.getters.getDBTeachers
+    this.teachers = await this.$store.dispatch('fetchTeachers')
 
     log(this.teachers)
 

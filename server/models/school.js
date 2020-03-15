@@ -15,12 +15,12 @@ const schoolSchema = new mongoose.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: 'Admin'
+        ref: 'Planer'
     }
 })
 
-schoolSchema.virtual('admin', {
-    ref: 'Admin',
+schoolSchema.virtual('planer', {
+    ref: 'Planer',
     localField: '_id',
     foreignField: 'schoolID'
 })
@@ -37,10 +37,10 @@ schoolSchema.virtual('subjects', {
     foreignField: 'school'
 })
 
-schoolSchema.virtual('scheduler', {
-    ref: 'Scheduler',
+schoolSchema.virtual('planer', {
+    ref: 'Planer',
     localField: '_id',
-    foreignField: 'school'
+    foreignField: 'schoolID'
 })
 
 schoolSchema.virtual('scheduleTimes', {

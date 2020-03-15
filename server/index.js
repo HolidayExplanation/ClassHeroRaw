@@ -10,8 +10,7 @@ const recover_account = require('./routers/global/recover_account')
 const logout = require('./routers/global/logout')
 const logout_all = require('./routers/global/logout_all')
 
-const admin = require('./routers/admin')
-const scheduler = require('./routers/scheduler')
+const planer = require('./routers/planer')
 const teacher = require('./routers/teacher')
 
 const app = express()
@@ -35,8 +34,7 @@ app.use(recover_account)
 app.use(logout)
 app.use(logout_all)
 
-app.use(admin)
-app.use(scheduler)
+app.use(planer)
 app.use(teacher)
 
 

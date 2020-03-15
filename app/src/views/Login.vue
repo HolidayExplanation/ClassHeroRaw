@@ -17,7 +17,7 @@
       <div id="Description">
         <span>
           {{ login ? 
-          'Mit Admin-, Lehrer- oder Planerkonto anmelden':
+          'Mit Lehrer- oder Planerkonto anmelden':
           'Konto wiederherstellen'
           }}
         </span>

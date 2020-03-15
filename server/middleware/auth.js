@@ -1,8 +1,7 @@
 const jwt = require('jsonwebtoken')
-const Admin = require('../models/users/admin')
+const Planer = require('../models/users/planer')
 const Teacher = require('../models/users/teacher')
 const Student = require('../models/users/student')
-const Scheduler = require('../models/users/scheduler')
 const log = console.log
 
 const auth = async (req, res, next, authType) => {
@@ -11,13 +10,13 @@ const auth = async (req, res, next, authType) => {
         const decoded = jwt.verify(token, process.env.SECRET_CODE)
         
         switch(authType) {
-            case 'admin':
-                const admin = await Admin.findOne({ _id: decoded._id, 'tokens.token': token })
-                if (!admin) {
+            case 'planer':
+                const planer = await Planer.findOne({ _id: decoded._id, 'tokens.token': token })
+                if (!planer) {
                     throw new Error()
                 }
                 req.token = token
-                req.admin = admin
+                req.planer = planer
                 break;
             case 'teacher':
                 const teacher = await Teacher.findOne({ _id: decoded._id, 'tokens.token': token })
@@ -34,14 +33,6 @@ const auth = async (req, res, next, authType) => {
                 }
                 req.token = token
                 req.student = student
-                break;
-            case 'scheduler':
-                const scheduler = await Scheduler.findOne({ _id: decoded._id, 'tokens.token': token })
-                if (!scheduler) {
-                    throw new Error()
-                }
-                req.token = token
-                req.scheduler = scheduler
                 break;
         }
 

@@ -67,23 +67,6 @@ studentSchema.methods.generateAuthToken = async function() {
     return token
 }
 
-// // define findByCredentials func
-// adminSchema.statics.findByUsername = async (email, password) => {
-//     const admin = await Admin.findOne({ email })
-
-//     if (!admin) {
-//         throw new Error('Unable to login.')
-//     }
-
-//     const isMatch = await bcrypt.compare(password, admin.password)
-
-//     if (!isMatch) {
-//         throw new Error('Unable to login')
-//     }
-
-//     return admin
-// }
-
 studentSchema.pre('save', async function(next) {
     const student = this
 

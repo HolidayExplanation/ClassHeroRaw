@@ -8,11 +8,11 @@ router.post('/logout', (req, res, next) => {
 }, async (req, res) => {
     const accountType = req.body.accountType
     try {
-        if (accountType === 'admin') {
-            req.admin.tokens = req.admin.tokens.filter((token) => {
+        if (accountType === 'planer') {
+            req.planer.tokens = req.planer.tokens.filter((token) => {
                 return token.token !== req.token
             })
-            await req.admin.save()
+            await req.planer.save()
             res.send()
         } else if (accountType === 'teacher') {
             req.teacher.tokens = req.teacher.tokens.filter((token) => {
@@ -25,12 +25,6 @@ router.post('/logout', (req, res, next) => {
                 return token.token !== req.token
             })
             await req.student.save()
-            res.send()
-        } else if (accountType === 'scheduler') {
-            req.scheduler.tokens = req.scheduler.tokens.filter((token) => {
-                return token.token !== req.token
-            })
-            await req.scheduler.save()
             res.send()
         }
     } catch(err) {

@@ -120,11 +120,11 @@
 
 <script>
 import Vue from 'vue'
-import {FunctionalCalendar} from 'vue-functional-calendar';
-Vue.use(FunctionalCalendar)
-
-import axios from 'axios'
+import { mapActions } from 'vuex'
 import config from '@/includes/js/config'
+import axios from 'axios'
+import { FunctionalCalendar } from 'vue-functional-calendar';
+Vue.use(FunctionalCalendar)
 const log = console.log
 
 export default {
@@ -173,6 +173,11 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'fetchClasses',
+      'fetchTeachers',
+      'fetchRooms'
+    ]),
     onlyTeacherSelector(i) {
       if (this.vertretungen[i].type === 'Betreuung') {
         return true
@@ -187,25 +192,24 @@ export default {
               optionType === 'Room' || 
               optionType === 'Info')
           {
+            log("entfall")
             return true
           }
         case 'Raumänderung':
           if (optionType === 'Teacher' || optionType === 'Info') {
-            this.$forceUpdate()
+            log("Raumänderung")
             return true
           }
           if (optionType === 'Room') {
-            this.$forceUpdate()
             return false
           }
         case 'Info':
           if (optionType === 'Teacher' || optionType === 'Room') {
-            this.$forceUpdate()
+            log("Info")
              return true
           }
         case 'Vert. ohne Lehrer':
           if (optionType === 'Teacher') {
-            this.$forceUpdate()
              return true
           }
         default:
@@ -230,12 +234,6 @@ export default {
       this.dayIsClicked = false
       this.$store.commit('setDayClicked', false)
     },
-    sortTeachersByLastName() {
-      // Sort teacher array by first name
-      this.teachers.sort(function(a, b) {
-        return (a.lastName > b.lastName) ? 1 : ((b.lastName > a.lastName) ? -1 : 0)
-      })
-    },
     addVertretung() {
       this.vertretungen.unshift({
         type: 'Vertretung',
@@ -247,33 +245,6 @@ export default {
         room: '-',
         info: null
       })
-    },
-    async fetchClasses() {
-      this.classes = this.$store.getters.getClasses
-
-      if (this.classes.length === 0) {
-        const classes = await axios.get(`${config.domain}/get-classes`)
-        this.classes = classes.data
-      }
-    },
-    async fetchTeacherAccounts() {
-      const teachers = this.$store.getters.getDBTeachers
-
-      if (teachers.length === 0) {
-        // Attempt getting Teachers from Database
-        let response = await axios.get(`${config.domain}/fetch-teacher-accounts-scheduler`)
-        this.$store.commit('addTeachers', response.data)
-
-        this.teachers = response.data
-    
-        this.sortTeachersByLastName()
-      }
-    },
-    async fetchRooms() {
-      const res = await axios.get(`${config.domain}/get-rooms`)
-
-      this.rooms = res.data
-      log(this.rooms)
     }
   },
   async created() {
@@ -283,15 +254,21 @@ export default {
       }
     })
 
-    this.fetchClasses()
-    this.fetchTeacherAccounts()
-    this.fetchRooms()
+    this.classes = await this.fetchClasses()
+    this.teachers = await this.fetchTeachers()
+    this.rooms = await this.fetchRooms()
   }
 }
 </script>
 
 <style lang="scss" scoped>
 @import '@/includes/scss/centerXY';
+
+select {
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background-color: transparent;
+}
 
 #blurVertretungen {
   z-index: 10;
@@ -312,6 +289,8 @@ export default {
   display: grid;
   height: 50px;
   grid-template-columns: 3fr 3fr 2.5fr 1fr 3fr 3fr 2fr 1fr;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
   div {
     border: 1px solid black;
   }
@@ -321,7 +300,8 @@ ul#Vertretungen {
   @include centerXY;
   width: 85%;
   height: 80%;
-  background-color: gray;
+  background-color: transparent;
+  border-radius: 7px;
   li.Vertretung {
     display: flex; justify-content:center; align-items: center;
     background-color: rgba(0, 0, 0, 0.2);
