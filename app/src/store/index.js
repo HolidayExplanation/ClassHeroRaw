@@ -20,12 +20,6 @@ export default new Vuex.Store({
     dayIsClicked: true
   },
   getters: {
-    getClasses(state) {
-      return state.classes
-    },
-    getRooms(state) {
-      return state.rooms
-    },
     getUser(state) {
       return state.user
     },

@@ -113,11 +113,11 @@ export default {
       'fetchRooms'
     ]),
     chooseTypeColor(i) {
-      const colors = ['yellowgreen', 'orange', 'skyblue', 'yellow', 
-      'purple', 'pink', '#00cc66', '#cc3399', '#ff6699', '#3399ff']
+      const colors = ['yellowgreen', 'orange', 'skyblue', 
+      'purple', 'pink', '#00cc66', '#cc3399', '#ff6699', '#3399ff', 'yellow']
       const roomType = this.rooms[i].type
       const pos = this.cats.indexOf(roomType)
-      log(pos)
+
       if (pos === -1) {
         return colors[colors.length - 1]
       }

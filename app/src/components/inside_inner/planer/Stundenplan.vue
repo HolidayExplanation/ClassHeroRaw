@@ -1,17 +1,32 @@
 <template>
   <div>
-    <section id="Main" v-if="false">
-      <!-- FIRST SHOW ONLY {SELECT CLASS} -->
-      <select id="ClassSelector">
-        <option v-for="(_class, i) in classes" :key="i">
-          {{ _class.name }}
-        </option>
-      </select>
-      <ul id="Monday">
-        <li v-for="(hour, h) in hours.monday" :key="h">
-          {{ h }}
-        </li>
-      </ul>
+    <section id="Main">
+
+      <div id="ClassSelector">
+        <select>
+          <option v-for="(_class, i) in classes" :key="i">
+            {{ _class.name }}
+          </option>
+        </select>
+      </div>
+      
+      <div id="Schedule">
+        <!-- Hours -->
+        <ul id="Hours">
+          <li v-for="hourNum in 12" :key="hourNum">
+            <span>{{ hourNum }}</span>
+          </li>
+        </ul>
+        <ul id="Days">
+          <li v-for="day in 5" :key="day">
+            <ul>
+              <li v-for="hour in 12" :key="hour">
+                {{ hour }}
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
     </section>
   </div>
 </template>
@@ -27,7 +42,11 @@ export default {
   data() {
     return {
       hours: {
-        monday: []
+        monday: ['benn', 'ebr'],
+        tuesday: ['benn'],
+        wednesday: [],
+        thursday: [],
+        friday: []
       },
       classes: []
     }
@@ -53,6 +72,32 @@ export default {
 <style lang="scss" scoped>
 @import '@/includes/scss/centerXY';
 
+#Schedule {
+  @include centerXY;
+  background-color: gray;
+  display: grid;
+  grid-template-columns: 5% 95%;
+  width: 90%;
+  #Hours {
+    background-color: paleturquoise;
+  }
+  #Days {
+    display: grid;
+    grid-template-columns: 20% 20% 20% 20% 20%;
+    background-color: palegreen;
+    ul {
+      border: 1px dashed orangered;
+    }
+  }
+}
 
+li {
+  position: relative;
+  height: 30px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  span, input {
+    @include centerXY;
+  }
+}
 
 </style>

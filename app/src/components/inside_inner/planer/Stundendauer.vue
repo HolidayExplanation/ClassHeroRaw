@@ -54,19 +54,16 @@ export default {
       hoursFrom: [],
       hoursTo: [],
       changed: 0,
-      loaded: false
+      loaded: false,
+      creatingRoom: false
     }
   },
   watch: {
     hoursFrom: function(val) {
       this.changed++
-      
-      log(this.changed)
     },
     hoursTo: function(val) {
       this.changed++
-      
-      log(this.changed)
     }
   },
   methods: {
