@@ -29,9 +29,14 @@
         </ul>
       </section>
       <section id="HourAdder">
-        <div id="buttonPositioner">
+        <div class="buttonPositioner">
           <button @click="addHour()">
-            <img id="add" src="@/assets/icons/add.svg">
+            <img class="add" src="@/assets/icons/add.svg">
+          </button>
+        </div>
+        <div class="buttonPositioner">
+          <button @click="addHour()" class="red">
+            <img class="add" src="@/assets/icons/subtract.svg">
           </button>
         </div>
       </section>
@@ -120,11 +125,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/includes/scss/animations/Fade';
 @import '@/includes/scss/centerXY';
-
-img#add {
-  @include centerXY;
-  height: 15px;
-}
+@import '@/includes/scss/flexCenter';
 
 $TimesWidth: 200px;
 $HourCountWidth: 60px;
@@ -150,7 +151,7 @@ div#Main {
     }
   }
   section#HourAdder {
-    position: relative;
+    @include flexCenter;
     width: ($TimesWidth*2 + $HourCountWidth);
     background-color: rgba(0, 0, 0, 0.3);
     border-bottom-left-radius: 5px;
@@ -158,8 +159,10 @@ div#Main {
     height: 60px;
     padding: 10px 0 10px 0;
     text-align: center;
-    div#buttonPositioner {
-      @include centerXY;
+    div + div {
+      margin-left: 15px;
+    }
+    div.buttonPositioner {
       padding: 5px;
       border-radius: 5px;
       border: 2px dashed rgba(255, 255, 255, 0.15);
@@ -174,9 +177,18 @@ div#Main {
         &:hover {
           transform: scale(1.03);
         }
+        img.add {
+          @include centerXY;
+          height: 15px;
+        }
       }
     }
   }
+}
+
+.red {
+  border: 2px solid rgb(255, 170, 90) !important;
+  background-color: rgb(255, 123, 0) !important;
 }
 
 li {

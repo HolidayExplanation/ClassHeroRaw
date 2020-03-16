@@ -218,6 +218,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/includes/scss/centerXY';
+@import '@/includes/scss/flexCenter';
 
 section#Main {
   @include centerXY;
@@ -254,12 +255,6 @@ section#Main {
 
 span.selectable {
   color: whitesmoke;
-}
-
-@mixin flexCenter {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 $listHeight: 45px;
