@@ -23,7 +23,7 @@ export default {
       user: null,
       pics: {
         planer: ['benachrichtigungen', 'klassenverwaltung', 
-        'lehrerverwaltung', 'planerkonto', 'raumverwaltung', 'stundendauer',
+        'lehrerverwaltung', 'raumverwaltung', 'stundendauer',
         'vertretungen', 'stundenplan']
       }
     }

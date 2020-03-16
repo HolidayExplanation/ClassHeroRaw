@@ -180,7 +180,7 @@ div#Main {
         outline: none;
         transition: .15s ease;
         &:hover {
-          transform: scale(1.03);
+          transform: scale(1.06);
         }
         img.add {
           @include centerXY;
