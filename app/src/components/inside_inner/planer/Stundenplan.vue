@@ -34,7 +34,12 @@
             <ul>
               <li v-for="hour in 12" :key="hour"
               @click="insertSubj(day, hour)">
-                {{ hours[day - 1][hour - 1] }}
+                <span v-if="hours[day-1][hour-1]">
+                  {{ hours[day - 1][hour - 1].teacherName }}
+                </span>
+               <span v-if="hours[day-1][hour-1]">
+                  {{ hours[day - 1][hour - 1].subjName }}
+                </span>
               </li>
             </ul>
           </li>
@@ -58,7 +63,7 @@ export default {
   data() {
     return {
       hours: [
-        ['benn', 'ebr'], ['ebr'], ['fsa'], ['fsa'], ['fsa']
+        [], [], [], [], []
       ],
       classes: [],
       teachers: [],
@@ -74,11 +79,16 @@ export default {
         subject.selected = false
       })
 
-      this.selectable[i].selected = true
+      this.selectable[i].selected = true // for CSS
+      this.selectedSubj = this.selectable[i] // for JS
     },
-    insert(d, h) {
+    insertSubj(d, h) {
       const day = d - 1
       const hour = h - 1
+
+      this.hours[day][hour] = this.selectedSubj
+      log(this.hours)
+      this.$forceUpdate()
     },
     selectRoom(value) {
       log(value)
