@@ -34,12 +34,14 @@
             <ul id="Hours">
               <li v-for="hour in 12" :key="hour"
               @click="insertSubj(day, hour)">
-                <span v-if="hours[day-1][hour-1]" class="hourTeacherName">
-                  {{ hours[day - 1][hour - 1].teacherName }}
-                </span>
-               <span v-if="hours[day-1][hour-1]" class="hourSubjName">
-                  {{ hours[day - 1][hour - 1].subjName }}
-                </span>
+                <div class="items">
+                  <span v-if="hours[day-1][hour-1]" class="hourTeacherName">
+                    {{ hours[day - 1][hour - 1].teacherName }}
+                  </span>
+                  <span v-if="hours[day-1][hour-1]" class="hourSubjName">
+                    {{ hours[day - 1][hour - 1].subjName }}
+                  </span>
+                </div>
               </li>
             </ul>
           </li>
@@ -152,6 +154,14 @@ span.selectable {
   color: whitesmoke;
 }
 
+@mixin flexCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+$listHeight: 45px;
+
 #Schedule {
   @include centerXY;
   background-color: gray;
@@ -162,7 +172,7 @@ span.selectable {
     li {
       background-color: paleturquoise;
       position: relative;
-      height: 40px;
+      height: $listHeight;
       border: 1px solid rgba(0, 0, 0, 0.2);
       span, input {
         @include centerXY;
@@ -174,25 +184,28 @@ span.selectable {
     grid-template-columns: 20% 20% 20% 20% 20%;
     background-color: palegreen;
     ul#Hours {
+      position: relative;
       li {
-        height: 40px;
+        height: $listHeight;
         border: 1px solid rgba(0, 0, 0, 0.2);
-        span {
+        @include flexCenter;
+        div.items {
+          @include flexCenter;
+          background-color: white;
           width: 95%;
+          height: 85%;
+          border-radius: 5px;
+          span {
           font-size: 12px;
           padding: 3px;
-        }
-        .hourTeacherName {
-          background-color: white;
-        }
-        .hourSubjName {
-          background-color: orangered;
+          }
+          .hourSubjName {
+            background-color: orangered;
+          }
         }
       }
     }
   }
 }
-
-
 
 </style>
