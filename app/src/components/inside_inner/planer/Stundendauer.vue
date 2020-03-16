@@ -35,7 +35,7 @@
           </button>
         </div>
         <div class="buttonPositioner">
-          <button @click="addHour()" class="red">
+          <button @click="removeHour()" class="red">
             <img class="add" src="@/assets/icons/subtract.svg">
           </button>
         </div>
@@ -80,6 +80,11 @@ export default {
     }
   },
   methods: {
+    removeHour() {
+      this.hourAmount--
+      this.hoursFrom.pop()
+      this.hoursTo.pop()
+    },
     addHour() {
       this.hourAmount++
       this.hoursFrom.push('')
