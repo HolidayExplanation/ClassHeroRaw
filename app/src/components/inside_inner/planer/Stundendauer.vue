@@ -7,19 +7,25 @@
       </section>
       <section id="Hours">
         <ul id="HourCount">
+          <transition-group name='fade'>
           <li v-for="hour in hourAmount" :key="hour">
             <span>{{ hour }}</span>
           </li>
+          </transition-group>
         </ul>
         <ul id="HoursFrom">
+          <transition-group name='fade'>
           <li v-for="(time, i) in hoursFrom" :key="i">
-            <input v-model='hoursFrom[i]'>
+            <input v-model='hoursFrom[i]' placeholder="SS:MM">
           </li>
+          </transition-group>
         </ul>
         <ul id="HoursTo">
+          <transition-group name='fade'>
             <li v-for="(time, i) in hoursTo" :key="i">
-            <input v-model='hoursTo[i]'>
+            <input v-model='hoursTo[i]' placeholder="SS:MM">
           </li>
+          </transition-group>
         </ul>
       </section>
       <section id="HourAdder">
@@ -30,16 +36,16 @@
         </div>
       </section>
 
-      <transition name="fade">
-      <!-- '> 2' because: 2 changes occur upon loading of hoursFrom & hoursTo -->
+    </div>
+
+    <transition name="fade">
+    <!-- '> 2' because: 2 changes occur upon loading of hoursFrom & hoursTo -->
       <section id="Update" v-if="changed > 2">
         <button @click="updateHours()">
           Aktualisieren
         </button>
       </section>
-      </transition>
-
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -128,15 +134,19 @@ div#Main {
   @include centerXY;
   width: $TimesWidth*2 + $HourCountWidth;
   display: grid;
+  box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.4);
+  border-radius: 5px;
   section#Titles {
     position: relative;
     height: 40px;
     margin-bottom: 5px;
-    font-size: 17px;
+    background-color: rgb(127, 127, 167);
     border: 1px solid rgba(0, 0, 0, 0.2);
     width: 100%;
     span {
       @include centerXY;
+      color: white;
+      font-size: 18px;
     }
   }
   section#HourAdder {
@@ -159,22 +169,12 @@ div#Main {
         border: 2px solid rgb(123, 207, 123);
         height: 40px; width: 40px;
         border-radius: 100%;
+        outline: none;
         transition: .15s ease;
         &:hover {
           transform: scale(1.03);
         }
       }
-    }
-  }
-  section#Update {
-    position: relative;
-    height: 30px;
-    width: 100%;
-    margin-top: 10px;
-    button {
-      @include centerXY;
-      padding: 5px 15px 5px 15px;
-      background-color: greenyellow;
     }
   }
 }
@@ -208,10 +208,38 @@ li {
      }
    }
    ul#HoursFrom {
-     background-color: cadetblue;
+     background-color: rgb(93, 99, 116);
    }
    ul#HoursTo {
-     background-color: brown;
+     background-color: rgb(93, 99, 116);
+   }
+   input {
+     color: #f0f0f0;
+     font-size: 17px;
+     border: 1px solid rgba(0, 0, 0, 0.35);
+     background-color: transparent;
+     &::placeholder {
+       color: rgba(0, 0, 0, 0.5);
+     }
    }
  }
+
+section#Update {
+  left: -300px;
+  position: absolute;
+  height: 30px;
+  width: 100%;
+  margin-top: 10px;
+  button {
+    // @include centerXY;
+    padding: 9px 20px 9px 20px;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 3px;
+    background-color: rgb(34, 172, 34);
+    box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
+    color: #f0f0f0;
+  }
+}
+
 </style>
