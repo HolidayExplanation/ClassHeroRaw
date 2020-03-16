@@ -30,22 +30,14 @@ const classSchema = new mongoose.Schema({
                 required: true,
                 ref: 'Subject'
             },
-            teacher: {
+            teacherID: {
                 type: mongoose.Schema.Types.ObjectId,
                 required: true,
                 ref: 'Teacher'
             },
-            // Need to change teacher fname and lname to a fullname everywhere
-            // and then add virtuals to Subject and Teacher
             teacherName: {
                 type: String,
-                required: true,
-                ref: 'Teacher'
-            },
-            teacherLastName: {
-                type: String,
-                required: true,
-                ref: 'Teacher'
+                required: true
             }
         }
     ],

@@ -428,6 +428,23 @@ router.get('/get-classes', (req, res, next) => {
   }
 })
 
+router.post('/fetch-assigned-subjects', (req, res, next) => {
+  auth(req, res, next, 'planer')
+}, async(req, res) => {
+  const classID = req.body.classID
+
+  try {
+    const _class = await Class.findById(classID)
+
+    log(_class)
+    
+    res.send(_class.assignedSubjects)
+  } catch (err) {
+    log(err)
+    res.send(err)
+  }
+})
+
 router.get('/fetch-teacher-accounts-scheduler', (req, res, next) => {
   auth(req, res, next, 'planer')
 }, async(req, res) => {

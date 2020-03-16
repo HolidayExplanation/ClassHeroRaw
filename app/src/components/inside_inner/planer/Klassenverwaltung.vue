@@ -177,14 +177,15 @@ export default {
   async created() {
     this.teachers = await this.$store.dispatch('fetchTeachers')
 
-    log(this.teachers)
+    log("teachers",this.teachers)
 
     this.teachers.forEach((teacher) => {
       if (teacher.subjects.length > 0) {
         teacher.subjects.forEach((subject) => {
           let subjectObject = {
             ...subject,
-            teacherName: `${teacher.name}`
+            teacherID: teacher._id,
+            teacherName: teacher.name
           }
 
           this.subjects.unshift(subjectObject)

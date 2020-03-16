@@ -14,7 +14,7 @@
           <span class="selectable">
             <span class="teacherName">{{ subj.teacherName }}</span>
             <span class="subjName" :style="{backgroundColor: chooseColor(i, 'Subject')}">
-              {{ subj.subjName }}
+              {{ subj.name }}
             </span>
           </span>
         </li>
@@ -39,7 +39,7 @@
                     {{ hours[day - 1][hour - 1].teacherName }}
                   </span>
                   <span class="hourSubjName" :style="{backgroundColor: chooseScheduleColor(hours[day-1][hour-1], 'Subject')}">
-                    {{ hours[day - 1][hour - 1].subjName }}
+                    {{ hours[day - 1][hour - 1].name }}
                   </span>
                 </div>
               </li>
@@ -89,7 +89,14 @@ export default {
         classID: this.selectedClass._id
       })
 
-      log(response)
+      response.data.forEach((subject) => {
+        this.selectable.push({
+          ...subject,
+          selected: false
+        })
+      })
+
+      log(this.selectable)
     },
     async fetchClassSchedule(selectedClass) {
       this.selectedClass = selectedClass
@@ -124,7 +131,8 @@ export default {
       }
     },
     chooseScheduleColor(subj, type) {
-      const i = this.selectable.findIndex(x => x.subjName === subj.subjName)
+      const i = this.selectable.findIndex(x => x.name === subj.name)
+      log(subj, i)
       
       if (type === 'List') {
         return `rgb(${this.listColors[i]})`
