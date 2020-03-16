@@ -30,10 +30,10 @@
         <ul id="Days">
           <li v-for="(n, day) in 5" :key="day">
             <ul id="Hours">
-              <li v-for="(n, hour) in 12" :key="hour"
-              @mousedown.left="insertSubj(day, hour)"
-              @mousedown.right="clearField(day, hour)">
+              <li v-for="(n, hour) in 12" :key="hour">
                 <div class="items" v-if="hours[day][hour]"
+                @mousedown.left="insertSubj(day, hour)"
+                @mousedown.right="clearField(day, hour)"
                 :style="{backgroundColor: chooseScheduleColor(hours[day][hour], 'List')}">
                   <span class="hourTeacherName">
                     {{ hours[day][hour].teacherName }}
@@ -41,6 +41,9 @@
                   <span class="hourSubjName" :style="{backgroundColor: chooseScheduleColor(hours[day][hour], 'Subject')}">
                     {{ hours[day][hour].name }}
                   </span>
+                </div>
+                <div v-else class="fieldPlaceholder" @mousedown.left="insertSubj(day, hour)">
+                  -
                 </div>
                 <span v-if="hours[day][hour]" @click="openRoomSelector(day, hour)">
                   {{ 
@@ -286,6 +289,12 @@ $listHeight: 45px;
             padding: 3px;
             color: white;
           }
+        }
+        div.fieldPlaceholder {
+          @include flexCenter;
+          width: 95%;
+          height: 85%;
+          background-color: yellow;
         }
       }
     }
