@@ -24,20 +24,20 @@
       
       <div id="Schedule">
         <!-- Hours -->
-        <ul id="Hours">
+        <ul id="HourList">
           <li v-for="hourNum in 12" :key="hourNum">
             <span>{{ hourNum }}</span>
           </li>
         </ul>
         <ul id="Days">
           <li v-for="day in 5" :key="day">
-            <ul>
+            <ul id="Hours">
               <li v-for="hour in 12" :key="hour"
               @click="insertSubj(day, hour)">
-                <span v-if="hours[day-1][hour-1]">
+                <span v-if="hours[day-1][hour-1]" class="hourTeacherName">
                   {{ hours[day - 1][hour - 1].teacherName }}
                 </span>
-               <span v-if="hours[day-1][hour-1]">
+               <span v-if="hours[day-1][hour-1]" class="hourSubjName">
                   {{ hours[day - 1][hour - 1].subjName }}
                 </span>
               </li>
@@ -158,21 +158,35 @@ span.selectable {
   display: grid;
   grid-template-columns: 5% 95%;
   width: 90%;
-  #Hours {
-    background-color: paleturquoise;
+  #HourList {
+    li {
+      background-color: paleturquoise;
+      position: relative;
+      height: 40px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      span, input {
+        @include centerXY;
+      }
+    }
   }
   #Days {
     display: grid;
     grid-template-columns: 20% 20% 20% 20% 20%;
     background-color: palegreen;
-    ul {
-      border: 1px dashed orangered;
+    ul#Hours {
       li {
-        position: relative;
-        height: 30px;
+        height: 40px;
         border: 1px solid rgba(0, 0, 0, 0.2);
-        span, input {
-          @include centerXY;
+        span {
+          width: 95%;
+          font-size: 12px;
+          padding: 3px;
+        }
+        .hourTeacherName {
+          background-color: white;
+        }
+        .hourSubjName {
+          background-color: orangered;
         }
       }
     }
