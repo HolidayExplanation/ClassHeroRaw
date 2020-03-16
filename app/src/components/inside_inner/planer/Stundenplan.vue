@@ -89,6 +89,8 @@ export default {
         classID: this.selectedClass._id
       })
 
+      this.selectable = []
+
       response.data.forEach((subject) => {
         this.selectable.push({
           ...subject,
