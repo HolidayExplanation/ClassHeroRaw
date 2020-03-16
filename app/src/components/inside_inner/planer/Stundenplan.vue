@@ -36,11 +36,12 @@
             <ul id="Hours">
               <li v-for="hour in 12" :key="hour"
               @click="insertSubj(day, hour)">
-                <div class="items" :style="{backgroundColor: chooseColor(hour, 'List')}">
-                  <span v-if="hours[day-1][hour-1]" class="hourTeacherName">
+                <div class="items" v-if="hours[day-1][hour-1]" 
+                :style="{backgroundColor: chooseScheduleColor(hours[day-1][hour-1], 'List')}">
+                  <span class="hourTeacherName">
                     {{ hours[day - 1][hour - 1].teacherName }}
                   </span>
-                  <span v-if="hours[day-1][hour-1]" class="hourSubjName">
+                  <span class="hourSubjName">
                     {{ hours[day - 1][hour - 1].subjName }}
                   </span>
                 </div>
@@ -72,22 +73,30 @@ export default {
       classes: [],
       teachers: [],
       rooms: [],
-      selectable: []
+      selectable: [],
+      listColors: ['#eb4034', '#32c91e', 'skyblue', 
+      'purple', 'pink', '#00cc66', '#cc3399', '#ff6699', '#3399ff', 'yellow'],
+      subjColors: ['#ad251c', '#239c13', 'skyblue', 
+      'purple', 'pink', '#00cc66', '#cc3399', '#ff6699', '#3399ff', 'yellow']
     }
   },
   created() {
   },
   methods: {
     chooseColor(i, type) {
-      const listColors = ['#eb4034', '#32c91e', 'skyblue', 
-      'purple', 'pink', '#00cc66', '#cc3399', '#ff6699', '#3399ff', 'yellow']
-      const subjColors = ['#ad251c', '#239c13', 'skyblue', 
-      'purple', 'pink', '#00cc66', '#cc3399', '#ff6699', '#3399ff', 'yellow']
+      if (type === 'List') {
+        return this.listColors[i]
+      } else {
+        return this.subjColors[i]
+      }
+    },
+    chooseScheduleColor(subj, type) {
+      const i = this.selectable.findIndex(x => x.subjName === subj.subjName)
 
       if (type === 'List') {
-        return listColors[i]
+        return this.listColors[i]
       } else {
-        return subjColors[i]
+        return this.subjColors[i]
       }
     },
     selectSubject(i) {
