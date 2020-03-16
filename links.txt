@@ -1,0 +1,4 @@
+https://github.com/luvuong-le/node-vue-chat/blob/master/client/components/chat/ChatInput.vue
+https://medium.com/@jaouad_45834/basic-chat-web-app-using-express-js-vue-js-socket-io-429588e841f0
+https://vuejobs.com/
+https://web.dev/measure/

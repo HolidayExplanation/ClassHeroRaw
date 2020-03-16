@@ -24,7 +24,9 @@
       </section>
       <section id="HourAdder">
         <div id="buttonPositioner">
-          <button @click="addHour()">+</button>
+          <button @click="addHour()">
+            <img id="add" src="@/assets/icons/add.svg">
+          </button>
         </div>
       </section>
 
@@ -113,6 +115,11 @@ export default {
 @import '@/includes/scss/animations/Fade';
 @import '@/includes/scss/centerXY';
 
+img#add {
+  @include centerXY;
+  height: 15px;
+}
+
 $TimesWidth: 200px;
 $HourCountWidth: 60px;
 $listItemHeight: 40px;
@@ -134,17 +141,22 @@ div#Main {
   }
   section#HourAdder {
     position: relative;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.05);
+    width: ($TimesWidth*2 + $HourCountWidth);
+    background-color: rgba(0, 0, 0, 0.3);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
     height: 60px;
+    padding: 10px 0 10px 0;
     text-align: center;
     div#buttonPositioner {
       @include centerXY;
       padding: 5px;
       border-radius: 5px;
-      border: 2px dashed rgba(0, 0, 0, 0.15);
+      border: 2px dashed rgba(255, 255, 255, 0.15);
       button {
-        background-color: black;
+        position: relative;
+        background-color: rgb(34, 172, 34);
+        border: 2px solid rgb(123, 207, 123);
         height: 40px; width: 40px;
         border-radius: 100%;
         transition: .15s ease;
@@ -188,7 +200,12 @@ li {
    width: $TimesWidth;
    grid-template-columns: $HourCountWidth $TimesWidth $TimesWidth;
    ul#HourCount {
-     background-color: orange;
+     background-color: rgb(119, 125, 151);
+     li > span {
+       color: white;
+       font-weight: bold;
+       font-size: 17px;
+     }
    }
    ul#HoursFrom {
      background-color: cadetblue;
