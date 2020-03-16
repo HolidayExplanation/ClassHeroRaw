@@ -82,15 +82,29 @@ export default {
   },
   methods: {
     ...mapActions([
-      'fetchClasses',
-      'fetchTeachers'
+      'fetchClasses'
     ]),
+    async fetchAssignedSubjects() {
+      let response = await axios.post(`${config.domain}/fetch-assigned-subjects`, {
+        classID: this.selectedClass._id
+      })
+
+      log(response)
+    },
     async fetchClassSchedule(selectedClass) {
+      this.selectedClass = selectedClass
+
       const classSchedule = await axios.post(`${config.domain}/get-class-schedule`, {
         classID: selectedClass._id
       })
 
-      log(classSchedule)
+      await this.fetchAssignedSubjects()
+
+      if (classSchedule.data.length < 1) {
+        this.hours = [[], [], [], [], []]
+      } else {
+        this.hours = classSchedule.data
+      }
     },
     updateSchedule() {
       this.changed = false
@@ -155,7 +169,6 @@ export default {
     }
   },
   async created() {
-    this.teachers = await this.fetchTeachers()
     this.classes = await this.fetchClasses()
 
     this.transformToSelectable()
