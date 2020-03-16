@@ -129,6 +129,8 @@ export default {
     assignRoom(val) {
       this.hours[this.selectedRoom.day][this.selectedRoom.hour].room = val
       this.$forceUpdate()
+      this.selectedRoom.day = null
+      this.selectedRoom.hour = null
     },
     openRoomSelector(day, hour) {
       this.selectedRoom.day = day
