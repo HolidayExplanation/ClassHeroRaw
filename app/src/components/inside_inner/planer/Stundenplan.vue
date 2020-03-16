@@ -74,10 +74,8 @@ export default {
       teachers: [],
       rooms: [],
       selectable: [],
-      listColors: ['#eb4034', '#32c91e', 'skyblue', 
-      'purple', 'pink', '#00cc66', '#cc3399', '#ff6699', '#3399ff', 'yellow'],
-      subjColors: ['#ad251c', '#239c13', 'skyblue', 
-      'purple', 'pink', '#00cc66', '#cc3399', '#ff6699', '#3399ff', 'yellow']
+      listColors: ['235, 64, 52', '50, 201, 30', '24, 156, 204', '105, 21, 189', '173, 18, 184',
+       '227, 95, 0', '146, 227, 84', '255, 102, 153', '68, 66, 212', '50, 207, 186']
     }
   },
   created() {
@@ -85,18 +83,18 @@ export default {
   methods: {
     chooseColor(i, type) {
       if (type === 'List') {
-        return this.listColors[i]
+        return `rgb(${this.listColors[i]})`
       } else {
-        return this.subjColors[i]
+        return `rgb(0, 0, 0, 0.2)`
       }
     },
     chooseScheduleColor(subj, type) {
       const i = this.selectable.findIndex(x => x.subjName === subj.subjName)
-
+      
       if (type === 'List') {
-        return this.listColors[i]
+        return `rgb(${this.listColors[i]})`
       } else {
-        return this.subjColors[i]
+        return `rgb(0, 0, 0, 0.2)`
       }
     },
     selectSubject(i) {
@@ -157,20 +155,18 @@ export default {
     margin: 5px;
     display: inline-block;
     padding: 5px 15px 5px 15px;
-    background-color: orange;
     .subjName {
       border-radius: 3px;
       margin-left: 5px;
-      background-color: green;
       padding: 3px 7px 3px 3px;
     }
   }
 }
 
 .selected {
-  background-color: indigo !important;
+  background-color: rgb(156, 156, 156) !important;
   .subjName {
-    background-color: grey !important;
+    background-color: rgb(70, 68, 68) !important;
   }
 }
 
@@ -206,7 +202,7 @@ $listHeight: 45px;
   #Days {
     display: grid;
     grid-template-columns: 20% 20% 20% 20% 20%;
-    background-color: palegreen;
+    // background-color: palegreen;
     ul#Hours {
       position: relative;
       li {
@@ -215,13 +211,13 @@ $listHeight: 45px;
         @include flexCenter;
         div.items {
           @include flexCenter;
-          background-color: rgb(158, 158, 158);
           width: 95%;
           height: 85%;
           border-radius: 5px;
           span {
-          font-size: 12px;
-          padding: 3px;
+            font-size: 12px;
+            padding: 3px;
+            color: white;
           }
           .hourSubjName {
             // background-color: orangered;
