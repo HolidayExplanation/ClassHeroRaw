@@ -41,7 +41,7 @@
                   <span class="hourTeacherName">
                     {{ hours[day - 1][hour - 1].teacherName }}
                   </span>
-                  <span class="hourSubjName">
+                  <span class="hourSubjName" :style="{backgroundColor: chooseScheduleColor(hours[day-1][hour-1], 'Subject')}">
                     {{ hours[day - 1][hour - 1].subjName }}
                   </span>
                 </div>
