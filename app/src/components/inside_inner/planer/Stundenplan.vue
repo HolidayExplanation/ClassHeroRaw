@@ -28,20 +28,27 @@
           </li>
         </ul>
         <ul id="Days">
-          <li v-for="day in 5" :key="day">
+          <li v-for="(n, day) in 5" :key="day">
             <ul id="Hours">
-              <li v-for="hour in 12" :key="hour"
+              <li v-for="(n, hour) in 12" :key="hour"
               @mousedown.left="insertSubj(day, hour)"
               @mousedown.right="clearField(day, hour)">
-                <div class="items" v-if="hours[day-1][hour-1]"
-                :style="{backgroundColor: chooseScheduleColor(hours[day-1][hour-1], 'List')}">
+                <div class="items" v-if="hours[day][hour]"
+                :style="{backgroundColor: chooseScheduleColor(hours[day][hour], 'List')}">
                   <span class="hourTeacherName">
-                    {{ hours[day - 1][hour - 1].teacherName }}
+                    {{ hours[day][hour].teacherName }}
                   </span>
-                  <span class="hourSubjName" :style="{backgroundColor: chooseScheduleColor(hours[day-1][hour-1], 'Subject')}">
-                    {{ hours[day - 1][hour - 1].name }}
+                  <span class="hourSubjName" :style="{backgroundColor: chooseScheduleColor(hours[day][hour], 'Subject')}">
+                    {{ hours[day][hour].name }}
                   </span>
                 </div>
+                <span v-if="hours[day][hour]">
+                  {{ 
+                    hours[day][hour].roomName?
+                    hours[day][hour].roomName:
+                    'room' 
+                  }}
+                </span>
               </li>
             </ul>
           </li>
@@ -120,7 +127,7 @@ export default {
     },
     clearField(day, hour) {
       log('hi')
-      this.hours[day-1][hour-1] = null
+      this.hours[day][hour] = null
       log(this.hours)
       this.$forceUpdate()
       this.changed = true
@@ -150,10 +157,7 @@ export default {
       this.selectable[i].selected = true // for CSS
       this.selectedSubj = this.selectable[i] // for JS
     },
-    insertSubj(d, h) {
-      const day = d - 1
-      const hour = h - 1
-
+    insertSubj(day, hour) {
       this.hours[day][hour] = this.selectedSubj
       log(this.hours)
       this.$forceUpdate()
