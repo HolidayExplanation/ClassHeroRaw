@@ -3,11 +3,13 @@
     <section id="Main">
 
       <ul id="SubjectList">
-        <li v-for="(subj, i) in selectable" :key="i"
+        <li v-for="(subj, i) in selectable" :key="i" :style="{backgroundColor: chooseColor(i, 'List')}"
         @click="selectSubject(i)" :class="{selected: subj.selected}">
           <span class="selectable">
             <span class="teacherName">{{ subj.teacherName }}</span>
-            <span class="subjName">{{ subj.subjName }}</span>
+            <span class="subjName" :style="{backgroundColor: chooseColor(i, 'Subject')}">
+              {{ subj.subjName }}
+            </span>
           </span>
         </li>
       </ul>
@@ -76,6 +78,18 @@ export default {
   created() {
   },
   methods: {
+    chooseColor(i, type) {
+      const listColors = ['#eb4034', '#32c91e', 'skyblue', 
+      'purple', 'pink', '#00cc66', '#cc3399', '#ff6699', '#3399ff', 'yellow']
+      const subjColors = ['#ad251c', '#239c13', 'skyblue', 
+      'purple', 'pink', '#00cc66', '#cc3399', '#ff6699', '#3399ff', 'yellow']
+
+      if (type === 'List') {
+        return listColors[i]
+      } else {
+        return subjColors[i]
+      }
+    },
     selectSubject(i) {
       this.selectable.forEach((subject) => {
         subject.selected = false
@@ -136,9 +150,10 @@ export default {
     padding: 5px 15px 5px 15px;
     background-color: orange;
     .subjName {
+      border-radius: 3px;
       margin-left: 5px;
       background-color: green;
-      padding: 3px;
+      padding: 3px 7px 3px 3px;
     }
   }
 }
@@ -191,7 +206,7 @@ $listHeight: 45px;
         @include flexCenter;
         div.items {
           @include flexCenter;
-          background-color: white;
+          background-color: rgb(158, 158, 158);
           width: 95%;
           height: 85%;
           border-radius: 5px;
