@@ -2,15 +2,13 @@
   <div>
     <section id="Main">
 
-      <ul>
-        <li v-for="(teacher, i) in teachers" :key="i">
-          <ul>
-            <li v-for="(subj, s) in teacher.subjects" :key="s">
-              <span class="selectable">
-                {{ `${teacher.name} ${subj.name}` }}
-              </span>
-            </li>
-          </ul>
+      <ul id="SubjectList">
+        <li v-for="(subj, i) in selectable" :key="i"
+        @click="selectSubject(i)" :class="{selected: subj.selected}">
+          <span class="selectable">
+            <span class="teacherName">{{ subj.teacherName }}</span>
+            <span class="subjName">{{ subj.subjName }}</span>
+          </span>
         </li>
       </ul>
 
@@ -34,9 +32,9 @@
         <ul id="Days">
           <li v-for="day in 5" :key="day">
             <ul>
-              <li v-for="hour in 12" :key="hour" @mouseover="checkEnter(day, hour)">
+              <li v-for="hour in 12" :key="hour"
+              @click="insertSubj(day, hour)">
                 {{ hours[day - 1][hour - 1] }}
-
               </li>
             </ul>
           </li>
@@ -64,26 +62,50 @@ export default {
       ],
       classes: [],
       teachers: [],
-      rooms: []
+      rooms: [],
+      selectable: []
     }
   },
   created() {
   },
   methods: {
-    checkEnter(day, hour) {
-      log(day -1, hour -1)
+    selectSubject(i) {
+      this.selectable.forEach((subject) => {
+        subject.selected = false
+      })
+
+      this.selectable[i].selected = true
+    },
+    insert(d, h) {
+      const day = d - 1
+      const hour = h - 1
     },
     selectRoom(value) {
       log(value)
     },
     ...mapActions([
-      'fetchClasses', 
+      'fetchClasses',
       'fetchTeachers'
-    ])
+    ]),
+    transformToSubjects() {
+      this.teachers.forEach(teacher => {
+        if (teacher.subjects.length > 0) {
+          teacher.subjects.forEach((subject) => {
+            return this.selectable.push({
+              teacherName: teacher.name,
+              subjName: subject.name,
+              selected: false
+            })
+          })
+        }
+      })
+    }
   },
   async created() {
-    this.classes = await this.fetchClasses()
     this.teachers = await this.fetchTeachers()
+    this.classes = await this.fetchClasses()
+
+    this.transformToSubjects()
   }
 }
 </script>
@@ -91,7 +113,30 @@ export default {
 <style lang="scss" scoped>
 @import '@/includes/scss/centerXY';
 
-ul {list-style: none}
+#SubjectList {
+  width: 90%;
+  height: 200px;
+  display: inline-block;
+  background-color: gray;
+  li {
+    margin: 5px;
+    display: inline-block;
+    padding: 5px 15px 5px 15px;
+    background-color: orange;
+    .subjName {
+      margin-left: 5px;
+      background-color: green;
+      padding: 3px;
+    }
+  }
+}
+
+.selected {
+  background-color: indigo !important;
+  .subjName {
+    background-color: grey !important;
+  }
+}
 
 span.selectable {
   color: whitesmoke;
