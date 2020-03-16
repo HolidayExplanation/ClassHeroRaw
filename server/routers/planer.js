@@ -479,9 +479,10 @@ router.post('/get-class-schedule', (req, res, next) => {
   const classID = req.body.classID
 
   try {
-      const schedule = await Schedule.findOne({ classID }, `-_id -classID days`)
+      const schedule = await Schedule.findOne({ classID }, `days`)
       return res.status(200).send(schedule.days)
   } catch(err) {
+      log(err)
       return res.status(400).send(err)
   }
 })

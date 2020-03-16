@@ -98,12 +98,6 @@ export default new Vuex.Store({
       }
 
       return context.state.rooms
-    },
-    async fetchClassSchedule(context) {
-      const classSchedule = await axios.get(`${config.domain}/get-class-schedule`)
-      context.commit('setRooms', classSchedule.data)
-
-      return context.state.classSchedule
     }
   },
   modules: {

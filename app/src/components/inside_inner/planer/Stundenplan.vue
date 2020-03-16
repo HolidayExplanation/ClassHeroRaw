@@ -1,13 +1,9 @@
 <template>
   <div >
-    <section id="Main" oncontextmenu="return false;">
+    <section id="Main" @contextmenu.prevent>
 
       <div id="ClassSelector">
-        <select>
-          <option v-for="(_class, i) in classes" :key="i">
-            {{ _class.name }}
-          </option>
-        </select>
+        <Select @classSelected="fetchClassSchedule" :classes="classes" />
       </div>
 
       <RoomSelector @selected="selectRoom" />
@@ -61,6 +57,7 @@
 </template>
 
 <script>
+import Select from '@/components/global/Select'
 import RoomSelector from './selectors/RoomSelector'
 import axios from 'axios'
 import config from '@/includes/js/config'
@@ -69,7 +66,7 @@ import { mapActions } from 'vuex'
 
 export default {
   name: 'Stundenplan',
-  components: { RoomSelector },
+  components: { Select, RoomSelector },
   data() {
     return {
       selectedClass: null,
@@ -86,9 +83,15 @@ export default {
   methods: {
     ...mapActions([
       'fetchClasses',
-      'fetchTeachers',
-      'fetchClassSchedule(this.selectedClass)'
+      'fetchTeachers'
     ]),
+    async fetchClassSchedule(selectedClass) {
+      const classSchedule = await axios.post(`${config.domain}/get-class-schedule`, {
+        classID: selectedClass._id
+      })
+
+      log(classSchedule)
+    },
     updateSchedule() {
       this.changed = false
     },
