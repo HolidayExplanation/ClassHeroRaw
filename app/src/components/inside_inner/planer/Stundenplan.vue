@@ -2,6 +2,16 @@
   <div>
     <section id="Main">
 
+      <div id="ClassSelector">
+        <select>
+          <option v-for="(_class, i) in classes" :key="i">
+            {{ _class.name }}
+          </option>
+        </select>
+      </div>
+
+      <RoomSelector @selected="selectRoom" />
+
       <ul id="SubjectList">
         <li v-for="(subj, i) in selectable" :key="i" :style="{backgroundColor: chooseColor(i, 'List')}"
         @click="selectSubject(i)" :class="{selected: subj.selected}">
@@ -13,16 +23,6 @@
           </span>
         </li>
       </ul>
-
-      <div id="ClassSelector">
-        <select>
-          <option v-for="(_class, i) in classes" :key="i">
-            {{ _class.name }}
-          </option>
-        </select>
-      </div>
-
-      <RoomSelector @selected="selectRoom" />
       
       <div id="Schedule">
         <!-- Hours -->
@@ -146,11 +146,20 @@ export default {
 <style lang="scss" scoped>
 @import '@/includes/scss/centerXY';
 
-#SubjectList {
+section#Main {
+  @include centerXY;
+  background-color: white;
   width: 90%;
-  height: 200px;
+  height: 90%;
+  display: grid;
+  grid-template-rows: 1fr 1fr 4fr 10fr;
+}
+
+#SubjectList {
+  // width: 90%;
+  // height: 200px;
   display: inline-block;
-  background-color: gray;
+  background-color: rgb(65, 65, 65);
   li {
     margin: 5px;
     display: inline-block;
@@ -183,11 +192,11 @@ span.selectable {
 $listHeight: 45px;
 
 #Schedule {
-  @include centerXY;
+  // @include centerXY;
   background-color: gray;
   display: grid;
   grid-template-columns: 5% 95%;
-  width: 90%;
+  // width: 90%;
   #HourList {
     li {
       background-color: paleturquoise;
