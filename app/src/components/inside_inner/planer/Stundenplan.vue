@@ -36,7 +36,7 @@
             <ul id="Hours">
               <li v-for="hour in 12" :key="hour"
               @click="insertSubj(day, hour)">
-                <div class="items">
+                <div class="items" :style="{backgroundColor: chooseColor(hour, 'List')}">
                   <span v-if="hours[day-1][hour-1]" class="hourTeacherName">
                     {{ hours[day - 1][hour - 1].teacherName }}
                   </span>
@@ -215,7 +215,7 @@ $listHeight: 45px;
           padding: 3px;
           }
           .hourSubjName {
-            background-color: orangered;
+            // background-color: orangered;
           }
         }
       }
