@@ -84,6 +84,7 @@ export default {
       classes: [],
       teachers: [],
       rooms: [],
+      selectableReady: false,
       selectable: [],
       listColors: ['235, 64, 52', '50, 201, 30', '24, 156, 204', '105, 21, 189', '173, 18, 184',
        '227, 95, 0', '146, 227, 84', '255, 102, 153', '68, 66, 212', '50, 207, 186'],
@@ -171,10 +172,21 @@ export default {
         subject.selected = false
       })
 
+      this.selectableReady = true
+
       this.selectable[i].selected = true // for CSS
       this.selectedSubj = this.selectable[i] // for JS
     },
+    setInfo(msg, type) {
+      const infoPayload = { msg, type }
+      this.$store.commit('setUpdateInfoMsg', infoPayload)
+    },
     insertSubj(day, hour) {
+      if (!this.selectableReady) {
+        this.setInfo('Wählen Sie bitte ein Fach zum einfügen!')
+        throw new Error()
+      }
+
       this.hours[day][hour] = this.selectedSubj
       log(this.hours)
       this.$forceUpdate()

@@ -263,8 +263,8 @@ export default {
       this.subjAdderA = !this.subjAdderA
     },
     setInfo(msg, type) {
-        const infoPayload = { msg, type }
-        this.$store.commit('setUpdateInfoMsg', infoPayload)
+      const infoPayload = { msg, type }
+      this.$store.commit('setUpdateInfoMsg', infoPayload)
     },
     async addClass() {
       // No newClass.name Error
