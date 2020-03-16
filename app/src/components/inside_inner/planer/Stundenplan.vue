@@ -6,7 +6,7 @@
         <Select @classSelected="fetchClassSchedule" :classes="classes" />
       </div>
 
-      <RoomSelector @selected="selectRoom" />
+      <RoomSelector @selected="assignRoom"/>
 
       <ul id="SubjectList">
         <li v-for="(subj, i) in selectable" :key="i" :style="{backgroundColor: chooseColor(i, 'List')}"
@@ -42,10 +42,10 @@
                     {{ hours[day][hour].name }}
                   </span>
                 </div>
-                <span v-if="hours[day][hour]">
+                <span v-if="hours[day][hour]" @click="openRoomSelector(day, hour)">
                   {{ 
-                    hours[day][hour].roomName?
-                    hours[day][hour].roomName:
+                    hours[day][hour].room?
+                    hours[day][hour].room:
                     'room' 
                   }}
                 </span>
@@ -84,7 +84,11 @@ export default {
       selectable: [],
       listColors: ['235, 64, 52', '50, 201, 30', '24, 156, 204', '105, 21, 189', '173, 18, 184',
        '227, 95, 0', '146, 227, 84', '255, 102, 153', '68, 66, 212', '50, 207, 186'],
-      changed: false
+      changed: false,
+      selectedRoom: {
+        day: null,
+        hour: null
+      }
     }
   },
   methods: {
@@ -121,6 +125,14 @@ export default {
       } else {
         this.hours = classSchedule.data
       }
+    },
+    assignRoom(val) {
+      this.hours[this.selectedRoom.day][this.selectedRoom.hour].room = val
+      this.$forceUpdate()
+    },
+    openRoomSelector(day, hour) {
+      this.selectedRoom.day = day
+      this.selectedRoom.hour = hour
     },
     updateSchedule() {
       this.changed = false
@@ -162,9 +174,6 @@ export default {
       log(this.hours)
       this.$forceUpdate()
       this.changed = true
-    },
-    selectRoom(value) {
-      log(value)
     },
     transformToSelectable() {
       this.teachers.forEach(teacher => {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <select v-model="selected" @change="selectRoom">
+    <select v-model="selected" @change="selectRoom()">
       <option v-for="(room, i) in rooms" :key="i">
         <span>{{ room.name }}</span>
       </option>
