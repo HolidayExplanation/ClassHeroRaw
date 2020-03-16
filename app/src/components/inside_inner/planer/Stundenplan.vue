@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <section id="Main">
+  <div >
+    <section id="Main" oncontextmenu="return false;">
 
       <div id="ClassSelector">
         <select>
@@ -35,8 +35,9 @@
           <li v-for="day in 5" :key="day">
             <ul id="Hours">
               <li v-for="hour in 12" :key="hour"
-              @click="insertSubj(day, hour)">
-                <div class="items" v-if="hours[day-1][hour-1]" 
+              @mousedown.left="insertSubj(day, hour)"
+              @mousedown.right="clearField(day, hour)">
+                <div class="items" v-if="hours[day-1][hour-1]"
                 :style="{backgroundColor: chooseScheduleColor(hours[day-1][hour-1], 'List')}">
                   <span class="hourTeacherName">
                     {{ hours[day - 1][hour - 1].teacherName }}
@@ -49,6 +50,10 @@
             </ul>
           </li>
         </ul>
+      </div>
+
+      <div id="Update" v-if="changed" @click="updateSchedule()">
+        <button>Update</button>
       </div>
       
     </section>
@@ -67,20 +72,33 @@ export default {
   components: { RoomSelector },
   data() {
     return {
-      hours: [
-        [], [], [], [], []
-      ],
+      selectedClass: null,
+      hours: [[], [], [], [], []],
       classes: [],
       teachers: [],
       rooms: [],
       selectable: [],
       listColors: ['235, 64, 52', '50, 201, 30', '24, 156, 204', '105, 21, 189', '173, 18, 184',
-       '227, 95, 0', '146, 227, 84', '255, 102, 153', '68, 66, 212', '50, 207, 186']
+       '227, 95, 0', '146, 227, 84', '255, 102, 153', '68, 66, 212', '50, 207, 186'],
+      changed: false
     }
   },
-  created() {
-  },
   methods: {
+    ...mapActions([
+      'fetchClasses',
+      'fetchTeachers',
+      'fetchClassSchedule(this.selectedClass)'
+    ]),
+    updateSchedule() {
+      this.changed = false
+    },
+    clearField(day, hour) {
+      log('hi')
+      this.hours[day-1][hour-1] = null
+      log(this.hours)
+      this.$forceUpdate()
+      this.changed = true
+    },
     chooseColor(i, type) {
       if (type === 'List') {
         return `rgb(${this.listColors[i]})`
@@ -112,19 +130,18 @@ export default {
       this.hours[day][hour] = this.selectedSubj
       log(this.hours)
       this.$forceUpdate()
+      this.changed = true
     },
     selectRoom(value) {
       log(value)
     },
-    ...mapActions([
-      'fetchClasses',
-      'fetchTeachers'
-    ]),
-    transformToSubjects() {
+    transformToSelectable() {
       this.teachers.forEach(teacher => {
         if (teacher.subjects.length > 0) {
           teacher.subjects.forEach((subject) => {
             return this.selectable.push({
+              subjectID: subject._id,
+              teacherID: teacher._id,
               teacherName: teacher.name,
               subjName: subject.name,
               selected: false
@@ -138,7 +155,7 @@ export default {
     this.teachers = await this.fetchTeachers()
     this.classes = await this.fetchClasses()
 
-    this.transformToSubjects()
+    this.transformToSelectable()
   }
 }
 </script>
@@ -227,9 +244,6 @@ $listHeight: 45px;
             font-size: 12px;
             padding: 3px;
             color: white;
-          }
-          .hourSubjName {
-            // background-color: orangered;
           }
         }
       }

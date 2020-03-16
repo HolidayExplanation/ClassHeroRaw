@@ -486,4 +486,20 @@ router.post('/get-class-schedule', (req, res, next) => {
   }
 })
 
+router.post('/update-schedule', (req, res, next) => {
+  auth(req, res, next, 'planer')
+}, async(req, res) => {
+  const classID = req.body.classID
+
+  try {
+      const schedule = await Schedule.findOne({ classID }, `-_id -classID days`)
+
+      log(schedule)
+
+      return res.status(200).send(schedule)
+  } catch(err) {
+      return res.status(400).send(err)
+  }
+})
+
 module.exports = router

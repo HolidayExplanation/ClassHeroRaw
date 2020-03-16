@@ -7,11 +7,8 @@ const staticScheduleSchema = new mongoose.Schema({
     ref: 'Class'
   },
   days: {
-    monday: [],
-    tuesday: [],
-    wednesday: [],
-    thursday: [],
-    friday: []
+    type: Array,
+    default: []
   }
 })
 

@@ -44,6 +44,9 @@ export default new Vuex.Store({
     setDayClicked(state, condition) {
       state.dayIsClicked = condition
     },
+    setClassSchedule(state, classSchedule) {
+      state.classSchedule = classSchedule
+    },
     setClasses(state, classes) {
       state.classes = classes
     },
@@ -95,6 +98,12 @@ export default new Vuex.Store({
       }
 
       return context.state.rooms
+    },
+    async fetchClassSchedule(context) {
+      const classSchedule = await axios.get(`${config.domain}/get-class-schedule`)
+      context.commit('setRooms', classSchedule.data)
+
+      return context.state.classSchedule
     }
   },
   modules: {
