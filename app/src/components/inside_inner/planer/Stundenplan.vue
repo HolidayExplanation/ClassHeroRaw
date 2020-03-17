@@ -1,6 +1,6 @@
 <template>
   <div>
-    <RoomSelector @selected="assignRoom"/>
+    <RoomSelector @selected="assignRoom" @roomListToggled="toggleRoomList"/>
 
     <div id="Blur" v-if="roomListActive"></div>
 
@@ -8,8 +8,7 @@
 
       <div id="ClassSelector">
         <Select :classes="classes"
-        @classSelected="fetchClassSchedule"
-        @roomListToggled="toggleRoomList"/>
+        @classSelected="fetchClassSchedule"/>
       </div>
 
       <ul id="SubjectList">

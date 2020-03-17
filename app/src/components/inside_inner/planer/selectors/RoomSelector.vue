@@ -48,6 +48,7 @@ export default {
     selectRoom(i) {
       log(i)
       log(this.rooms[i])
+      this.toggleList()
       this.$emit('selected', this.rooms[i])
     },
     fetchRooms() {
