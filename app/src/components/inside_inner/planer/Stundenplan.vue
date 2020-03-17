@@ -1,6 +1,9 @@
 <template>
   <div>
-    <RoomSelector @selected="assignRoom" @roomListToggled="toggleRoomList"/>
+    <button class="closeRoomList" v-if="roomListActive" @click="closeRoomList()">
+      Raumliste schließen
+    </button>
+    <RoomSelector @selected="assignRoom" v-if="roomListActive"/>
 
     <div id="Blur" v-if="roomListActive"></div>
 
@@ -48,11 +51,12 @@
                 <div v-else class="fieldPlaceholder" @mousedown.left="insertSubj(day, hour)">
                   -
                 </div>
-                <span v-if="hours[day][hour]" @click="openRoomSelector(day, hour)">
+                <span v-if="hours[day][hour]" 
+                @click="openRoomSelector(0, 2)">
                   {{ 
                     hours[day][hour].room?
                     hours[day][hour].room:
-                    'room' 
+                    '-' 
                   }}
                 </span>
               </li>
@@ -82,6 +86,7 @@ export default {
   components: { Select, RoomSelector },
   data() {
     return {
+      roomListActivated: false,
       roomListActive: false,
       selectedClass: null,
       hours: [[], [], [], [], []],
@@ -116,8 +121,6 @@ export default {
           selected: false
         })
       })
-
-      log(this.selectable)
     },
     async fetchClassSchedule(selectedClass) {
       this.selectedClass = selectedClass
@@ -134,29 +137,27 @@ export default {
         this.hours = classSchedule.data
       }
     },
-    toggleRoomList(val) {
-      log(val)
-      this.roomListActive = val
+    closeRoomList() {
+      this.roomListActive = false
     },
-    assignRoom(val) {
-      log(val)
-      this.hours[this.selectedRoom.day][this.selectedRoom.hour].room = val
-      this.$forceUpdate()
+    assignRoom(room) {
+      log("sel", this.hours)
+      this.hours[this.selectedRoom.day][this.selectedRoom.hour].room = room
       this.selectedRoom.day = null
       this.selectedRoom.hour = null
-      
+      this.roomListActive = false
     },
     openRoomSelector(day, hour) {
       this.selectedRoom.day = day
       this.selectedRoom.hour = hour
+      log(this.selectedRoom)
+      this.roomListActive = true
     },
     updateSchedule() {
       this.changed = false
     },
     clearField(day, hour) {
-      log('hi')
       this.hours[day][hour] = null
-      log(this.hours)
       this.$forceUpdate()
       this.changed = true
     },
@@ -169,7 +170,6 @@ export default {
     },
     chooseScheduleColor(subj, type) {
       const i = this.selectable.findIndex(x => x.name === subj.name)
-      log(subj, i)
       
       if (type === 'List') {
         return `rgb(${this.listColors[i]})`
@@ -198,7 +198,6 @@ export default {
       }
 
       this.hours[day][hour] = this.selectedSubj
-      log(this.hours)
       this.$forceUpdate()
       this.changed = true
     },
@@ -229,6 +228,11 @@ export default {
 <style lang="scss" scoped>
 @import '@/includes/scss/centerXY';
 @import '@/includes/scss/flexCenter';
+
+button.closeRoomList {
+  background-color: red;
+  padding: 5px;
+}
 
 section#Main {
   @include centerXY;

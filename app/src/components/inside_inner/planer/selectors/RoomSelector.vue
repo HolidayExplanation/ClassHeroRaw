@@ -1,8 +1,7 @@
 <template>
   <div>
-    <button @click="toggleList()">Toggle</button>
     <!-- Room List -->
-    <ul id="RoomList" v-if="listActive">
+    <ul id="RoomList">
       <div id="roomListPositioner">
         <transition-group name="fade" mode="in-out">
           <li class="Room" v-for="(room, i) in rooms" :key="i"
@@ -35,20 +34,12 @@ export default {
   name: 'RoomSelector',
   data() {
     return {
-      listActive: false,
       rooms: [],
       roomTypes: [] // For Colors
     }
   },
   methods: {
-    toggleList() {
-      this.listActive = !this.listActive
-      this.$emit('roomListToggled', this.listActive)
-    },
     selectRoom(i) {
-      log(i)
-      log(this.rooms[i])
-      this.toggleList()
       this.$emit('selected', this.rooms[i])
     },
     fetchRooms() {
@@ -74,8 +65,6 @@ export default {
         this.roomTypes.push(room.type)
       }
     })
-
-    log(this.roomTypes)
   }
 }
 </script>
