@@ -1,12 +1,16 @@
 <template>
-  <div >
+  <div>
+    <RoomSelector @selected="assignRoom"/>
+
+    <div id="Blur" v-if="roomListActive"></div>
+
     <section id="Main" @contextmenu.prevent>
 
       <div id="ClassSelector">
-        <Select @classSelected="fetchClassSchedule" :classes="classes" />
+        <Select :classes="classes"
+        @classSelected="fetchClassSchedule"
+        @roomListToggled="toggleRoomList"/>
       </div>
-
-      <RoomSelector @selected="assignRoom"/>
 
       <ul id="SubjectList">
         <li v-for="(subj, i) in selectable" :key="i" :style="{backgroundColor: chooseColor(i, 'List')}"
@@ -79,6 +83,7 @@ export default {
   components: { Select, RoomSelector },
   data() {
     return {
+      roomListActive: false,
       selectedClass: null,
       hours: [[], [], [], [], []],
       classes: [],
@@ -130,11 +135,17 @@ export default {
         this.hours = classSchedule.data
       }
     },
+    toggleRoomList(val) {
+      log(val)
+      this.roomListActive = val
+    },
     assignRoom(val) {
+      log(val)
       this.hours[this.selectedRoom.day][this.selectedRoom.hour].room = val
       this.$forceUpdate()
       this.selectedRoom.day = null
       this.selectedRoom.hour = null
+      
     },
     openRoomSelector(day, hour) {
       this.selectedRoom.day = day
@@ -226,7 +237,15 @@ section#Main {
   width: 90%;
   height: 90%;
   display: grid;
-  grid-template-rows: 1fr 1fr 4fr 10fr;
+  grid-template-rows: 1fr 4fr 10fr;
+}
+
+#Blur {
+  z-index: 10;
+  @include centerXY;
+  background-color: rgba(0, 0, 0, 0.4);
+  width: 90%;
+  height: 90%;
 }
 
 #SubjectList {
@@ -301,7 +320,7 @@ $listHeight: 45px;
           @include flexCenter;
           width: 95%;
           height: 85%;
-          background-color: yellow;
+          background-color: rgb(104, 104, 104);
         }
       }
     }

@@ -231,13 +231,16 @@ li {
      background-color: rgb(93, 99, 116);
    }
    input {
-     color: #f0f0f0;
-     font-size: 17px;
-     border: 1px solid rgba(0, 0, 0, 0.35);
-     background-color: transparent;
-     &::placeholder {
-       color: rgba(0, 0, 0, 0.5);
-     }
+    color: #f0f0f0;
+    font-size: 17px;
+    border: 1px solid rgba(0, 0, 0, 0.35);
+    background-color: transparent;
+    &:hover {
+      border: 1px solid rgb(45, 179, 78);
+    }
+    &::placeholder {
+      color: rgba(0, 0, 0, 0.5);
+    }
    }
  }
 
