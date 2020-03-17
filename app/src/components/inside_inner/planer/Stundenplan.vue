@@ -52,7 +52,7 @@
                   -
                 </div>
                 <span v-if="hours[day][hour]" 
-                @click="openRoomSelector(0, 2)">
+                @click="openRoomSelector(day, hour)">
                   {{ 
                     hours[day][hour].room?
                     hours[day][hour].room:
@@ -142,12 +142,17 @@ export default {
     },
     assignRoom(room) {
       log("sel", this.hours)
-      this.hours[this.selectedRoom.day][this.selectedRoom.hour].room = room
-      this.selectedRoom.day = null
-      this.selectedRoom.hour = null
+      log(this.selectedRoom.day)
+      log(this.selectedRoom.hour)
+      log("room", room)
+
+      
+
+      this.hours[this.selectedRoom.day][this.selectedRoom.hour].room = 54
       this.roomListActive = false
     },
     openRoomSelector(day, hour) {
+      log(day, hour)
       this.selectedRoom.day = day
       this.selectedRoom.hour = hour
       log(this.selectedRoom)
@@ -196,8 +201,16 @@ export default {
         this.setInfo('Wählen Sie bitte ein Fach zum einfügen!')
         throw new Error()
       }
+      
+      const subject = this.selectedSubj
 
-      this.hours[day][hour] = this.selectedSubj
+      this.hours[day][hour] = {
+        _id: subject._id,
+        name: subject.name,
+        teacherID: subject.teacherID,
+        teacherName: subject.teacherName,
+        room: null
+      }
       this.$forceUpdate()
       this.changed = true
     },
@@ -210,7 +223,8 @@ export default {
               teacherID: teacher._id,
               teacherName: teacher.name,
               subjName: subject.name,
-              selected: false
+              selected: false,
+              room: null
             })
           })
         }
