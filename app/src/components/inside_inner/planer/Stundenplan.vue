@@ -148,7 +148,7 @@ export default {
 
       
 
-      this.hours[this.selectedRoom.day][this.selectedRoom.hour].room = 54
+      this.hours[this.selectedRoom.day][this.selectedRoom.hour].room = room
       this.roomListActive = false
     },
     openRoomSelector(day, hour) {
@@ -201,7 +201,7 @@ export default {
         this.setInfo('Wählen Sie bitte ein Fach zum einfügen!')
         throw new Error()
       }
-      
+
       const subject = this.selectedSubj
 
       this.hours[day][hour] = {
