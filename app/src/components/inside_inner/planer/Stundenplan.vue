@@ -141,21 +141,12 @@ export default {
       this.roomListActive = false
     },
     assignRoom(room) {
-      log("sel", this.hours)
-      log(this.selectedRoom.day)
-      log(this.selectedRoom.hour)
-      log("room", room)
-
-      
-
       this.hours[this.selectedRoom.day][this.selectedRoom.hour].room = room
       this.roomListActive = false
     },
     openRoomSelector(day, hour) {
-      log(day, hour)
       this.selectedRoom.day = day
       this.selectedRoom.hour = hour
-      log(this.selectedRoom)
       this.roomListActive = true
     },
     updateSchedule() {
