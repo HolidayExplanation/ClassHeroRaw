@@ -6,9 +6,9 @@
       <ul id="teacherList">
         <li v-for="(teacher, i) in teachers" :key="i">
           <div class="teacher">
-            <img class="profileImg" src="@/assets/icons/user_green.svg">
+            <img class="profileImg" src="@/assets/icons/user_purple.svg">
             <div id="name">
-              <span>{{`${teacher.name}`}}</span>
+              <span>{{ teacher.name }}</span>
             </div>
             <div id="username">
               <span>{{ teacher.username }}</span>
