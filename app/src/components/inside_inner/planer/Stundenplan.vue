@@ -118,10 +118,11 @@ export default {
       })
 
       if (response.status === 200) {
-        // this.changed = false
+        this.changed = false
+        this.setInfo('Aktualisiert', 'good')
+      } else {
+        this.setInfo('Fehler', 'bad')
       }
-
-      log(response)
     },
     async fetchAssignedSubjects() {
       let response = await axios.post(`${config.domain}/fetch-assigned-subjects`, {
@@ -181,7 +182,7 @@ export default {
         hour
       }
 
-      // // Add change
+      // Add change
       this.scheduleChanges.push(subjectForPush)
     },
     openRoomSelector(day, hour) {

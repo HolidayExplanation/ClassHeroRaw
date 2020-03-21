@@ -517,9 +517,27 @@ router.post('/update-schedule', (req, res, next) => {
         ...schedule[0].days
       ]
 
+      let roomIDs = []
       scheduleChanges.forEach(change => {
         newSchedule[change.day][change.hour] = change
+        if (change.room) {
+          roomIDs.push(change.room._id)
+        }
       })
+
+      // log(roomIDs)
+
+      // Remove Duplicates
+      roomIDs  = [...new Set(roomIDs)];
+      log('unique',roomIDs)
+
+      // await Promise.all(roomIDs.map(async (roomID) => {
+      //   await Planer.generateUsername(student.name).then(async (generatedUsername) => {
+      //       student.username = generatedUsername
+      //       const newStudent = new Student(student)
+      //       await newStudent.save()
+      //   }) 
+      // }))
 
       await Schedule.updateOne(
         { classID }, 
