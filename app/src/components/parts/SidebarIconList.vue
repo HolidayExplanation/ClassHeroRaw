@@ -1,7 +1,7 @@
 <template>
-  <div id="main">
+  <div>
     <ul>
-      <li class="menuItem" v-for="(pic, i) in pics"
+      <li v-for="(pic, i) in pics"
       :key="i" @click="changeView(pic)">
           <img :src="getImgUrl(pic)">
           <div class="notificationCountContainer"
@@ -86,8 +86,9 @@ export default {
 
 img#logout {
   @include centerX;
+  padding: 7px;
   bottom: 12px;
-  height: 45px;
+  height: 28px;
   border-radius: 5px;
   cursor: pointer;
   &:hover {
@@ -117,7 +118,7 @@ li {
   img {
     @include centerXY;
     margin-bottom: 10px;
-    height: 40px;
+    height: 35px;
   }
 }
 
