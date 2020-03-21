@@ -525,13 +525,6 @@ router.post('/update-schedule', (req, res, next) => {
         { days: [...newSchedule] }
       )
 
-      log(saved)
-
-      
-      // log('newSchedule', newSchedule)
-
-      // log("schedule", schedule)
-
       return res.status(200).send(schedule)
   } catch(err) {
     log(err)

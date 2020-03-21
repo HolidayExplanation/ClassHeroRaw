@@ -164,7 +164,7 @@ export default {
       this.roomListActive = false
     },
     openRoomSelector(day, hour) {
-      this.currentRoom = this.hours[day][hour].room.name
+      // this.currentRoom = this.hours[day][hour].room.name
       this.selectedRoom.day = day
       this.selectedRoom.hour = hour
       this.roomListActive = true
