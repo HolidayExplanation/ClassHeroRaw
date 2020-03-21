@@ -6,10 +6,7 @@ const staticScheduleSchema = new mongoose.Schema({
     required: true,
     ref: 'Class'
   },
-  days: {
-    type: Array,
-    default: []
-  }
+  days: [[], [], [], [], []]
 })
 
 staticScheduleSchema.virtual('Classes', {

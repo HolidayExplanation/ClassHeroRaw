@@ -55,7 +55,7 @@
                 @click="openRoomSelector(day, hour)">
                   {{ 
                     hours[day][hour].room?
-                    hours[day][hour].room:
+                    hours[day][hour].room.name:
                     '-' 
                   }}
                 </span>
@@ -92,7 +92,6 @@ export default {
       hours: [[], [], [], [], []],
       classes: [],
       teachers: [],
-      rooms: [],
       selectableReady: false,
       selectable: [],
       listColors: ['235, 64, 52', '50, 201, 30', '24, 156, 204', '105, 21, 189', '173, 18, 184',
@@ -101,13 +100,29 @@ export default {
       selectedRoom: {
         day: null,
         hour: null
-      }
+      },
+      currentRoom: null,
+      scheduleChanges: []
     }
   },
   methods: {
     ...mapActions([
       'fetchClasses'
     ]),
+    async updateSchedule() {
+      const data = null
+
+      let response = await axios.post(`${config.domain}/update-schedule`, {
+        classID: this.selectedClass._id,
+        scheduleChanges: this.scheduleChanges
+      })
+
+      if (response.status === 200) {
+        // this.changed = false
+      }
+
+      log(response)
+    },
     async fetchAssignedSubjects() {
       let response = await axios.post(`${config.domain}/fetch-assigned-subjects`, {
         classID: this.selectedClass._id
@@ -121,6 +136,8 @@ export default {
           selected: false
         })
       })
+
+      log(this.selectable)
     },
     async fetchClassSchedule(selectedClass) {
       this.selectedClass = selectedClass
@@ -136,6 +153,8 @@ export default {
       } else {
         this.hours = classSchedule.data
       }
+
+      log(this.hours)
     },
     closeRoomList() {
       this.roomListActive = false
@@ -145,12 +164,10 @@ export default {
       this.roomListActive = false
     },
     openRoomSelector(day, hour) {
+      this.currentRoom = this.hours[day][hour].room.name
       this.selectedRoom.day = day
       this.selectedRoom.hour = hour
       this.roomListActive = true
-    },
-    updateSchedule() {
-      this.changed = false
     },
     clearField(day, hour) {
       this.hours[day][hour] = null
@@ -195,13 +212,22 @@ export default {
 
       const subject = this.selectedSubj
 
-      this.hours[day][hour] = {
+      const subjectForPush = {
         _id: subject._id,
         name: subject.name,
         teacherID: subject.teacherID,
         teacherName: subject.teacherName,
-        room: null
+        room: null,
+        day,
+        hour
       }
+
+      // Add change
+      this.scheduleChanges.push(subjectForPush)
+
+      log("changes", this.scheduleChanges)
+
+      this.hours[day][hour] = subjectForPush
       this.$forceUpdate()
       this.changed = true
     },

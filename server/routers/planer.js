@@ -508,14 +508,33 @@ router.post('/update-schedule', (req, res, next) => {
   auth(req, res, next, 'planer')
 }, async(req, res) => {
   const classID = req.body.classID
+  const scheduleChanges = req.body.scheduleChanges
 
   try {
-      const schedule = await Schedule.findOne({ classID }, `-_id -classID days`)
+      const schedule = await Schedule.find({classID})
+      const newSchedule = [
+        ...schedule[0].days
+      ]
 
-      log(schedule)
+      scheduleChanges.forEach(change => {
+        newSchedule[change.day][change.hour] = change
+      })
+
+      const saved = await Schedule.updateOne(
+        { classID }, 
+        { days: [...newSchedule] }
+      )
+
+      log(saved)
+
+      
+      // log('newSchedule', newSchedule)
+
+      // log("schedule", schedule)
 
       return res.status(200).send(schedule)
   } catch(err) {
+    log(err)
       return res.status(400).send(err)
   }
 })
