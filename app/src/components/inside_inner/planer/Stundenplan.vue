@@ -181,12 +181,8 @@ export default {
         hour
       }
 
-      log(subjectForPush)
-
-
       // // Add change
       this.scheduleChanges.push(subjectForPush)
-      log('forpsuh',subjectForPush)
     },
     openRoomSelector(day, hour) {
       this.selectedRoom.day = day
