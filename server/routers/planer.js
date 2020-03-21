@@ -509,6 +509,7 @@ router.post('/update-schedule', (req, res, next) => {
 }, async(req, res) => {
   const classID = req.body.classID
   const scheduleChanges = req.body.scheduleChanges
+  log('changes', scheduleChanges)
 
   try {
       const schedule = await Schedule.find({classID})
@@ -520,12 +521,12 @@ router.post('/update-schedule', (req, res, next) => {
         newSchedule[change.day][change.hour] = change
       })
 
-      const saved = await Schedule.updateOne(
+      await Schedule.updateOne(
         { classID }, 
         { days: [...newSchedule] }
       )
 
-      return res.status(200).send(schedule)
+      return res.status(200).send()
   } catch(err) {
     log(err)
       return res.status(400).send(err)

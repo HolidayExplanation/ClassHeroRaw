@@ -160,11 +160,35 @@ export default {
       this.roomListActive = false
     },
     assignRoom(room) {
-      this.hours[this.selectedRoom.day][this.selectedRoom.hour].room = room
+      const day = this.selectedRoom.day
+      const hour = this.selectedRoom.hour
+
+      this.hours[day][hour].room = room
       this.roomListActive = false
+      this.changed = true
+      
+      const subject = {
+        ...this.hours[day][hour]
+      }
+
+      const subjectForPush = {
+        _id: subject._id,
+        name: subject.name,
+        teacherID: subject.teacherID,
+        teacherName: subject.teacherName,
+        room: subject.room,
+        day,
+        hour
+      }
+
+      log(subjectForPush)
+
+
+      // // Add change
+      this.scheduleChanges.push(subjectForPush)
+      log('forpsuh',subjectForPush)
     },
     openRoomSelector(day, hour) {
-      // this.currentRoom = this.hours[day][hour].room.name
       this.selectedRoom.day = day
       this.selectedRoom.hour = hour
       this.roomListActive = true
@@ -217,15 +241,13 @@ export default {
         name: subject.name,
         teacherID: subject.teacherID,
         teacherName: subject.teacherName,
-        room: null,
+        room: subject.room,
         day,
         hour
       }
 
       // Add change
       this.scheduleChanges.push(subjectForPush)
-
-      log("changes", this.scheduleChanges)
 
       this.hours[day][hour] = subjectForPush
       this.$forceUpdate()
