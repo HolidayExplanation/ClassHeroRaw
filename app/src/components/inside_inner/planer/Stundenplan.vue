@@ -168,30 +168,7 @@ export default {
       this.roomListActive = false
       this.changed = true
       
-      const subject = {
-        ...this.hours[day][hour]
-      }
-
-      const subjectForPush = {
-        _id: subject._id,
-        name: subject.name,
-        teacherID: subject.teacherID,
-        teacherName: subject.teacherName,
-        room: subject.room,
-        day,
-        hour
-      }
-
-      this.scheduleChanges.forEach(change => {
-        if (change.day === subjectForPush.day && change.hour === subjectForPush.hour) {
-          this.scheduleChanges[day][hour] = subjectForPush
-        } else {
-          this.scheduleChanges.push(subjectForPush)
-        }
-      })
-
-      // Add change
-      this.scheduleChanges.push(subjectForPush)
+      // this.addChange(day, hour)
     },
     openRoomSelector(day, hour) {
       this.selectedRoom.day = day
@@ -233,6 +210,29 @@ export default {
       const infoPayload = { msg, type }
       this.$store.commit('setUpdateInfoMsg', infoPayload)
     },
+    addChange(day, hour, forPush) {
+      log(day, hour)
+
+      if (this.scheduleChanges.length === 0) {
+        this.scheduleChanges.push(forPush)
+        log('initial push')
+      } else {
+        this.scheduleChanges.forEach(change => {
+        log('extra push')
+        let i = 0
+        if (change.day === forPush.day && change.hour === forPush.hour) {
+            log('replaces')
+            this.scheduleChanges[i] = forPush
+          } else {
+            log('pushes')
+            this.scheduleChanges.push(forPush)
+          }
+          i++
+        })
+      }
+
+      console.log(this.scheduleChanges)
+    },
     insertSubj(day, hour) {
       if (!this.selectableReady) {
         this.setInfo('Wählen Sie bitte ein Fach zum einfügen!')
@@ -252,7 +252,7 @@ export default {
       }
 
       // Add change
-      this.scheduleChanges.push(subjectForPush)
+      this.addChange(day, hour, subjectForPush)
 
       this.hours[day][hour] = subjectForPush
       this.$forceUpdate()
