@@ -118,6 +118,8 @@ export default {
         scheduleChanges: this.scheduleChanges
       })
 
+      log(response)
+
       if (response.status === 200) {
         this.changed = false
         this.setInfo('Aktualisiert', 'good')
@@ -161,8 +163,8 @@ export default {
     closeRoomList() {
       this.roomListActive = false
     },
-    addChange(day, hour) {
-      this.scheduleChanges.push({ day, hour })
+    addChange(day, hour, type) {
+      this.scheduleChanges.push({ day, hour, type })
     },
     assignRoom(room) {
       const day = this.selectedRoom.day
@@ -173,7 +175,7 @@ export default {
       this.changed = true
 
       // Add change
-      this.addChange(day, hour)
+      this.addChange(day, hour, 'room')
     },
     openRoomSelector(day, hour) {
       this.selectedRoom.day = day
@@ -235,7 +237,7 @@ export default {
       }
 
       // Add change
-      this.addChange(day, hour)
+      this.addChange(day, hour, 'teacher')
 
       this.hours[day][hour] = subjectForPush
       this.$forceUpdate()

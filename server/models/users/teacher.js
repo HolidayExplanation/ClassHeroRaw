@@ -7,6 +7,11 @@ const teacherSchema = new mongoose.Schema({
         type: Array,
         default: []
     },
+    monday: [],
+    tuesday: [],
+    wednesday: [],
+    thursday: [],
+    friday: [],
     dynamicNotAvailable: {
         type: Array,
         default: []

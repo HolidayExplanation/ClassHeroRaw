@@ -513,7 +513,8 @@ router.post('/update-schedule', (req, res, next) => {
   log('changes', scheduleChanges)
 
   try {
-      const oldSchedule = await Schedule.find({classID})
+      let oldSchedule = await Schedule.find({classID})
+      oldSchedule = oldSchedule[0].days
 
       await Schedule.updateOne(
         { classID }, 
@@ -524,7 +525,63 @@ router.post('/update-schedule', (req, res, next) => {
       scheduleChanges = scheduleChanges.filter((elem, index, self) => self.findIndex(
           (t) => {return (t.day === elem.day && t.hour === elem.hour)}) === index)
 
-      log('unique', scheduleChanges)
+
+      for await (const change of scheduleChanges) {
+        if (change.type === 'teacher') {
+          if (oldSchedule[change.day][change.hour].teacherID) {
+            let teacherID = oldSchedule[change.day][change.hour].teacherID
+
+            let teacher = await Teacher.findById(teacherID)
+
+            // teacher.staticNotAvailable[change.day].push(change.hour)
+
+            switch (change.day) {
+              case 0:
+                await Teacher.updateOne(
+                  { _id: teacherID }, 
+                  { $push: { monday: change.hour } },
+                );
+                break;
+              case 1:
+                await Teacher.updateOne(
+                  { _id: teacherID }, 
+                  { $push: { tuesday: change.hour } },
+
+                );
+                break;
+              case 2:
+                await Teacher.updateOne(
+                  { _id: teacherID }, 
+                  { $push: { wednesday: change.hour } },
+
+                );
+                break;
+              case 3:
+                await Teacher.updateOne(
+                  { _id: teacherID }, 
+                  { $push: { thursday: change.hour } },
+
+                );
+                break;
+              case 4:
+                await Teacher.updateOne(
+                  { _id: teacherID }, 
+                  { $push: { friday: change.hour } },
+
+                );
+                break;
+            }
+
+            // log(teacher)
+
+            // let savedTeacher = await teacher.save()
+
+            // log(savedTeacher)
+            // return res.send(savedTeacher)
+          }
+        }
+      }
+
 
       // await Promise.all(roomIDs.map(async (roomID) => {
       //   await Planer.generateUsername(student.name).then(async (generatedUsername) => {
@@ -534,7 +591,6 @@ router.post('/update-schedule', (req, res, next) => {
       //   }) 
       // }))
 
-      return res.status(200).send()
   } catch(err) {
     log(err)
       return res.status(400).send(err)
