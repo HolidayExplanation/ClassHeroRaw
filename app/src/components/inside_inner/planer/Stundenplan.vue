@@ -182,6 +182,14 @@ export default {
         hour
       }
 
+      this.scheduleChanges.forEach(change => {
+        if (change.day === subjectForPush.day && change.hour === subjectForPush.hour) {
+          this.scheduleChanges[day][hour] = subjectForPush
+        } else {
+          this.scheduleChanges.push(subjectForPush)
+        }
+      })
+
       // Add change
       this.scheduleChanges.push(subjectForPush)
     },
