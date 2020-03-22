@@ -508,42 +508,23 @@ router.post('/update-schedule', (req, res, next) => {
   auth(req, res, next, 'planer')
 }, async(req, res) => {
   const classID = req.body.classID
-  const scheduleChanges = req.body.scheduleChanges
+  const newSchedule = req.body.newSchedule
+  let scheduleChanges = req.body.scheduleChanges
   log('changes', scheduleChanges)
 
   try {
-      const schedule = await Schedule.find({classID})
-      const newSchedule = [
-        ...schedule[0].days
-      ]
-
-      let rooms = []
-      scheduleChanges.forEach(change => {
-        if (change.teacherName) {
-          log('has name')
-          newSchedule[change.day][change.hour] = change
-          newSchedule[change.day][change.hour].room = schedule[0].days[change.day][change.hour].room
-        } else {
-          log('no name')
-          newSchedule[change.day][change.hour].room = change.room
-        }
-        
-        if (change.room) {
-          rooms.push({
-            _id: change.room._id,
-            day: change.day,
-            hour: change.hour
-          })
-        }
-      })
+      const oldSchedule = await Schedule.find({classID})
 
       await Schedule.updateOne(
         { classID }, 
         { days: [...newSchedule] }
       )
+      
+      // delete all duplicates from the array
+      scheduleChanges = scheduleChanges.filter((elem, index, self) => self.findIndex(
+          (t) => {return (t.day === elem.day && t.hour === elem.hour)}) === index)
 
-      // Remove Duplicates
-      log('unique', rooms)
+      log('unique', scheduleChanges)
 
       // await Promise.all(roomIDs.map(async (roomID) => {
       //   await Planer.generateUsername(student.name).then(async (generatedUsername) => {
@@ -552,20 +533,6 @@ router.post('/update-schedule', (req, res, next) => {
       //       await newStudent.save()
       //   }) 
       // }))
-
-      // if (newSchedule.teacherName.length > 1) {
-      //   log('teachername')
-      // }
-
-      // if (newSchedule.teacherName.length > 1 && !newSchedule.room) {
-      //   log('only teacher')
-      // } else if (newSchedule.room && !newSchedule.teacherName) {
-      //   log('only room')
-      // } else if (newSchedule.teacherName && newSchedule.room) {
-      //   log('both')
-      // }
-
-      // 
 
       return res.status(200).send()
   } catch(err) {

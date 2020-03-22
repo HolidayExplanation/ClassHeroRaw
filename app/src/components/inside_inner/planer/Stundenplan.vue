@@ -114,6 +114,7 @@ export default {
 
       let response = await axios.post(`${config.domain}/update-schedule`, {
         classID: this.selectedClass._id,
+        newSchedule: this.hours,
         scheduleChanges: this.scheduleChanges
       })
 
@@ -160,6 +161,9 @@ export default {
     closeRoomList() {
       this.roomListActive = false
     },
+    addChange(day, hour) {
+      this.scheduleChanges.push({ day, hour })
+    },
     assignRoom(room) {
       const day = this.selectedRoom.day
       const hour = this.selectedRoom.hour
@@ -167,24 +171,9 @@ export default {
       this.hours[day][hour].room = room
       this.roomListActive = false
       this.changed = true
-      
-      const subject = {
-        ...this.selectedSubj,
-        room
-      }
-
-      const subjectForPush = {
-        _id: subject._id,
-        name: subject.name,
-        teacherID: subject.teacherID,
-        teacherName: subject.teacherName,
-        room: subject.room,
-        day,
-        hour
-      }
 
       // Add change
-      this.addChange(day, hour, subjectForPush)
+      this.addChange(day, hour)
     },
     openRoomSelector(day, hour) {
       this.selectedRoom.day = day
@@ -226,31 +215,13 @@ export default {
       const infoPayload = { msg, type }
       this.$store.commit('setUpdateInfoMsg', infoPayload)
     },
-    addChange(day, hour, forPush) {
-      // log(day, hour)
-
-      if (this.scheduleChanges.length === 0) {
-        this.scheduleChanges.push(forPush)
-        log('initial push')
-      } else {
-        let index = this.scheduleChanges.findIndex(x => x.day == forPush.day && x.hour == forPush.hour)
-        log(index)
-        if (index > -1) {
-          log('replaced')
-          this.scheduleChanges[index] = forPush
-        } else {
-          log('pushed')
-          this.scheduleChanges.push(forPush)
-        }
-      }
-
-      // console.log(this.scheduleChanges)
-    },
     insertSubj(day, hour) {
       if (!this.selectableReady) {
         this.setInfo('Wählen Sie bitte ein Fach zum einfügen!')
         throw new Error()
       }
+
+      log(this.selectedSubj.teacherName)
 
       const subject = this.selectedSubj
 
@@ -264,7 +235,7 @@ export default {
       }
 
       // Add change
-      this.addChange(day, hour, subjectForPush)
+      this.addChange(day, hour)
 
       this.hours[day][hour] = subjectForPush
       this.$forceUpdate()
