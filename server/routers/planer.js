@@ -519,7 +519,15 @@ router.post('/update-schedule', (req, res, next) => {
 
       let rooms = []
       scheduleChanges.forEach(change => {
-        newSchedule[change.day][change.hour] = change
+        if (change.teacherName) {
+          log('has name')
+          newSchedule[change.day][change.hour] = change
+          newSchedule[change.day][change.hour].room = schedule[0].days[change.day][change.hour].room
+        } else {
+          log('no name')
+          newSchedule[change.day][change.hour].room = change.room
+        }
+        
         if (change.room) {
           rooms.push({
             _id: change.room._id,
@@ -529,10 +537,12 @@ router.post('/update-schedule', (req, res, next) => {
         }
       })
 
-      // log(roomIDs)
+      await Schedule.updateOne(
+        { classID }, 
+        { days: [...newSchedule] }
+      )
 
       // Remove Duplicates
-      rooms  = [...new Set(rooms)];
       log('unique', rooms)
 
       // await Promise.all(roomIDs.map(async (roomID) => {
@@ -543,10 +553,19 @@ router.post('/update-schedule', (req, res, next) => {
       //   }) 
       // }))
 
-      await Schedule.updateOne(
-        { classID }, 
-        { days: [...newSchedule] }
-      )
+      // if (newSchedule.teacherName.length > 1) {
+      //   log('teachername')
+      // }
+
+      // if (newSchedule.teacherName.length > 1 && !newSchedule.room) {
+      //   log('only teacher')
+      // } else if (newSchedule.room && !newSchedule.teacherName) {
+      //   log('only room')
+      // } else if (newSchedule.teacherName && newSchedule.room) {
+      //   log('both')
+      // }
+
+      // 
 
       return res.status(200).send()
   } catch(err) {

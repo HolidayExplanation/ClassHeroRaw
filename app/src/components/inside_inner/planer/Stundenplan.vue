@@ -227,27 +227,24 @@ export default {
       this.$store.commit('setUpdateInfoMsg', infoPayload)
     },
     addChange(day, hour, forPush) {
-      log(day, hour)
+      // log(day, hour)
 
       if (this.scheduleChanges.length === 0) {
         this.scheduleChanges.push(forPush)
         log('initial push')
       } else {
-        this.scheduleChanges.forEach(change => {
-        log('extra push')
-        let i = 0
-        if (change.day === forPush.day && change.hour === forPush.hour) {
-            log('replaces')
-            this.scheduleChanges[i] = forPush
-          } else {
-            log('pushes')
-            this.scheduleChanges.push(forPush)
-          }
-          i++
-        })
+        let index = this.scheduleChanges.findIndex(x => x.day == forPush.day && x.hour == forPush.hour)
+        log(index)
+        if (index > -1) {
+          log('replaced')
+          this.scheduleChanges[index] = forPush
+        } else {
+          log('pushed')
+          this.scheduleChanges.push(forPush)
+        }
       }
 
-      console.log(this.scheduleChanges)
+      // console.log(this.scheduleChanges)
     },
     insertSubj(day, hour) {
       if (!this.selectableReady) {
