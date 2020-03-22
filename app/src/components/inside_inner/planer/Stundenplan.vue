@@ -168,7 +168,23 @@ export default {
       this.roomListActive = false
       this.changed = true
       
-      // this.addChange(day, hour)
+      const subject = {
+        ...this.selectedSubj,
+        room
+      }
+
+      const subjectForPush = {
+        _id: subject._id,
+        name: subject.name,
+        teacherID: subject.teacherID,
+        teacherName: subject.teacherName,
+        room: subject.room,
+        day,
+        hour
+      }
+
+      // Add change
+      this.addChange(day, hour, subjectForPush)
     },
     openRoomSelector(day, hour) {
       this.selectedRoom.day = day
@@ -246,7 +262,6 @@ export default {
         name: subject.name,
         teacherID: subject.teacherID,
         teacherName: subject.teacherName,
-        room: subject.room,
         day,
         hour
       }
