@@ -22,7 +22,7 @@
           <span class="selectable">
             <span class="teacherName">{{ subj.teacherName }}</span>
             <span class="subjName" :style="{backgroundColor: chooseColor(i, 'Subject')}">
-              {{ subj.name }}
+              {{ subj.name.substring(0, 3) }}
             </span>
           </span>
         </li>
@@ -45,16 +45,16 @@
                 @mousedown.right="clearField(day, hour)"
                 :style="{backgroundColor: chooseScheduleColor(hours[day][hour], 'List')}">
                   <span class="hourTeacherName">
-                    {{ hours[day][hour].teacherName }}
+                    {{ adjustedTeacherName(day, hour) }}
                   </span>
                   <span class="hourSubjName" :style="{backgroundColor: chooseScheduleColor(hours[day][hour], 'Subject')}">
-                    {{ hours[day][hour].name }}
+                    {{ hours[day][hour].name.substring(0, 3) }}
                   </span>
                 </div>
                 <div v-else class="fieldPlaceholder" @mousedown.left="insertSubj(day, hour)">
                   -
                 </div>
-                <span v-if="hours[day][hour]" 
+                <span v-if="hours[day][hour]" class="room" 
                 @click="openRoomSelector(day, hour)">
                   {{ 
                     hours[day][hour].room?
@@ -113,6 +113,13 @@ export default {
     ...mapActions([
       'fetchClasses'
     ]),
+    adjustedTeacherName(day, hour) {
+      const name = this.hours[day][hour].teacherName.split(' ')
+      const fname = name[0].charAt(0)
+      const lname = name[name.length - 1]
+
+      return `${fname}. ${lname}`
+    },
     checkInsertOK(day, hour) {
       if (this.selectedSubj) {
         if (this.hours[day][hour] != undefined) {
@@ -292,6 +299,13 @@ export default {
 @import '@/includes/scss/centerXY';
 @import '@/includes/scss/flexCenter';
 
+.room {
+  background-color: greenyellow;
+  padding: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
 button.closeRoomList {
   background-color: red;
   padding: 5px;
@@ -342,6 +356,10 @@ span.selectable {
   color: whitesmoke;
 }
 
+.notInsertable {
+
+}
+
 $listHeight: 45px;
 
 #Schedule {
@@ -368,9 +386,13 @@ $listHeight: 45px;
     ul#Hours {
       position: relative;
       li {
+        @include flexCenter;
         height: $listHeight;
         border: 1px solid rgba(0, 0, 0, 0.2);
-        @include flexCenter;
+        transition: .2s ease;
+        &:hover {
+          transform: scale(1.10);
+        }
         div.items {
           @include flexCenter;
           width: 95%;
