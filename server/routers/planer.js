@@ -510,7 +510,7 @@ router.post('/update-schedule', (req, res, next) => {
   const classID = req.body.classID
   const newSchedule = req.body.newSchedule
   let scheduleChanges = req.body.scheduleChanges
-  // log('changes', scheduleChanges)
+  log('changes', scheduleChanges)
 
   try {
       let oldSchedule = await Schedule.find({classID})
@@ -550,7 +550,7 @@ router.post('/update-schedule', (req, res, next) => {
               { staticNotAvailable: updatedStaticNotAvailable },
             )
 
-            log('oldTeacherUpdated', oldTeacherUpdated)
+            // log('oldTeacherUpdated', oldTeacherUpdated)
           }
           
           let teacher = await Teacher.findById(change.teacherID)
@@ -567,6 +567,8 @@ router.post('/update-schedule', (req, res, next) => {
           log(saved)
         }
       }
+
+      return res.send()
   } catch(err) {
     log(err)
       return res.status(400).send(err)
