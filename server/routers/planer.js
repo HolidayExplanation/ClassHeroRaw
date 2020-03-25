@@ -529,10 +529,11 @@ router.post('/update-schedule', (req, res, next) => {
       for await (const change of scheduleChanges) {
         if (change.type === 'teacher') {
 
-          if (oldSchedule[change.day][change.hour] !== undefined) {
-            let hourToBeEdited = oldSchedule[change.day][change.hour]
-            
-            let teacherToBeFreedID = hourToBeEdited.teacherID
+          log('old', oldSchedule[change.day][change.hour])
+
+          if (oldSchedule[change.day][change.hour] != undefined) {
+            // log('RUNS???')
+            let teacherToBeFreedID = oldSchedule[change.day][change.hour].teacherID
 
             log('teacher to be freed', teacherToBeFreedID)
 

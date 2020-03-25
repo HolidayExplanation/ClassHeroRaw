@@ -123,6 +123,7 @@ export default {
       if (response.status === 200) {
         this.changed = false
         this.setInfo('Aktualisiert', 'good')
+        this.scheduleChanges = []
       } else {
         this.setInfo('Fehler', 'bad')
       }
