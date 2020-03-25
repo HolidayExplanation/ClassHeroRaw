@@ -38,11 +38,11 @@
         <ul id="Days">
           <li v-for="(n, day) in 5" :key="day">
             <ul id="Hours">
-              <li v-for="(n, hour) in 12" :key="hour">
+              <li v-for="(n, hour) in 12" :key="hour"
+               @mouseenter="checkInsertOK(day, hour)">
                 <div class="items" v-if="hours[day][hour]"
                 @mousedown.left="insertSubj(day, hour)"
                 @mousedown.right="clearField(day, hour)"
-                @mouseenter="checkInsertOK(day, hour)"
                 :style="{backgroundColor: chooseScheduleColor(hours[day][hour], 'List')}">
                   <span class="hourTeacherName">
                     {{ hours[day][hour].teacherName }}
@@ -114,8 +114,12 @@ export default {
       'fetchClasses'
     ]),
     checkInsertOK(day, hour) {
-      // const insertOK = this.
-      log(this.selectedSubj)
+      if (this.selectedSubj) {
+        // If Teacher in staticNotAvailable has at day this hour value in the list
+        const hourOK = !this.selectedSubj.staticNotAvailable[day].includes(hour)
+        const sameTeacher = this.selectedSubj.teacherID === this.hours[day][hour].teacherID
+        log(hourOK, sameTeacher)
+      }
     },
     async updateSchedule() {
       const data = null
@@ -140,6 +144,8 @@ export default {
       let response = await axios.post(`${config.domain}/fetch-assigned-subjects`, {
         classID: this.selectedClass._id
       })
+
+      log(response)
 
       this.selectable = []
 
