@@ -527,11 +527,13 @@ router.post('/update-schedule', (req, res, next) => {
 
 
       for await (const change of scheduleChanges) {
-        // log('old schedule', oldSchedule[change.day][change.hour] == undefined)
         if (change.type === 'teacher') {
 
-          if (oldSchedule[change.day][change.hour] !== undefined) {
-            console.log('this spot is not empty')
+          const hourToBeEdited = oldSchedule[change.day][change.hour]
+          if (hourToBeEdited !== undefined) {
+            const teacherToBeFreed = hourToBeEdited.teacherID
+
+            log('teacher to be freed', teacherToBeFreed)
           }
           
           let teacher = await Teacher.findById(change.teacherID)
@@ -544,6 +546,8 @@ router.post('/update-schedule', (req, res, next) => {
             { _id: change.teacherID }, 
             { staticNotAvailable: updatedStaticNotAvailable },
           )
+
+          log(saved)
         }
       }
   } catch(err) {
