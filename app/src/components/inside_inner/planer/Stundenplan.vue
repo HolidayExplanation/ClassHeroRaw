@@ -7,6 +7,8 @@
 
     <div id="Blur" v-if="roomListActive"></div>
 
+    <span v-if="insertOK">Unavailable</span>
+
     <section id="Main" @contextmenu.prevent>
 
       <div id="ClassSelector">
@@ -40,6 +42,7 @@
                 <div class="items" v-if="hours[day][hour]"
                 @mousedown.left="insertSubj(day, hour)"
                 @mousedown.right="clearField(day, hour)"
+                @mouseenter="checkInsertOK(day, hour)"
                 :style="{backgroundColor: chooseScheduleColor(hours[day][hour], 'List')}">
                   <span class="hourTeacherName">
                     {{ hours[day][hour].teacherName }}
@@ -102,13 +105,18 @@ export default {
         hour: null
       },
       currentRoom: null,
-      scheduleChanges: []
+      scheduleChanges: [],
+      insertOK: false
     }
   },
   methods: {
     ...mapActions([
       'fetchClasses'
     ]),
+    checkInsertOK(day, hour) {
+      // const insertOK = this.
+      log(this.selectedSubj)
+    },
     async updateSchedule() {
       const data = null
 
@@ -135,7 +143,7 @@ export default {
 
       this.selectable = []
 
-      response.data.forEach((subject) => {
+      response.data.assignedSubjects.forEach((subject) => {
         this.selectable.push({
           ...subject,
           selected: false

@@ -434,11 +434,22 @@ router.post('/fetch-assigned-subjects', (req, res, next) => {
   const classID = req.body.classID
 
   try {
-    const _class = await Class.findById(classID)
+    let _class = await Class.findById(classID)
+    const classObj = _class.toObject()
 
-    log(_class)
+    let i = 0
+    for await (const subject of _class.assignedSubjects) {
+      let data = await Teacher.findById(
+        subject.teacherID, `staticNotAvailable`)
+
+      classObj.assignedSubjects[i].staticNotAvailable = data.staticNotAvailable
+
+      i++
+    }
+
+    // log(JSON.stringify(classObj))
     
-    res.send(_class.assignedSubjects)
+    res.json(classObj)
   } catch (err) {
     log(err)
     res.send(err)
