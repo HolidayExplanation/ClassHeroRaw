@@ -39,7 +39,8 @@
           <li v-for="(n, day) in 5" :key="day">
             <ul id="Hours">
               <li v-for="(n, hour) in 12" :key="hour"
-               @mouseenter="checkInsertOK(day, hour)">
+               
+               :class="{notInsertable: checkInsertOK(day, hour)}">
                 <div class="items" v-if="hours[day][hour]"
                 @mousedown.left="insertSubj(day, hour)"
                 @mousedown.right="clearField(day, hour)"
@@ -106,7 +107,12 @@ export default {
       },
       currentRoom: null,
       scheduleChanges: [],
-      insertOK: false
+      insertOK: true,
+      fieldHovered: {
+        day: null,
+        hour: null
+      },
+      insertableFields: [[], [], [], [], []]
     }
   },
   methods: {
@@ -120,6 +126,18 @@ export default {
 
       return `${fname}. ${lname}`
     },
+    clearHoveredField() {
+      this.fieldHovered.day = null
+      this.fieldHovered.hour = null
+      this.insertOK = true
+    },
+    addNotInsertableClass(day, hour) {
+      log(day, hour)
+      console.log(this.fieldHovered.day, this.fieldHovered.hour)
+      if (day === this.fieldHovered.day && hour === this.fieldHovered.hour && !insertOK) {
+        return true
+      }
+    },
     checkInsertOK(day, hour) {
       if (this.selectedSubj) {
         if (this.hours[day][hour] != undefined) {
@@ -127,9 +145,25 @@ export default {
           const hourOK = !this.selectedSubj.staticNotAvailable[day].includes(hour)
           const sameTeacher = this.selectedSubj.teacherID === this.hours[day][hour].teacherID
           log(hourOK, sameTeacher)
+
+          if (hourOK || sameTeacher) {
+            this.insertOK = true
+            return false
+          } else {
+            this.insertOK = false
+            return true
+          }
+
         } else {
           const hourOK = !this.selectedSubj.staticNotAvailable[day].includes(hour)
           log(hourOK)
+          if (hourOK) {
+            this.insertOK = true
+            return false
+          } else {
+            this.insertOK = false
+            return true
+          }
         }
       }
     },
@@ -357,7 +391,7 @@ span.selectable {
 }
 
 .notInsertable {
-
+  background-color: red !important;
 }
 
 $listHeight: 45px;
