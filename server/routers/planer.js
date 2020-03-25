@@ -527,78 +527,25 @@ router.post('/update-schedule', (req, res, next) => {
 
 
       for await (const change of scheduleChanges) {
+        // log('old schedule', oldSchedule[change.day][change.hour] == undefined)
         if (change.type === 'teacher') {
+
           if (oldSchedule[change.day][change.hour] !== undefined) {
-            let teacher = await Teacher.findById(change.teacherID)
-
-            teacher.staticNotAvailable[change.day].push(change.hour)
-
-
-            const updatedStaticNotAvailable = [...teacher.staticNotAvailable]
-
-            const saved = await Teacher.updateOne(
-              { _id: change.teacherID }, 
-              { staticNotAvailable: updatedStaticNotAvailable },
-            )
-
-            // switch (change.day) {
-            //   case 0:
-            //     await Teacher.updateOne(
-            //       { _id: teacherID }, 
-            //       { $push: { monday: change.hour } },
-            //     );
-            //     break;
-            //   case 1:
-            //     await Teacher.updateOne(
-            //       { _id: teacherID }, 
-            //       { $push: { tuesday: change.hour } },
-
-            //     );
-            //     break;
-            //   case 2:
-            //     await Teacher.updateOne(
-            //       { _id: teacherID }, 
-            //       { $push: { wednesday: change.hour } },
-
-            //     );
-            //     break;
-            //   case 3:
-            //     await Teacher.updateOne(
-            //       { _id: teacherID }, 
-            //       { $push: { thursday: change.hour } },
-
-            //     );
-            //     break;
-            //   case 4:
-            //     await Teacher.updateOne(
-            //       { _id: teacherID }, 
-            //       { $push: { friday: change.hour } },
-
-            //     );
-            //     break;
-            // }
-
-            // log(teacher)
-
-            // let savedTeacher = await teacher.save()
-
-            // log(savedTeacher)
-            // return res.send(savedTeacher)
-          } else {
-            log('hello')
+            console.log('this spot is not empty')
           }
+          
+          let teacher = await Teacher.findById(change.teacherID)
+
+          teacher.staticNotAvailable[change.day].push(change.hour)
+
+          const updatedStaticNotAvailable = [...teacher.staticNotAvailable]
+
+          const saved = await Teacher.updateOne(
+            { _id: change.teacherID }, 
+            { staticNotAvailable: updatedStaticNotAvailable },
+          )
         }
       }
-
-
-      // await Promise.all(roomIDs.map(async (roomID) => {
-      //   await Planer.generateUsername(student.name).then(async (generatedUsername) => {
-      //       student.username = generatedUsername
-      //       const newStudent = new Student(student)
-      //       await newStudent.save()
-      //   }) 
-      // }))
-
   } catch(err) {
     log(err)
       return res.status(400).send(err)
