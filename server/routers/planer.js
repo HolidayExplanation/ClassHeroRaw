@@ -529,11 +529,27 @@ router.post('/update-schedule', (req, res, next) => {
       for await (const change of scheduleChanges) {
         if (change.type === 'teacher') {
 
-          const hourToBeEdited = oldSchedule[change.day][change.hour]
-          if (hourToBeEdited !== undefined) {
-            const teacherToBeFreed = hourToBeEdited.teacherID
+          if (oldSchedule[change.day][change.hour] !== undefined) {
+            let hourToBeEdited = oldSchedule[change.day][change.hour]
+            
+            let teacherToBeFreedID = hourToBeEdited.teacherID
 
-            log('teacher to be freed', teacherToBeFreed)
+            log('teacher to be freed', teacherToBeFreedID)
+
+            let oldTeacher = await Teacher.findById(teacherToBeFreedID)
+
+            //
+            var index = oldTeacher.staticNotAvailable[change.day].indexOf(change.hour);
+            if (index !== -1) oldTeacher.staticNotAvailable[change.day].splice(index, 1);
+
+            const updatedStaticNotAvailable = [...oldTeacher.staticNotAvailable]
+
+            const oldTeacherUpdated = await Teacher.updateOne(
+              { _id: teacherToBeFreedID }, 
+              { staticNotAvailable: updatedStaticNotAvailable },
+            )
+
+            log('oldTeacherUpdated', oldTeacherUpdated)
           }
           
           let teacher = await Teacher.findById(change.teacherID)
