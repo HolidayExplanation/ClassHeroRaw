@@ -115,10 +115,15 @@ export default {
     ]),
     checkInsertOK(day, hour) {
       if (this.selectedSubj) {
-        // If Teacher in staticNotAvailable has at day this hour value in the list
-        const hourOK = !this.selectedSubj.staticNotAvailable[day].includes(hour)
-        const sameTeacher = this.selectedSubj.teacherID === this.hours[day][hour].teacherID
-        log(hourOK, sameTeacher)
+        if (this.hours[day][hour] != undefined) {
+          // If Teacher in staticNotAvailable has at day this hour value in the list
+          const hourOK = !this.selectedSubj.staticNotAvailable[day].includes(hour)
+          const sameTeacher = this.selectedSubj.teacherID === this.hours[day][hour].teacherID
+          log(hourOK, sameTeacher)
+        } else {
+          const hourOK = !this.selectedSubj.staticNotAvailable[day].includes(hour)
+          log(hourOK)
+        }
       }
     },
     async updateSchedule() {
