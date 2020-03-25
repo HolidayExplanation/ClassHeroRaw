@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const staticScheduleSchema = new mongoose.Schema({
+const scheduleSchema = new mongoose.Schema({
   classID: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
@@ -9,12 +9,12 @@ const staticScheduleSchema = new mongoose.Schema({
   days: [[], [], [], [], []]
 })
 
-staticScheduleSchema.virtual('Classes', {
+scheduleSchema.virtual('Classes', {
   ref: 'Class',
   localField: 'classID',
   foreignField: '_id'
 })
 
-const staticSchedule = mongoose.model('staticSchedule', staticScheduleSchema)
+const Schedule = mongoose.model('staticSchedule', scheduleSchema)
 
-module.exports = staticSchedule
+module.exports = Schedule

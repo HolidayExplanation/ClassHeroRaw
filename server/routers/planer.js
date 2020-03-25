@@ -510,7 +510,7 @@ router.post('/update-schedule', (req, res, next) => {
   const classID = req.body.classID
   const newSchedule = req.body.newSchedule
   let scheduleChanges = req.body.scheduleChanges
-  log('changes', scheduleChanges)
+  // log('changes', scheduleChanges)
 
   try {
       let oldSchedule = await Schedule.find({classID})
@@ -528,49 +528,55 @@ router.post('/update-schedule', (req, res, next) => {
 
       for await (const change of scheduleChanges) {
         if (change.type === 'teacher') {
-          if (oldSchedule[change.day][change.hour].teacherID) {
-            let teacherID = oldSchedule[change.day][change.hour].teacherID
+          if (oldSchedule[change.day][change.hour] !== undefined) {
+            let teacher = await Teacher.findById(change.teacherID)
 
-            let teacher = await Teacher.findById(teacherID)
+            teacher.staticNotAvailable[change.day].push(change.hour)
 
-            // teacher.staticNotAvailable[change.day].push(change.hour)
 
-            switch (change.day) {
-              case 0:
-                await Teacher.updateOne(
-                  { _id: teacherID }, 
-                  { $push: { monday: change.hour } },
-                );
-                break;
-              case 1:
-                await Teacher.updateOne(
-                  { _id: teacherID }, 
-                  { $push: { tuesday: change.hour } },
+            const updatedStaticNotAvailable = [...teacher.staticNotAvailable]
 
-                );
-                break;
-              case 2:
-                await Teacher.updateOne(
-                  { _id: teacherID }, 
-                  { $push: { wednesday: change.hour } },
+            const saved = await Teacher.updateOne(
+              { _id: change.teacherID }, 
+              { staticNotAvailable: updatedStaticNotAvailable },
+            )
 
-                );
-                break;
-              case 3:
-                await Teacher.updateOne(
-                  { _id: teacherID }, 
-                  { $push: { thursday: change.hour } },
+            // switch (change.day) {
+            //   case 0:
+            //     await Teacher.updateOne(
+            //       { _id: teacherID }, 
+            //       { $push: { monday: change.hour } },
+            //     );
+            //     break;
+            //   case 1:
+            //     await Teacher.updateOne(
+            //       { _id: teacherID }, 
+            //       { $push: { tuesday: change.hour } },
 
-                );
-                break;
-              case 4:
-                await Teacher.updateOne(
-                  { _id: teacherID }, 
-                  { $push: { friday: change.hour } },
+            //     );
+            //     break;
+            //   case 2:
+            //     await Teacher.updateOne(
+            //       { _id: teacherID }, 
+            //       { $push: { wednesday: change.hour } },
 
-                );
-                break;
-            }
+            //     );
+            //     break;
+            //   case 3:
+            //     await Teacher.updateOne(
+            //       { _id: teacherID }, 
+            //       { $push: { thursday: change.hour } },
+
+            //     );
+            //     break;
+            //   case 4:
+            //     await Teacher.updateOne(
+            //       { _id: teacherID }, 
+            //       { $push: { friday: change.hour } },
+
+            //     );
+            //     break;
+            // }
 
             // log(teacher)
 
@@ -578,6 +584,8 @@ router.post('/update-schedule', (req, res, next) => {
 
             // log(savedTeacher)
             // return res.send(savedTeacher)
+          } else {
+            log('hello')
           }
         }
       }

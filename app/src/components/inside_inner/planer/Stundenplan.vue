@@ -163,8 +163,8 @@ export default {
     closeRoomList() {
       this.roomListActive = false
     },
-    addChange(day, hour, type) {
-      this.scheduleChanges.push({ day, hour, type })
+    addChange(day, hour, type, teacherID) {
+      this.scheduleChanges.push({ day, hour, type, teacherID })
     },
     assignRoom(room) {
       const day = this.selectedRoom.day
@@ -237,7 +237,7 @@ export default {
       }
 
       // Add change
-      this.addChange(day, hour, 'teacher')
+      this.addChange(day, hour, 'teacher', subjectForPush.teacherID)
 
       this.hours[day][hour] = subjectForPush
       this.$forceUpdate()
