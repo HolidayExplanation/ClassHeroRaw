@@ -12,7 +12,7 @@
     <section id="Main" @contextmenu.prevent>
 
       <div id="ClassSelector">
-        <Select :classes="classes"
+        <ClassSelector :classes="classes"
         @classSelected="fetchClassSchedule"/>
       </div>
 
@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import Select from '@/components/global/Select'
+import ClassSelector from '@/components/global/ClassSelector'
 import RoomSelector from './selectors/RoomSelector'
 import axios from 'axios'
 import config from '@/includes/js/config'
@@ -87,7 +87,7 @@ import { mapActions } from 'vuex'
 
 export default {
   name: 'Stundenplan',
-  components: { Select, RoomSelector },
+  components: { ClassSelector, RoomSelector },
   data() {
     return {
       roomListActivated: false,

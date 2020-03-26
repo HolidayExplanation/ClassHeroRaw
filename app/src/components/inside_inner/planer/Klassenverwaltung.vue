@@ -20,10 +20,11 @@
         </div>
         <!-- Select HalfYear -->
         <div id="adder_selectHalfYear">
-          <select  v-model="newClass.halfYear">
-            <option>1. Halbjahr</option>
+          <Select :options="['1. Halbjahr', '2. Halbjahr']" @optionValue="console.log(val)"/>
+          <!-- <select  v-model="newClass.halfYear">
+            <option></option>
             <option>2. Halbjahr</option>
-          </select>
+          </select> -->
         </div>
        
        <div id="addClass">
@@ -85,7 +86,7 @@
               </ul>
               <!-- Subject List -->
               <ul class="SubjectList">
-                <li v-if="_class.assignedSubjects.length === 0">
+                <li v-if="_class.assignedSubjects">
                   Keine Fächer zugewiesen
                 </li>
                 <li v-else v-for="(subject, i) in _class.assignedSubjects" :key="i">
@@ -119,7 +120,7 @@
               </div>
               <!-- Student List -->
               <ul class="StudentList">
-                <li v-if="_class.assignedStudents.length === 0">
+                <li v-if="_class.assignedStudents">
                   Keine Schüler Konten in der Klasse
                 </li>
                 <li v-else>Student</li>
@@ -136,13 +137,15 @@
 
 <script>
 import LoadingIcon from '@/components/global/LoadingIcon'
-
+import Select from '@/components/global/Select'
 import axios from 'axios'
+import { mapActions } from 'vuex'
 import config from '@/includes/js/config'
 const log = console.log
 
 export default {
   name: 'Klassenverwaltung',
+  components: { Select },
   data() {
     return {
       years: [new Date().getFullYear(), new Date().getFullYear()+1],
@@ -194,8 +197,14 @@ export default {
     })
 
     log(this.subjects)
+
+    this.classes = await this.fetchClasses()
+    log('classes', this.classes)
   },
   methods: {
+    ...mapActions([
+      'fetchClasses'
+    ]),
     toggleClassDetails(i) {
       this.classes[i].detailsShown = !this.classes[i].detailsShown
       log(this.classes[i])
@@ -319,19 +328,28 @@ export default {
 section#ClassAdder {
   display: grid;
   grid-template-columns: 1fr .5fr 1fr 1fr;
-  border-radius: 15px;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgb(87, 90, 136);
   div#adder_className {
-    background-color: maroon;
      input {
       padding: 10px;
       width: 140px;
-      border: 1px solid rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(0, 0, 0, 0.4);
+      color: rgba(0, 0, 0, 0.4);
       border-radius: 3px;
+      background-color: transparent;
+      &::placeholder {
+        color: rgba(0, 0, 0, 0.4);
+      }
     }
   }
-  div:nth-child(2) {background-color: rgb(5, 126, 120);}
-  div:nth-child(3) {background-color: rgb(19, 158, 77);}
-  div:nth-child(4) {background-color: rgb(138, 131, 39);}
+  button {
+    background-color: greenyellow;
+    border: none;
+    padding: 5px 10px 5px 10px;
+    border-radius: 3px;
+  }
   div {
     position: relative;
     display: flex; 
@@ -389,12 +407,11 @@ section#Classes {
 }
 
 div#con {
-  background-color: rgb(104, 143, 110);
+  @include centerXY;
   display: grid;
   grid-template-rows: 60px;
   width: 80%;
   max-width: 1000px;
-  @include centerXY;
 }
 
 </style>

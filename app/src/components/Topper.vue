@@ -7,7 +7,7 @@
           `${user.name}`
         }}
       </span>
-      <img id="profileArrow" src="@/assets/icons/profile_arrow.svg">
+      <img id="profileArrow" src="@/assets/icons/user_purple.svg">
     </div>
   </div>
 </template>
@@ -32,19 +32,25 @@ export default {
 <style lang="scss" scoped>
 @import '@/includes/scss/Unselectable';
 @import '@/includes/scss/centerY';
+@import '@/includes/scss/flexCenterY';
 
 div#container {
   @include centerY;
-  right: 50px;
+  @include flexCenterY;
+  top: 22px;
+  right: 20px;
+  border-radius: 100px;
+  background-color: rgb(32, 32, 34);
+  padding: 5px 5px 5px 10px;
   span {
     @include Unselectable;
     color: #f0f0f0;
+    float: right;
   }
   img#profileArrow {
-    position: absolute;
-    height: 12px;
-    right: -30px;
-    padding: 5px;
+    height: 26px;
+    float: left;
+    margin-left: 7px;
     border-radius: 3px;
     cursor: pointer;
     transition: .15s ease;
