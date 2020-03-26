@@ -41,7 +41,7 @@ div#container {
   right: 20px;
   border-radius: 100px;
   background-color: rgb(32, 32, 34);
-  padding: 5px 5px 5px 10px;
+  padding-left: 20px;
   span {
     @include Unselectable;
     color: #f0f0f0;
@@ -54,8 +54,11 @@ div#container {
     border-radius: 3px;
     cursor: pointer;
     transition: .15s ease;
+    border: 5px solid transparent;
     &:hover {
-      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 100%;
+      border-color: rgba(255, 255, 255, 0.1) !important;
+      background-color: #f0f0f0;
     }
   }
 }
