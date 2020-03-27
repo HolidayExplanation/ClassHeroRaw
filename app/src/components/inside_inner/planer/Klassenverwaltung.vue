@@ -12,11 +12,12 @@
         
         <!-- Select Year -->
         <div id="adder_selectYear">
-          <Select class="_Select" :options="years"/>
+          <Select class="_Select" :options="years" @optionSelected="setNewClassYear"/>
         </div>
         <!-- Select HalfYear -->
         <div id="adder_selectHalfYear">
-          <Select class="_Select" :options="['1. Halbjahr', '2. Halbjahr']"/>
+          <Select class="_Select" :options="['1. Halbjahr', '2. Halbjahr']"
+          @optionSelected="setNewClassHalfYear"/>
         </div>
        
        <div id="addClass">
@@ -200,6 +201,12 @@ export default {
     ...mapActions([
       'fetchClasses'
     ]),
+    setNewClassYear(val) {
+      this.newClass.year = val
+    },
+    setNewClassHalfYear(val) {
+      this.newClass.halfYear = val
+    },
     toggleClassDetails(i) {
       this.classes[i].detailsShown = !this.classes[i].detailsShown
       log(this.classes[i])

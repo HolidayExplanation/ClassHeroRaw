@@ -34,7 +34,7 @@ export default {
     },
     send(i) {
       this.selected = this.options[i]
-      this.$emit('optionValue', this.options[i]);
+      this.$emit('optionSelected', this.options[i]);
     }
   },
   mounted() {
