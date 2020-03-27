@@ -99,10 +99,11 @@ ul#List {
       width: 80%;
     }
     div#chevron {
-      @include flexCenter;
+      @include flexCenterY;
       height: 30px;
       width: 30px;
       padding-right: 5px;
+      margin-left: auto;
     }
   }
   li.option {

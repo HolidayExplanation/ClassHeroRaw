@@ -12,12 +12,12 @@
         
         <!-- Select Year -->
         <div id="adder_selectYear">
-          <Select class="_Select" :options="years" 
+          <Select class="_Select" :options="years" :style="{zIndex: 300}"  
           @optionSelected="setNewClassYear"/>
         </div>
         <!-- Select HalfYear -->
         <div id="adder_selectHalfYear">
-          <Select class="_Select" :options="['1. Halbjahr', '2. Halbjahr']"
+          <Select class="_Select" :style="{zIndex: + 300}" :options="['1. Halbjahr', '2. Halbjahr']"
           @optionSelected="setNewClassHalfYear"/>
         </div>
        
@@ -415,7 +415,7 @@ ul#ClassList {
   li.Class {
     @include flexCenterY;
     display: grid;
-    grid-template-columns: .6fr .5fr 140px 1fr .2fr;
+    grid-template-columns: 150px .5fr 140px 1fr .2fr;
     border: 1px solid rgba(255, 255, 255, 0.1);
     background-color: rgb(58, 58, 58);
     span.className {
@@ -433,7 +433,7 @@ ul#ClassList {
 }
 
 .toggleClassDetails {
-  background-color: red;
+  background-color: rgb(66, 142, 212);
   height: 100%;
   width: 100%;
   i {
