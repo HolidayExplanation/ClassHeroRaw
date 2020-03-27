@@ -5,12 +5,12 @@ const classSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    classTeacher: {
+    classTeacherID: {
         type: mongoose.Schema.Types.ObjectId,
         required: false,
         ref: 'Teacher'
     },
-    classTeacherName: {
+    classTeacherUname: {
         type: String,
         required: false
     },

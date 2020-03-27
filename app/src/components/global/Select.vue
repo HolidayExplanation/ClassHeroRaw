@@ -1,25 +1,25 @@
 <template>
   <div>
     <ul id="List" @click="toggleList()">
-      <li id="selected">
+      <li id="selected" v-if="selected">
         <span id="selectedVal" v-if="selType !== 'Teacher'">
           {{ selected }}
         </span>
-        <span id="selectedVal" v-else>
-          {{ `${selected.username}` }}
+        <span id="selectedVal" v-else v-show="selected">
+          {{ `${selected.classTeacherUname}` }}
         </span>
         <div id="chevron">
           <i class="fas fa-chevron-down"></i>
         </div>
       </li> 
-      <li class="option" v-show="listOpen" 
+      <li class="option" v-show="listOpen && option.username"
       v-for="(option, i) in options" :key="i"
       @click="send(i)">
         <span v-if="selType != 'Teacher'">
           {{ option }}
         </span>
         <span v-else>
-          {{ option.name }}
+          {{ option.username }}
         </span>
       </li>
     </ul>
@@ -66,7 +66,7 @@ ul#List {
   height: 30px;
   width: 100% !important;
   li:nth-child(1) {
-    z-index: 10;
+    z-index: 12;
     @include flexCenterY;
     background-color: whitesmoke;
     cursor: pointer;

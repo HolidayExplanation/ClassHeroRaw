@@ -42,8 +42,12 @@
           <span class="classYears">{{ `${_class.halfYear}. Halbjahr` }}</span>
 
           <!-- Select Class Teacher -->
-          <Select :options="teachers" :selType="'Teacher'"/>
-
+          <Select :options="[
+          {
+            username: _class.classTeacherUname, 
+            teacherID: _class.classTeacherID
+          }, ...teachers]" 
+          :selType="'Teacher'"/>
            <!-- Show Entire Class Data -->
           <button class="toggleClassDetails" @click="toggleClassDetails(c)">Show</button>
 
