@@ -42,17 +42,7 @@
           <span class="classYears">{{ `${_class.halfYear}. Halbjahr` }}</span>
 
           <!-- Select Class Teacher -->
-          <select class="TeacherDropdown" @click="toggleList()">
-            <option v-if="_class.classTeacherName">
-              {{_class.classTeacherName}}
-            </option>
-            <option v-else>Klassenlehrer auswählen</option>
-              <option v-for="(teacher, i) in teachers" :key="i">
-              <span>
-                {{ `${teacher.name} (${teacher.username})` }}
-              </span>
-            </option>
-          </select>
+          <Select :options="teachers" :selType="'Teacher'"/>
 
            <!-- Show Entire Class Data -->
           <button class="toggleClassDetails" @click="toggleClassDetails(c)">Show</button>

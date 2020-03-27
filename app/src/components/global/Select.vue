@@ -2,7 +2,12 @@
   <div>
     <ul id="List" @click="toggleList()">
       <li id="selected">
-        <span id="selectedVal">{{ selected }}</span>
+        <span id="selectedVal" v-if="selType !== 'Teacher'">
+          {{ selected }}
+        </span>
+        <span id="selectedVal" v-else>
+          {{ `${selected.username}` }}
+        </span>
         <div id="chevron">
           <i class="fas fa-chevron-down"></i>
         </div>
@@ -10,7 +15,12 @@
       <li class="option" v-show="listOpen" 
       v-for="(option, i) in options" :key="i"
       @click="send(i)">
-        <span>{{ option }}</span>
+        <span v-if="selType != 'Teacher'">
+          {{ option }}
+        </span>
+        <span v-else>
+          {{ option.name }}
+        </span>
       </li>
     </ul>
   </div>
@@ -21,7 +31,7 @@ const log = console.log
 
 export default {
   name: 'Select',
-  props: ['options'],
+  props: ['options', 'selType'],
   data() {
     return {
       selected: null,
@@ -56,6 +66,7 @@ ul#List {
   height: 30px;
   width: 100% !important;
   li:nth-child(1) {
+    z-index: 10;
     @include flexCenterY;
     background-color: whitesmoke;
     cursor: pointer;
@@ -74,6 +85,7 @@ ul#List {
     }
   }
   li.option {
+    z-index: 50;
     @include flexCenter;
     width: 100%;
     height: 100%;
