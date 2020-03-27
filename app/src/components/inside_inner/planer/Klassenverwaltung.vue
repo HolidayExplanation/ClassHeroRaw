@@ -34,18 +34,11 @@
         <li class="Class" v-for="(_class, c) in classes" :key="c">
 
           <!-- Change Class Name -->
-          <input class="className" v-model="_class.name">
+          <span class="className">{{ _class.name }}</span>
           <!-- Select Year -->
-          <select class="year" v-model="newClass.year">
-            <option v-for="year in years" :key="year">
-              {{ year }}
-            </option>
-          </select>
+          <span class="className">{{ _class.year }}</span>
           <!-- Select HalfYear -->
-          <select class="halfYear" v-model="_class.halfYear">
-            <option>1. Halbjahr</option>
-            <option>2. Halbjahr</option>
-          </select>
+          <span class="className">{{ `${_class.halfYear}. Halbjahr` }}</span>
 
           <!-- Select Class Teacher -->
           <select class="TeacherDropdown" @click="toggleList()">
@@ -64,7 +57,7 @@
           <button class="toggleClassDetails" @click="toggleClassDetails(c)">Show</button>
 
           <!-- Class Details -->
-          <div class="ClassDetails" v-if="!classes[c].detailsShown">
+          <div class="ClassDetails" v-if="classes[c].detailsShown">
 
             <div class="Subjects">
               <!-- Subject Adder -->
@@ -318,6 +311,26 @@ export default {
 @import '@/includes/scss/centerY';
 @import '@/includes/scss/centerXY';
 
+@mixin KlassenbezeichnungInput {
+  font-size: 19px;
+  font-weight: bold;
+  color: rgba(0, 0, 0, 0.6);
+  text-align: center;
+  padding: 10px;
+  width: 140px;
+  outline: none;
+  border-radius: 3px;
+  border: none;
+  background-color: #f0f0f0;
+  caret-color: rgb(28, 194, 97);
+  box-shadow: 1px 1px 2px 3px rgba(0, 0, 0, 0.1);
+  &::placeholder {
+    padding: 0;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.3);
+  }
+}
+
 ._Select {
   width: 100%;
   max-width: 200px;
@@ -340,13 +353,7 @@ section#ClassAdder {
   background-color: rgb(87, 90, 136);
   div#adder_className {
      input {
-      padding: 10px;
-      width: 140px;
-      outline: none;
-      border-radius: 3px;
-      border: none;
-      background-color: #f0f0f0;
-      box-shadow: 1px 1px 2px 3px rgba(0, 0, 0, 0.1);
+      @include KlassenbezeichnungInput;
     }
   }
   button {
@@ -404,7 +411,13 @@ ul#ClassList {
   padding: 10px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   li.Class {
-    // background-color: rgb(58, 58, 58);
+    display: grid;
+    grid-template-columns: 1fr .5fr 1fr 1fr .3fr;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgb(58, 58, 58);
+    .className {
+      @include KlassenbezeichnungInput;
+    }
   }
 }
 

@@ -419,7 +419,7 @@ router.get('/get-classes', (req, res, next) => {
   const schoolID = req.planer.schoolID
 
   try {
-      const classes = await Class.find({ school: schoolID }, '_id name')
+      const classes = await Class.find({ school: schoolID }, '_id name year halfYear classTeacherName')
 
       return res.send(classes)
   } catch(err) {

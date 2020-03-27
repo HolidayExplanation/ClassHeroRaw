@@ -47,7 +47,7 @@ const classSchema = new mongoose.Schema({
     },
     year: {
         type: Date,
-        default: new Date().getFullYear()
+        required: true
     },
     halfYear: {
         type: Number,
