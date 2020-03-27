@@ -2,10 +2,14 @@
   <div>
     <ul id="List" @click="toggleList()">
       <li id="selected">
-        <span>{{ selected }}</span>
-      </li>
-      <li class="option" v-show="listOpen" @click="emitOptionValue()"
-      v-for="(option, i) in options" :key="i">
+        <span id="selectedVal">{{ selected }}</span>
+        <div id="chevron">
+          <i class="fas fa-chevron-down"></i>
+        </div>
+      </li> 
+      <li class="option" v-show="listOpen" 
+      v-for="(option, i) in options" :key="i"
+      @click="send(i)">
         <span>{{ option }}</span>
       </li>
     </ul>
@@ -13,6 +17,8 @@
 </template>
 
 <script>
+const log = console.log
+
 export default {
   name: 'Select',
   props: ['options'],
@@ -26,9 +32,9 @@ export default {
     toggleList() {
       this.listOpen = !this.listOpen
     },
-    emitOptionValue(optionValue) {
-      this.toggleList()
-      this.$emit('optionValue', optionValue);
+    send(i) {
+      this.selected = this.options[i]
+      this.$emit('optionValue', this.options[i]);
     }
   },
   mounted() {
@@ -39,39 +45,53 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/includes/scss/flexCenterY';
+@import '@/includes/scss/flexCenter';
 
-div {
-  width: 100%;
-}
+// div {
+//   width: 100%;
+// }
 
 ul#List {
   z-index: 10;
-  width: 80%;
   height: 30px;
-  background-color: rgb(153, 131, 131);
+  width: 100% !important;
   li:nth-child(1) {
     @include flexCenterY;
     background-color: whitesmoke;
-    height: 30px;
-    width: 100%;
-    span {
-      margin-left: 10px;
+    cursor: pointer;
+    transition: .15s ease;
+    &:hover {
+       background-color: rgb(228, 228, 228);
+    }
+    span#selectedVal {
+      width: 80%;
+    }
+    div#chevron {
+      @include flexCenter;
+      height: 30px;
+      width: 30px;
+      padding-right: 5px;
     }
   }
   li.option {
+    @include flexCenter;
     width: 100%;
     height: 100%;
-    border: 1px solid black;
-    background-color: #000;
-    background-color: #ea4c89;
-    background-color: #0057ff;
-    background-color: #32c766;
-    background-color: #f48024;
-    background-color: #006400;
-    border-radius: 4px 4px 0 0;
-    span {
-
+    background-color: #f0f0f0;
+    cursor: pointer;
+    transition: .15s ease;
+    &:hover {
+      background-color: #32c766;
     }
   }
+}
+
+option {
+  background-color: #000;
+  background-color: #ea4c89;
+  background-color: #0057ff;
+  background-color: #32c766;
+  background-color: #f48024;
+  background-color: #006400;
 }
 </style>

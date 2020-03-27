@@ -7,20 +7,16 @@
         <!-- Class Name Show/Edit -->
         <div id="adder_className">
           <input v-model="newClass.name" 
-          placeholder="Klassenbezeichnung">
+          placeholder="Klassenbezeichnung" autofocus>
         </div>
         
         <!-- Select Year -->
         <div id="adder_selectYear">
-          <select v-model="newClass.year">
-            <option v-for="year in years" :key="year">
-              {{ year }}
-            </option>
-          </select>
+          <Select class="_Select" :options="years"/>
         </div>
         <!-- Select HalfYear -->
         <div id="adder_selectHalfYear">
-          <Select :options="['1. Halbjahr', '2. Halbjahr']" @optionValue="console.log(val)"/>
+          <Select class="_Select" :options="['1. Halbjahr', '2. Halbjahr']"/>
           <!-- <select  v-model="newClass.halfYear">
             <option></option>
             <option>2. Halbjahr</option>
@@ -28,7 +24,10 @@
         </div>
        
        <div id="addClass">
-         <button @click="addClass()">Klasse hinzufügen</button>
+         <button @click="addClass()">
+           <span>Klasse hinzufügen</span>
+           <i id="add" class="fas fa-arrow-alt-circle-right"></i>
+         </button>
        </div>
 
       </section>
@@ -316,6 +315,11 @@ export default {
 @import '@/includes/scss/centerY';
 @import '@/includes/scss/centerXY';
 
+._Select {
+  width: 100%;
+  max-width: 200px;
+}
+
 .ClassDetails {
   width: 80%;
   background-color: sandybrown;
@@ -335,20 +339,24 @@ section#ClassAdder {
      input {
       padding: 10px;
       width: 140px;
-      border: 1px solid rgba(0, 0, 0, 0.4);
-      color: rgba(0, 0, 0, 0.4);
+      outline: none;
       border-radius: 3px;
-      background-color: transparent;
-      &::placeholder {
-        color: rgba(0, 0, 0, 0.4);
-      }
+      border: none;
+      background-color: #f0f0f0;
+      box-shadow: 1px 1px 2px 3px rgba(0, 0, 0, 0.1);
     }
   }
   button {
-    background-color: greenyellow;
+    background-color: rgb(28, 194, 97);
     border: none;
     padding: 5px 10px 5px 10px;
     border-radius: 3px;
+    font-weight: bold;
+    height: 30px;
+    transition: .15s ease;
+    &:hover {
+      transform: scale(1.05)
+    }
   }
   div {
     position: relative;
@@ -412,6 +420,11 @@ div#con {
   grid-template-rows: 60px;
   width: 80%;
   max-width: 1000px;
+}
+
+#add {
+  transform: scale(1.3);
+  padding-left: 5px;
 }
 
 </style>

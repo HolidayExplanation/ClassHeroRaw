@@ -7,7 +7,7 @@
           `${user.name}`
         }}
       </span>
-      <img id="profileArrow" src="@/assets/icons/user_purple.svg">
+      <img id="avatar" src="@/assets/icons/user_purple.svg">
     </div>
   </div>
 </template>
@@ -47,7 +47,7 @@ div#container {
     color: #f0f0f0;
     float: right;
   }
-  img#profileArrow {
+  img#avatar {
     height: 26px;
     float: left;
     margin-left: 7px;
