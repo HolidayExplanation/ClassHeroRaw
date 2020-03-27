@@ -42,14 +42,16 @@
           <span class="classYears">{{ `${_class.halfYear}. Halbjahr` }}</span>
 
           <!-- Select Class Teacher -->
-          <Select :options="[
+          <Select :style="{zIndex: + 20 - c}" :options="[
           {
             username: _class.classTeacherUname, 
             teacherID: _class.classTeacherID
           }, ...teachers]" 
           :selType="'Teacher'"/>
            <!-- Show Entire Class Data -->
-          <button class="toggleClassDetails" @click="toggleClassDetails(c)">Show</button>
+          <button class="toggleClassDetails" @click="toggleClassDetails(c)">
+            <i class="fas fa-angle-double-down"></i>
+          </button>
 
           <!-- Class Details -->
           <div class="ClassDetails" v-if="classes[c].detailsShown">
@@ -271,17 +273,11 @@ export default {
         this.setInfo('Bitte geben Sie eine Klassenbezeichnung ein.', 'bad')
         throw new Error('No newClass.name detected')
       }
-
-      const formattedHalfYear = parseInt(this.newClass.halfYear.charAt(0))
-      
-        log('classtocrete', this.newClass)
       const data = {
         name: this.newClass.name,
         year: this.newClass.year,
-        halfYear: formattedHalfYear
+        halfYear: this.newClass.halfYear
       }
-
-      
 
       const res = await axios.post(`${config.domain}/create-class`, data)
       
@@ -362,6 +358,7 @@ section#ClassAdder {
     }
   }
   button {
+    outline: none;
     background-color: rgb(28, 194, 97);
     border: none;
     padding: 5px 10px 5px 10px;
@@ -418,7 +415,7 @@ ul#ClassList {
   li.Class {
     @include flexCenterY;
     display: grid;
-    grid-template-columns: 1fr .5fr 1fr 1fr .3fr;
+    grid-template-columns: .6fr .5fr 140px 1fr .2fr;
     border: 1px solid rgba(255, 255, 255, 0.1);
     background-color: rgb(58, 58, 58);
     span.className {
@@ -432,6 +429,15 @@ ul#ClassList {
       width: 80%;
       height: 20px;
     }
+  }
+}
+
+.toggleClassDetails {
+  background-color: red;
+  height: 100%;
+  width: 100%;
+  i {
+    transform: scale(1.2);
   }
 }
 

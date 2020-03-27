@@ -83,11 +83,11 @@ export default {
 // }
 
 ul#List {
-  z-index: 10;
+  // z-index: 10;
   height: 30px;
-  width: 100% !important;
+  width: 95%;
   li:nth-child(1) {
-    z-index: 12;
+    // z-index: 12;
     @include flexCenterY;
     background-color: whitesmoke;
     cursor: pointer;
@@ -106,7 +106,7 @@ ul#List {
     }
   }
   li.option {
-    z-index: 50;
+    // z-index: 50;
     @include flexCenter;
     width: 100%;
     height: 100%;
