@@ -16,12 +16,16 @@ router.post('/create-class', (req, res, next) => {
     auth(req, res, next, 'planer')
 }, async (req, res) => {
     try {
+      log(req.body)
+
         const _class = new Class({
             name: req.body.name,
             year: req.body.year,
             halfYear: req.body.halfYear,
             school: req.planer.schoolID,
         })
+
+        log(_class)
         
         const savedClass = await _class.save()
 

@@ -12,7 +12,8 @@
         
         <!-- Select Year -->
         <div id="adder_selectYear">
-          <Select class="_Select" :options="years" @optionSelected="setNewClassYear"/>
+          <Select class="_Select" :options="years" 
+          @optionSelected="setNewClassYear"/>
         </div>
         <!-- Select HalfYear -->
         <div id="adder_selectHalfYear">
@@ -36,9 +37,9 @@
           <!-- Change Class Name -->
           <span class="className">{{ _class.name }}</span>
           <!-- Select Year -->
-          <span class="className">{{ _class.year }}</span>
+          <span class="classYears">{{ _class.year }}</span>
           <!-- Select HalfYear -->
-          <span class="className">{{ `${_class.halfYear}. Halbjahr` }}</span>
+          <span class="classYears">{{ `${_class.halfYear}. Halbjahr` }}</span>
 
           <!-- Select Class Teacher -->
           <select class="TeacherDropdown" @click="toggleList()">
@@ -141,7 +142,7 @@ export default {
       newClass: {
         name: null,
         year: new Date().getFullYear(),
-        halfYear: '1. Halbjahr',
+        halfYear: '1',
         detailsShown: false
       },
       subjAdderA: false,
@@ -278,11 +279,15 @@ export default {
       }
 
       const formattedHalfYear = parseInt(this.newClass.halfYear.charAt(0))
+      
+        log('classtocrete', this.newClass)
       const data = {
         name: this.newClass.name,
         year: this.newClass.year,
         halfYear: formattedHalfYear
       }
+
+      
 
       const res = await axios.post(`${config.domain}/create-class`, data)
       
@@ -310,14 +315,20 @@ export default {
 @import '@/includes/scss/centerX';
 @import '@/includes/scss/centerY';
 @import '@/includes/scss/centerXY';
+@import '@/includes/scss/flexCenter';
+@import '@/includes/scss/flexCenterY';
 
-@mixin KlassenbezeichnungInput {
+@mixin KlassenbezeichnungInput($height, $width) {
+  @include flexCenter;
   font-size: 19px;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.6);
   text-align: center;
-  padding: 10px;
-  width: 140px;
+  // padding: 10px;
+  width: $width; 
+  height: $height;
+  max-width: 95%;
+  max-height: 95%;
   outline: none;
   border-radius: 3px;
   border: none;
@@ -353,7 +364,7 @@ section#ClassAdder {
   background-color: rgb(87, 90, 136);
   div#adder_className {
      input {
-      @include KlassenbezeichnungInput;
+      @include KlassenbezeichnungInput(45px, 170px);
     }
   }
   button {
@@ -411,12 +422,21 @@ ul#ClassList {
   padding: 10px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   li.Class {
+    @include flexCenterY;
     display: grid;
     grid-template-columns: 1fr .5fr 1fr 1fr .3fr;
     border: 1px solid rgba(255, 255, 255, 0.1);
     background-color: rgb(58, 58, 58);
-    .className {
-      @include KlassenbezeichnungInput;
+    span.className {
+      @include KlassenbezeichnungInput(30px, 120px);
+    }
+    span.classYears {
+      color: white;
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 2px;
+      display: inline-block;
+      width: 80%;
+      height: 20px;
     }
   }
 }
