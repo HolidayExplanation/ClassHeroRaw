@@ -47,12 +47,12 @@ const classSchema = new mongoose.Schema({
     },
     year: {
         type: Number,
-        required: true,
-        max: 4
+        maxlength: 4,
+        required: true
     },
     halfYear: {
         type: String,
-        max: 1,
+        maxlength: 1,
         required: true
     },
     created: {

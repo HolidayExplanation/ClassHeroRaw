@@ -24,8 +24,6 @@ router.post('/create-class', (req, res, next) => {
             halfYear: req.body.halfYear,
             school: req.planer.schoolID,
         })
-
-        log(_class)
         
         const savedClass = await _class.save()
 
@@ -35,6 +33,7 @@ router.post('/create-class', (req, res, next) => {
 
         return res.send(savedClass._id)
     } catch(err) {
+        log(err)
         return res.send(err)
     }
 })

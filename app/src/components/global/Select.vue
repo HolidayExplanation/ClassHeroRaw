@@ -6,22 +6,35 @@
           {{ selected }}
         </span>
         <span id="selectedVal" v-else v-show="selected">
-          {{ `${selected.classTeacherUname}` }}
+          {{ 
+            selected.username?
+            `${selected.username}`:
+            'Klassenlehrer auswählen' 
+          }}
         </span>
         <div id="chevron">
           <i class="fas fa-chevron-down"></i>
         </div>
-      </li> 
-      <li class="option" v-show="listOpen && option.username"
+      </li>
+      <div v-if="listOpen && selType !== 'Teacher'">
+        <li class="option" 
+        v-for="(option, i) in options" :key="i"
+        @click="send(i)">
+          <span >
+            {{ option }}
+          </span>
+        </li>
+      </div>
+
+      <div v-else-if="listOpen && selType === 'Teacher'">
+        <li class="option" 
       v-for="(option, i) in options" :key="i"
       @click="send(i)">
-        <span v-if="selType != 'Teacher'">
-          {{ option }}
-        </span>
-        <span v-else>
+        <span >
           {{ option.username }}
         </span>
       </li>
+      </div>
     </ul>
   </div>
 </template>
@@ -43,8 +56,16 @@ export default {
       this.listOpen = !this.listOpen
     },
     send(i) {
-      this.selected = this.options[i]
-      this.$emit('optionSelected', this.options[i]);
+      log(this.options[i])
+      
+      if (this.selType === 'Teacher') {
+        this.selected.username = this.options[i].username
+      } else {
+        this.selected = this.options[i]
+      }
+
+      log(this.selected)
+      this.$emit('optionSelected', this.options[i])
     }
   },
   mounted() {
