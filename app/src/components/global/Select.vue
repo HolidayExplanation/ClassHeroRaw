@@ -89,7 +89,7 @@ ul#List {
   li:nth-child(1) {
     // z-index: 12;
     @include flexCenterY;
-    background-color: whitesmoke;
+    background-color: #808db3;
     cursor: pointer;
     transition: .15s ease;
     &:hover {
@@ -113,6 +113,7 @@ ul#List {
     height: 100%;
     background-color: #f0f0f0;
     cursor: pointer;
+    padding: 3px 0 3px 0;
     transition: .15s ease;
     &:hover {
       background-color: #32c766;
