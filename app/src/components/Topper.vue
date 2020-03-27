@@ -51,14 +51,17 @@ div#container {
     height: 26px;
     float: left;
     margin-left: 7px;
-    border-radius: 3px;
+    border-radius: 100%;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-radius: 100%;
+    background-color: #f0f0f0;
     cursor: pointer;
     transition: .15s ease;
-    border: 5px solid transparent;
+    // border: 5px solid transparent;
     &:hover {
+      border: 4px dashed #a0a8d6 !important;
       border-radius: 100%;
-      border-color: rgba(255, 255, 255, 0.1) !important;
-      background-color: #f0f0f0;
+      background-color: #a0a8d6;
     }
   }
 }
