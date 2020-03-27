@@ -78,16 +78,10 @@ export default {
 @import '@/includes/scss/flexCenterY';
 @import '@/includes/scss/flexCenter';
 
-// div {
-//   width: 100%;
-// }
-
 ul#List {
-  // z-index: 10;
   height: 30px;
   width: 95%;
   li:nth-child(1) {
-    // z-index: 12;
     @include flexCenterY;
     background-color: #808db3;
     cursor: pointer;
@@ -107,7 +101,6 @@ ul#List {
     }
   }
   li.option {
-    // z-index: 50;
     @include flexCenter;
     width: 100%;
     height: 100%;
@@ -121,12 +114,4 @@ ul#List {
   }
 }
 
-option {
-  background-color: #000;
-  background-color: #ea4c89;
-  background-color: #0057ff;
-  background-color: #32c766;
-  background-color: #f48024;
-  background-color: #006400;
-}
 </style>

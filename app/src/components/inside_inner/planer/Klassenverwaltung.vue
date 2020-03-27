@@ -35,7 +35,9 @@
         <li class="Class" v-for="(_class, c) in classes" :key="c">
 
           <!-- Change Class Name -->
-          <span class="className">{{ _class.name }}</span>
+          <span class="className" :style="{backgroundColor: getBgColor(c)}">
+            {{ _class.name }}
+          </span>
           <!-- Select Year -->
           <span class="classYears">{{ _class.year }}</span>
           <!-- Select HalfYear -->
@@ -147,7 +149,8 @@ export default {
       subjects: [],
       studentForPush: null,
       studentsForPush: [],
-      pushPending: false
+      pushPending: false,
+      classBgColors: ['#ea4c89', '#0057ff', '#32c766', '#f48024', '#006400']
     }
   },
   computed: {
@@ -191,6 +194,9 @@ export default {
     ...mapActions([
       'fetchClasses'
     ]),
+    getBgColor(i) {
+      return this.classBgColors[i]
+    },
     setNewClassYear(val) {
       this.newClass.year = val
     },
@@ -421,6 +427,7 @@ ul#ClassList {
     background-color: rgb(58, 58, 58);
     span.className {
       @include KlassenbezeichnungInput(30px, 120px);
+      color: rgba(0, 0, 0, 0.6) !important;
     }
     span.classYears {
       color: white;
