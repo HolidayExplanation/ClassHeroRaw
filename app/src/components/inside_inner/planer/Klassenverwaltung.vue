@@ -17,10 +17,6 @@
         <!-- Select HalfYear -->
         <div id="adder_selectHalfYear">
           <Select class="_Select" :options="['1. Halbjahr', '2. Halbjahr']"/>
-          <!-- <select  v-model="newClass.halfYear">
-            <option></option>
-            <option>2. Halbjahr</option>
-          </select> -->
         </div>
        
        <div id="addClass">
@@ -399,9 +395,9 @@ section#ClassAdder {
 
 ul#ClassList {
   padding: 10px;
-  background-color: black;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   li.Class {
-    background-color: rgb(58, 58, 58);
+    // background-color: rgb(58, 58, 58);
   }
 }
 
