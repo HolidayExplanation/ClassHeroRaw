@@ -343,15 +343,6 @@ export default {
   max-width: 200px;
 }
 
-.ClassDetails {
-  width: 80%;
-  background-color: sandybrown;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 5px;
-}
-
 section#ClassAdder {
   display: grid;
   grid-template-columns: 1fr .5fr 1fr 1fr;
@@ -436,6 +427,14 @@ ul#ClassList {
       display: inline-block;
       width: 80%;
       height: 20px;
+    }
+    .ClassDetails {
+      width: 100%;
+      background-color: sandybrown;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 5px;
     }
   }
 }
