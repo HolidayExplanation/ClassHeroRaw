@@ -260,17 +260,24 @@ export default {
       log(res)
     },
     filteredSubjects(c) {
-      let subjects = []
+      let filtered = []
       
       if (this.classes[c].assignedSubjects.length > 0) {
+
+        let assignedSubjectIDs = []
         this.classes[c].assignedSubjects.forEach((assignedSubject) => {
-          log(assignedSubject)
-          subjects = this.subjects.filter(function( subject ) {
-              return subject._id !== assignedSubject._id;
-          })
+          assignedSubjectIDs.push(assignedSubject._id)
         })
 
-        return subjects
+        log('ids', assignedSubjectIDs)
+
+        this.subjects.forEach(subject => {
+          if (!assignedSubjectIDs.includes(subject._id)) {
+            filtered.push(subject)
+          }
+        })
+
+        return filtered
       } else {
         return this.subjects
       }
