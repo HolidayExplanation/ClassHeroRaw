@@ -73,11 +73,12 @@
                 <li v-if="!_class.assignedSubjects">
                   Keine Fächer zugewiesen
                 </li>
-                <li v-else v-for="(subject, i) in _class.assignedSubjects" :key="i">
-                  <div>
+                <li class="Subject" v-else v-for="(subject, i) in _class.assignedSubjects" :key="i">
+                  <div class="subjectText">
                     <span>{{ adjustedTeacherName(subject) }}</span>
                     <span>{{ subject.name.substring(0, 3) }}</span>
                   </div>
+                  <i class="fas fa-minus-circle"></i>
                 </li>
               </ul>
             </div>
@@ -407,8 +408,28 @@ section#ClassAdder {
   .SubjectAdder {
 
   }
-  .SubjectList {
-
+  ul.SubjectList {
+    li.Subject {
+      margin-left: 3px;
+      float: left;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      background-color: #f0f0f0;
+      display: grid;
+      grid-template-columns: 6fr 1fr;
+      // display: inline-block;
+      padding: 4px;
+      div.subjectText {
+        span:nth-child(2) {
+          margin-left: 7px;
+          padding: 2px 5px 2px 5px;
+          border-radius: 3px;
+          background-color: green;
+        }
+      }
+      i {
+        margin: 0 3px 0 0;
+      }
+    }
   }
 }
 
