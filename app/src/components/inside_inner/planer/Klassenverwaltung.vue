@@ -202,7 +202,10 @@ export default {
       'fetchSubjects'
     ]),
     getBgColor(i) {
-      return this.classBgColors[i]
+      const timesBigger = i / this.classBgColors.length
+      const result = i - (Math.floor(timesBigger) * this.classBgColors.length)
+
+      return this.classBgColors[result]
     },
     setNewClassYear(val) {
       this.newClass.year = val
