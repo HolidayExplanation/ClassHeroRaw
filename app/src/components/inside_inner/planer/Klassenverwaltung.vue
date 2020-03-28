@@ -74,7 +74,10 @@
                   Keine Fächer zugewiesen
                 </li>
                 <li v-else v-for="(subject, i) in _class.assignedSubjects" :key="i">
-                  {{ subject }}
+                  <div>
+                    <span>{{ adjustedTeacherName(subject) }}</span>
+                    <span>{{ subject.name.substring(0, 3) }}</span>
+                  </div>
                 </li>
               </ul>
             </div>
@@ -194,6 +197,13 @@ export default {
       'fetchClasses',
       'fetchSubjects'
     ]),
+    adjustedTeacherName(subject) {
+      const name = subject.teacherName.split(' ')
+      const fname = name[0].charAt(0)
+      const lname = name[name.length - 1]
+
+      return `${fname}. ${lname}`
+    },
     getBgColor(i) {
       const timesBigger = i / this.classBgColors.length
       const result = i - (Math.floor(timesBigger) * this.classBgColors.length)
