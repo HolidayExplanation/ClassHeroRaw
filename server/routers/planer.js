@@ -86,33 +86,46 @@ router.post('/create-student-accounts', (req, res, next) => {
   const classID = req.body.classID
   const students = req.body.students
 
+  log(students)
+
+  let studentsToAssignToClass = []
   try {
       const schoolID = req.planer.schoolID
 
-      let student = {
-        name: null,
-        class: null,
-        school: null,
-        username: null,
-        password: 'passwort'
-      }
       await Promise.all(students.map(async (singleStudent) => {
-        student.name = singleStudent
-        student.school = schoolID
-        student.class = classID
+        let student = {
+          name: singleStudent,
+          class: classID,
+          school: schoolID,
+          username: null,
+          password: 'passwort'
+        }
         
         // Generate Username
         await Planer.generateUsername(student.name).then(async (generatedUsername) => {
             student.username = generatedUsername
             const newStudent = new Student(student)
-            await newStudent.save()
+            const savedStudent = await newStudent.save()
+            
+            const formattedForClassAssignment = {
+              _id: savedStudent._id,
+              username: savedStudent.username,
+              name: savedStudent.name
+            }
+
+            studentsToAssignToClass.unshift(formattedForClassAssignment)
         }) 
       }))
-  } catch(err) {
-      res.status(500).send(err)
-  }
 
-  res.send()
+      await Class.updateOne({ _id: classID}, 
+        { $push: {assignedStudents: studentsToAssignToClass }}  
+      )
+
+      return res.send(studentsToAssignToClass)
+  } catch(err) {
+      log(err)
+      return res.status(500).send(err)
+  }
 })
 
 router.post('/create-subject', (req, res, next) => {

@@ -201,7 +201,6 @@ planerSchema.statics.generateUsername = async(name) => {
         generatedUsername = `${name}.${countTracker}`.toLowerCase()
     }
     
-    console.log("final", countTracker)
     return generatedUsername
 }
 

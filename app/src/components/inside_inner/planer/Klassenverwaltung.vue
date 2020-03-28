@@ -107,13 +107,13 @@
               <!-- Student List -->
               <ul class="StudentList">
                 <div v-if="_class.assignedStudents.length < 1">
-                  <li>
-                    <span>Keine Schüler Konten in der Klasse</span>
+                  <li class="noStudentsFound">
+                    <span>Keine Schüler Konten gefunden</span>
                   </li>
                 </div>
                 <div v-else>
-                  <li v-for="(student, s) in _class.assignedStudents" :key="s">
-                    <span>{{ student.name }}</span>
+                  <li class="student" v-for="(student, s) in _class.assignedStudents" :key="s">
+                    <span>{{ `${student.name} (${student.username})` }}</span>
                   </li>
                 </div>
               </ul>
@@ -245,7 +245,7 @@ export default {
 
       this.pushPending = false
 
-      if (response.status === 201) {
+      if (response.status === 200) {
         this.teachers = []
         const receivedStudents = response.data
         log(receivedStudents)
@@ -337,12 +337,37 @@ export default {
 @import '@/includes/scss/flexCenter';
 @import '@/includes/scss/flexCenterY';
 
+li.noStudentsFound {
+  @include flexCenter;
+  color: #f0f0f0;
+  background-color: rgba(255, 255, 255, 0.2);
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 5px;
+}
+
 .iconOpen {
   transform: rotate(200deg) scale(1.2) !important;
 }
 
 .buttonForIconOpen {
   background-color: #f0f0f0 !important;
+}
+
+ul.StudentList {
+  padding-bottom: 15px;
+  div {
+    li.student {
+      margin-left: auto;
+      margin-right: auto;
+      @include flexCenter;
+      background-color: white;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+      padding: 5px;
+      width: 80%;
+    }
+  }
 }
 
 div#inputContainer {
