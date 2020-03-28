@@ -77,7 +77,7 @@
               </ul>
               <!-- Subject List -->
               <ul class="SubjectList">
-                <li v-if="_class.assignedSubjects">
+                <li v-if="!_class.assignedSubjects">
                   Keine Fächer zugewiesen
                 </li>
                 <li v-else v-for="(subject, i) in _class.assignedSubjects" :key="i">
@@ -192,10 +192,14 @@ export default {
 
     this.classes = await this.fetchClasses()
     log('classes', this.classes)
+
+    this.subjects = await this.fetchSubjects()
+    log('subjects', this.subjects)
   },
   methods: {
     ...mapActions([
-      'fetchClasses'
+      'fetchClasses',
+      'fetchSubjects'
     ]),
     getBgColor(i) {
       return this.classBgColors[i]
@@ -241,6 +245,8 @@ export default {
       }
     },
     async addSubjectToClass(subject, classIndex) {
+      log('subject', subject)
+
       const data = {
         subject,
         classID: this.classes[classIndex]._id
@@ -256,18 +262,18 @@ export default {
     filteredSubjects(c) {
       let subjects = []
       
-      this.classes[c].assignedSubjects.forEach((assignedSubject) => {
-        log(assignedSubject)
-        subjects = this.subjects.filter(function( subject ) {
-            return subject._id !== assignedSubject._id;
+      if (this.classes[c].assignedSubjects) {
+        this.classes[c].assignedSubjects.forEach((assignedSubject) => {
+          log(assignedSubject)
+          subjects = this.subjects.filter(function( subject ) {
+              return subject._id !== assignedSubject._id;
+          })
         })
-      })
 
-      // log(subjects)
-
-     
-
-      return this.subjects
+        return subjects
+      } else {
+        return this.subjects
+      }
     },
     toggleSubjectAdder() {
       this.subjAdderA = !this.subjAdderA

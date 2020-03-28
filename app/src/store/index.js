@@ -12,6 +12,7 @@ export default new Vuex.Store({
     user: {},
     classes: [],
     teachers: [],
+    subjects: [],
     rooms: [],
     updateInfo: {
       msg: null,
@@ -52,6 +53,9 @@ export default new Vuex.Store({
     },
     setRooms(state, rooms) {
       state.rooms = rooms
+    },
+    setSubjects(state, subjects) {
+      state.subjects = subjects
     },
     setUser(state, user) {
       state.user = user
@@ -98,6 +102,14 @@ export default new Vuex.Store({
       }
 
       return context.state.rooms
+    },
+    async fetchSubjects(context) {
+      if (context.state.rooms.length === 0) {
+        const subjects = await axios.get(`${config.domain}/fetch-existing-subjects`)
+        context.commit('setSubjects', subjects.data)
+      }
+
+      return context.state.subjects
     }
   },
   modules: {

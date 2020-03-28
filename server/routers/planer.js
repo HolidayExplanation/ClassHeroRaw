@@ -264,17 +264,21 @@ router.patch('/assign-subject-to-class', (req, res, next) => {
   }
 })
 
-router.post('/fetch-existing-subjects', (req, res, next) => {
+router.get('/fetch-existing-subjects', (req, res, next) => {
   auth(req, res, next, 'planer')
 }, async(req, res) => {
-  const schoolID = req.body.schoolID
+  const schoolID = req.planer.schoolID
+  log(schoolID)
 
   try {
-      const fetchedSubjects = await Subject.find({ schoolID },
-          `_id name teacherName`)
+      const fetchedSubjects = await Subject.find({ school: schoolID },
+          `_id name teacherName teacher`)
+
+      log(fetchedSubjects)
 
       return res.status(200).send(fetchedSubjects)
   } catch(err) {
+      log(err)
       return res.status(400).send(err)
   }  
 })
@@ -422,7 +426,7 @@ router.get('/get-classes', (req, res, next) => {
   const schoolID = req.planer.schoolID
 
   try {
-      const classes = await Class.find({ school: schoolID }, '_id name year halfYear classTeacherName')
+      const classes = await Class.find({ school: schoolID }, '_id name year halfYear classTeacherName assignedSubjects')
 
       return res.send(classes)
   } catch(err) {
