@@ -2,10 +2,13 @@
   <div>
     <ul id="List" @click="toggleList()">
       <li id="selected" v-if="selected">
-        <span id="selectedVal" v-if="selType !== 'Teacher'">
+        <span id="selectedVal" v-if="selType === 'Default'">
           {{ selected }}
         </span>
-        <span id="selectedVal" v-else v-show="selected">
+        <span id="selectedVal" v-if="selType === 'Subject'">
+          Fach hinzufügen
+        </span>
+        <span id="selectedVal" v-if="selType === 'Teacher'" v-show="selected">
           {{ 
             selected.username?
             `${selected.username}`:
@@ -16,12 +19,22 @@
           <i class="fas fa-chevron-down"></i>
         </div>
       </li>
-      <div v-if="listOpen && selType !== 'Teacher'">
+      <div v-if="listOpen && selType === 'Default'">
         <li class="option" 
         v-for="(option, i) in options" :key="i"
         @click="send(i)">
           <span >
             {{ option }}
+          </span>
+        </li>
+      </div>
+
+      <div v-if="listOpen && selType === 'Subject'">
+        <li class="option" 
+        v-for="(option, i) in options" :key="i"
+        @click="send(i)">
+          <span>
+            {{ `${option.teacherName} ${option.name}` }}
           </span>
         </li>
       </div>

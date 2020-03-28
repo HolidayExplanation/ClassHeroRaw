@@ -13,12 +13,12 @@
         <!-- Select Year -->
         <div id="adder_selectYear">
           <Select class="_Select" :options="years" :style="{zIndex: 300}"  
-          @optionSelected="setNewClassYear"/>
+          @optionSelected="setNewClassYear" :selType="'Default'"/>
         </div>
         <!-- Select HalfYear -->
         <div id="adder_selectHalfYear">
           <Select class="_Select" :style="{zIndex: + 300}" :options="['1. Halbjahr', '2. Halbjahr']"
-          @optionSelected="setNewClassHalfYear"/>
+          @optionSelected="setNewClassHalfYear" :selType="'Default'"/>
         </div>
        
        <div id="addClass">
@@ -63,18 +63,11 @@
 
             <div class="Subjects">
               <!-- Subject Adder -->
-              <div class="selectedItem" @click="toggleSubjectAdder()">
-                <span>Fach zum zuweisen auswählen</span>
-                <img class="dropdownArrow" :src="dropdownArrow">
+              <div class="SubjectAdder" :style="{zIndex: + 20 - c}">
+                <Select :options="filteredSubjects(c)" 
+                :selType="'Subject'"
+                @optionSelected="addSubjectToClass($event, c)"/>
               </div>
-              <ul class="SelectSubject" v-if="subjAdderA">
-                <!-- ADJUST to be a custom Selector -->
-                <li v-for="(subject, i) in filteredSubjects(c)" :key="i"
-                 @click="addSubjectToClass(subject, c)">
-                  <span class="subjectTeacherName">{{ subject.teacherName }}</span>
-                  <span class="subjectName">{{ ` ${subject.name}` }}</span>
-                </li>
-              </ul>
               <!-- Subject List -->
               <ul class="SubjectList">
                 <li v-if="!_class.assignedSubjects">
@@ -248,8 +241,6 @@ export default {
       }
     },
     async addSubjectToClass(subject, classIndex) {
-      log('subject', subject)
-
       const data = {
         subject,
         classID: this.classes[classIndex]._id
@@ -397,6 +388,17 @@ section#ClassAdder {
     display: flex; 
     justify-content:center;
     align-items: center;
+  }
+}
+
+.Subjects {
+  display: grid;
+  grid-template-columns: 2fr 5fr;
+  .SubjectAdder {
+
+  }
+  .SubjectList {
+
   }
 }
 
