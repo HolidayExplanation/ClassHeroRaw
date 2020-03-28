@@ -262,7 +262,7 @@ export default {
     filteredSubjects(c) {
       let subjects = []
       
-      if (this.classes[c].assignedSubjects) {
+      if (this.classes[c].assignedSubjects.length > 0) {
         this.classes[c].assignedSubjects.forEach((assignedSubject) => {
           log(assignedSubject)
           subjects = this.subjects.filter(function( subject ) {
