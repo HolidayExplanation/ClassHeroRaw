@@ -34,26 +34,29 @@
       <ul id="ClassList">
         <li class="Class" v-for="(_class, c) in classes" :key="c">
 
-          <!-- Change Class Name -->
-          <span class="className" :style="{backgroundColor: getBgColor(c)}">
-            {{ _class.name }}
-          </span>
-          <!-- Select Year -->
-          <span class="classYears">{{ _class.year }}</span>
-          <!-- Select HalfYear -->
-          <span class="classYears">{{ `${_class.halfYear}. Halbjahr` }}</span>
+          <div class="ClassMain">
+            <!-- Change Class Name -->
+            <span class="className" :style="{backgroundColor: getBgColor(c)}">
+              {{ _class.name }}
+            </span>
+            <!-- Select Year -->
+            <span class="classYears">{{ _class.year }}</span>
+            <!-- Select HalfYear -->
+            <span class="classYears">{{ `${_class.halfYear}. Halbjahr` }}</span>
 
-          <!-- Select Class Teacher -->
-          <Select :style="{zIndex: + 20 - c}" :options="[
-          {
-            username: _class.classTeacherUname, 
-            teacherID: _class.classTeacherID
-          }, ...teachers]" 
-          :selType="'Teacher'"/>
-           <!-- Show Entire Class Data -->
-          <button class="toggleClassDetails" @click="toggleClassDetails(c)">
-            <i class="fas fa-angle-double-down"></i>
-          </button>
+            <!-- Select Class Teacher -->
+            <Select :style="{zIndex: + 20 - c}" :options="[
+            {
+              username: _class.classTeacherUname, 
+              teacherID: _class.classTeacherID
+            }, ...teachers]" 
+            :selType="'Teacher'"/>
+            <!-- Show Entire Class Data -->
+            <button class="toggleClassDetails" @click="toggleClassDetails(c)"
+            :class="{buttonForIconOpen: _class.detailsShown}">
+              <i class="fas fa-angle-double-down" :class="{iconOpen: _class.detailsShown}"></i>
+            </button>
+          </div>
 
           <!-- Class Details -->
           <div class="ClassDetails" v-if="classes[c].detailsShown">
@@ -314,6 +317,14 @@ export default {
 @import '@/includes/scss/flexCenter';
 @import '@/includes/scss/flexCenterY';
 
+.iconOpen {
+  transform: rotate(180deg) !important;
+}
+
+.buttonForIconOpen {
+  background-color: #f0f0f0 !important;
+}
+
 @mixin KlassenbezeichnungInput($height, $width) {
   @include flexCenter;
   font-size: 19px;
@@ -411,23 +422,28 @@ ul#ClassList {
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-top: none !important;
   li.Class {
-    @include flexCenterY;
     display: grid;
-    grid-template-columns: 150px .5fr 140px 1fr .2fr;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background-color: rgb(58, 58, 58);
-    span.className {
-      @include KlassenbezeichnungInput(30px, 120px);
-      color: rgba(0, 0, 0, 0.6) !important;
+    grid-template-rows: 40px calc(100% - 40px);
+    .ClassMain {
+      @include flexCenterY;
+      display: grid;
+      grid-template-columns: 150px .5fr 140px 1fr .2fr;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: rgb(58, 58, 58);
+      span.className {
+        @include KlassenbezeichnungInput(30px, 120px);
+        color: rgba(0, 0, 0, 0.6) !important;
+      }
+      span.classYears {
+        color: white;
+        background-color: rgba(255, 255, 255, 0.1);
+        padding: 2px;
+        display: inline-block;
+        width: 80%;
+        height: 20px;
+      }
     }
-    span.classYears {
-      color: white;
-      background-color: rgba(255, 255, 255, 0.1);
-      padding: 2px;
-      display: inline-block;
-      width: 80%;
-      height: 20px;
-    }
+   
     .ClassDetails {
       width: 100%;
       background-color: sandybrown;
@@ -443,7 +459,10 @@ ul#ClassList {
   background-color: rgb(66, 142, 212);
   height: 100%;
   width: 100%;
+  outline: none;
+  transition: .5s ease;
   i {
+    transition: .5s ease;
     transform: scale(1.2);
   }
 }
