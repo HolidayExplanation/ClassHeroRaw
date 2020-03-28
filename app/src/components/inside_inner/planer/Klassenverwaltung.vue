@@ -405,29 +405,41 @@ section#ClassAdder {
 .Subjects {
   display: grid;
   grid-template-columns: 2fr 5fr;
+  padding: 7px;
   .SubjectAdder {
 
   }
   ul.SubjectList {
     li.Subject {
       margin-left: 3px;
+      margin-top: 3px;
       float: left;
+      color: #f0f0f0;
       border: 1px solid rgba(0, 0, 0, 0.1);
-      background-color: #f0f0f0;
+      background-color: #305790;
       display: grid;
       grid-template-columns: 6fr 1fr;
-      // display: inline-block;
       padding: 4px;
+      transition: .25s ease;
+      &:hover {
+        transform: scale(1.05);
+        box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.5);
+      }
       div.subjectText {
         span:nth-child(2) {
           margin-left: 7px;
           padding: 2px 5px 2px 5px;
           border-radius: 3px;
-          background-color: green;
+          background-color: rgb(56, 155, 180);
         }
       }
       i {
+        color: tomato;
         margin: 0 3px 0 0;
+        cursor: pointer;
+        &:hover {
+          color: red;
+        }
       }
     }
   }
@@ -500,7 +512,7 @@ ul#ClassList {
    
     .ClassDetails {
       width: 100%;
-      background-color: sandybrown;
+      background-color: rgb(39, 42, 47);
       display: block;
       margin-left: auto;
       margin-right: auto;
@@ -522,10 +534,10 @@ ul#ClassList {
 }
 
 section#Classes {
-  background-color: rgb(105, 105, 105);
+  // background-color: rgb(105, 105, 105);
   ul {
     li {
-      background-color: orange;
+      // background-color: orange;
     }
   }
 }
