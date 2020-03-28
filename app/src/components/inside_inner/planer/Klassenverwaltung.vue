@@ -154,7 +154,7 @@ export default {
       studentForPush: null,
       studentsForPush: [],
       pushPending: false,
-      classBgColors: ['#ea4c89', '#0057ff', '#32c766', '#f48024', '#006400']
+      classBgColors: ['#ea4c89', '#24bcd6', '#32c766', '#f48024', '#f0e10e']
     }
   },
   computed: {
