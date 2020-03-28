@@ -92,9 +92,7 @@
                   <ul>
                     <li class="tag" v-for="(student, o) in studentsForPush" :key="o">
                       <span>{{ student }}</span>
-                      <button @click="removeStudentFromPush(o)">
-                        <span>&#10005;</span>
-                      </button>
+                      <i class="fas fa-minus-circle" @click="removeStudentFromPush(o)"></i>
                     </li>
                   </ul>
                 </div>
@@ -341,6 +339,66 @@ export default {
   background-color: #f0f0f0 !important;
 }
 
+div#inputContainer {
+  overflow-y: auto;
+  max-height: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  min-width: 100%;
+  padding: 5px 0 5px 0;
+  float: left;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  background-color: rgb(69, 94, 128);
+  box-shadow: 1px 2px 6px 2px rgba(0, 0, 0, 0.1);
+  cursor: text;
+  ul {
+    margin-top: 5px;
+    float: left;
+    margin-right: 10px;
+    li.tag {
+      display: inline-block;
+      background-color:  #ffffff;
+      font-weight: bold;
+      color: rgb(58, 51, 51);
+      margin-left: 5px;
+      padding: 5px 5px 5px 5px;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 0, 0, 0.3);
+      transition: .20s ease;
+      cursor: default;
+      &:hover {
+        transform: scale(1.05);
+        box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
+      }
+      i {
+        color: tomato;
+        margin: 0 3px 0 3px;
+        cursor: pointer;
+        &:hover {
+          color: red;
+        }
+      }
+    }
+  }
+  input {
+    color: #f0f0f0;
+    background-color: rgb(69, 94, 128);
+    position: relative;
+    padding: 10px 5px 10px 15px;
+    transition: 1s ease;
+    border: none;
+    font-size: 17px;
+    width: 300px;
+    float: left;
+    &:focus {
+      outline: none;
+    }
+  }
+  input::placeholder {
+    color: rgba(255, 255, 255, 0.7)
+  }
+}
+
 @mixin KlassenbezeichnungInput($height, $width) {
   @include flexCenter;
   font-size: 19px;
@@ -406,9 +464,6 @@ section#ClassAdder {
   display: grid;
   grid-template-columns: 2fr 5fr;
   padding: 7px;
-  .SubjectAdder {
-
-  }
   ul.SubjectList {
     li.Subject {
       margin-left: 3px;
@@ -530,15 +585,6 @@ ul#ClassList {
   i {
     transition: .5s ease;
     transform: scale(1.2);
-  }
-}
-
-section#Classes {
-  // background-color: rgb(105, 105, 105);
-  ul {
-    li {
-      // background-color: orange;
-    }
   }
 }
 
