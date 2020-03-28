@@ -269,8 +269,6 @@ export default {
           assignedSubjectIDs.push(assignedSubject._id)
         })
 
-        log('ids', assignedSubjectIDs)
-
         this.subjects.forEach(subject => {
           if (!assignedSubjectIDs.includes(subject._id)) {
             filtered.push(subject)
