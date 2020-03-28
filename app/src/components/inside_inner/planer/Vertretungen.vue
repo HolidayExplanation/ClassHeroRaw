@@ -252,6 +252,18 @@ export default {
       if (mutation.type === 'setDayClicked') {
         this.dayIsClicked = state.dayIsClicked
       }
+
+      if (mutation.type === 'addTeachers') {
+        this.teachers = state.teachers
+      }
+
+      if (mutation.type === 'setRooms') {
+        this.rooms = state.rooms
+      }
+
+      if (mutation.type === 'setClasses') {
+        this.classes = state.classes
+      }
     })
 
     this.classes = await this.fetchClasses()

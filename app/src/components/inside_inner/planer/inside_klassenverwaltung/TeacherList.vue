@@ -71,7 +71,7 @@ export default {
   created() {
     this.$store.subscribe(async(mutation, state) => {
       if (mutation.type === 'addTeachers') {
-        this.teachers = state.dbTeachers
+        this.teachers = state.teachers
       }
     })
   },
