@@ -64,9 +64,11 @@
             <div class="Subjects">
               <!-- Subject Adder -->
               <div class="SubjectAdder" :style="{zIndex: + 20 - c}">
-                <Select :options="filteredSubjects(c)" 
-                :selType="'Subject'"
-                @optionSelected="addSubjectToClass($event, c)"/>
+                <keep-alive>
+                  <Select :options="filteredSubjects(c)" 
+                  :selType="'Subject'"
+                  @optionSelected="addSubjectToClass($event, c)"/>
+                </keep-alive>
               </div>
               <!-- Subject List -->
               <ul class="SubjectList">
