@@ -88,7 +88,7 @@
               <div class="StudentAdder">
                 <div id="inputContainer">
                   <input v-model="studentForPush" @keyup.enter="pushStudent()"
-                  placeholder="Vorname Name (mit Enter bestätigen)">
+                  placeholder="Schüler Vor- und Nachname (mit Enter bestätigen)">
                   <ul>
                     <li class="tag" v-for="(student, o) in studentsForPush" :key="o">
                       <span>{{ student }}</span>
@@ -106,10 +106,16 @@
               </div>
               <!-- Student List -->
               <ul class="StudentList">
-                <li v-if="_class.assignedStudents">
-                  Keine Schüler Konten in der Klasse
-                </li>
-                <li v-else>Student</li>
+                <div v-if="_class.assignedStudents.length < 1">
+                  <li>
+                    <span>Keine Schüler Konten in der Klasse</span>
+                  </li>
+                </div>
+                <div v-else>
+                  <li v-for="(student, s) in _class.assignedStudents" :key="s">
+                    <span>{{ student.name }}</span>
+                  </li>
+                </div>
               </ul>
             </div>
 
@@ -388,7 +394,7 @@ div#inputContainer {
     transition: 1s ease;
     border: none;
     font-size: 17px;
-    width: 300px;
+    width: 390px;
     float: left;
     &:focus {
       outline: none;
@@ -396,6 +402,24 @@ div#inputContainer {
   }
   input::placeholder {
     color: rgba(255, 255, 255, 0.7)
+  }
+}
+
+#downButton {
+  margin-top: 10px;
+  margin-left: 10px;
+  padding: 7px 12px 7px 12px;
+  border: none;
+  min-width: 130px;
+  max-height: 40px;
+  background-color: rgb(22, 175, 22);
+  border-radius: 4px;
+  font-size: 16px;
+  color: white;
+  box-shadow: 1px 2px 6px 2px rgba(0, 0, 0, 0.3);
+  transition: .2s ease;
+  &:hover {
+    transform: scale(1.02);
   }
 }
 
