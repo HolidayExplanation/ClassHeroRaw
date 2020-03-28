@@ -417,13 +417,20 @@ section#ClassAdder {
   background-color: lime !important;
 }
 
+::-webkit-scrollbar {
+  width: 0px;  /* Remove scrollbar space */
+  background: transparent;  /* Optional: just make scrollbar invisible */
+}
+
 ul#ClassList {
   padding: 10px;
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-top: none !important;
+  max-height: 600px;
+  overflow-y: auto;
   li.Class {
     display: grid;
-    grid-template-rows: 40px calc(100% - 40px);
+    grid-template-rows: 40px 90%;
     .ClassMain {
       @include flexCenterY;
       display: grid;
