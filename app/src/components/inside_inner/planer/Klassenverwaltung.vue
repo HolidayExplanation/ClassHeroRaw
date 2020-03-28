@@ -318,7 +318,7 @@ export default {
 @import '@/includes/scss/flexCenterY';
 
 .iconOpen {
-  transform: rotate(180deg) !important;
+  transform: rotate(200deg) scale(1.2) !important;
 }
 
 .buttonForIconOpen {
