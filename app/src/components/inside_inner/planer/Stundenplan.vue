@@ -322,6 +322,13 @@ export default {
     }
   },
   async created() {
+    this.$store.subscribe(async(mutation, state) => {
+      if (mutation.type === 'setClasses') {
+        this.classes = state.classes
+        this.transformToSelectable()
+      }
+    })
+
     this.classes = await this.fetchClasses()
 
     this.transformToSelectable()
