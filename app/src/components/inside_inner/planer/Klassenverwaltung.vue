@@ -616,7 +616,6 @@ ul#ClassList {
         height: 20px;
       }
     }
-   
     .ClassDetails {
       width: 100%;
       background-color: rgb(39, 42, 47);

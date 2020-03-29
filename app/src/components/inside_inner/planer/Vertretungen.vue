@@ -10,75 +10,79 @@
         </li>
       </div>
 
-      <!-- Vertretung -->
-      <li class="Vertretung" v-for="(vertretung, v) in vertretungen" :key="v">
-        <!-- Art -->
-        <div class="Type">
-          <Select :options="types" selType="Default"
-          @optionSelected="optionSelected($event, v, 'type')"/>
-        </div>
+      <transition-group name="slide-fade">
+        <!-- Vertretung -->
+        <li class="Vertretung" v-for="(vertretung, v) in vertretungen" :key="v">
+          <!-- Art -->
+          <div class="Type">
+            <Select :options="types" selType="Default"
+            @optionSelected="optionSelected($event, v, 'type')"/>
+          </div>
 
-        <!-- Datum -->
-        <div class="Date">
-          <span>{{ vertretung.date }}</span>
-          <img src="@/assets/icons/calendar.svg" @click="toggleCalendar(v)">
-        </div>
+          <!-- Datum -->
+          <div class="Date">
+            <span>{{ vertretung.date }}</span>
+            <img src="@/assets/icons/calendar.svg" @click="toggleCalendar(v)">
+          </div>
 
-        <!-- Stunden -->
-        <div class="Hours">
-          <!-- From -->
-          <Select :options="hourNumberList" selType="Default" id="SelectHour"
-          @optionSelected="optionSelected($event, v, 'hour', 'fHour')"/>
-          <span>&</span>
-          <!-- From -->
-          <Select :options="hourNumberList" selType="Default" id="SelectHour"
-          @optionSelected="optionSelected($event, v, 'hour', 'lHour')"/>
-        </div>
+          <!-- Stunden -->
+          <div class="Hours">
+            <!-- From -->
+            <Select :options="hourNumberList" selType="Default" id="SelectHour"
+            @optionSelected="optionSelected($event, v, 'hour', 'fHour')"/>
+            <span>&</span>
+            <!-- From -->
+            <Select :options="hourNumberList" selType="Default" id="SelectHour"
+            @optionSelected="optionSelected($event, v, 'hour', 'lHour')"/>
+          </div>
 
-        <!-- Klasse -->
-        <div class="Class">
-          <Select :options="classes" selType="Class"
-          @optionSelected="optionSelected($event, v, 'class')"/>
-        </div>
+          <!-- Klasse -->
+          <div class="Class">
+            <Select :options="classes" selType="Class"
+            @optionSelected="optionSelected($event, v, 'class')"/>
+          </div>
 
-        <!-- Lehrer und/oder Fach -->
-        <div class="Subject">
-          <div class="blurOption" v-if="showOption(v, 'Teacher')"></div>
-          
-          <Select :options="teachers" selType="Teacher" v-if="onlyTeacherSelector(v)"
-          @optionSelected="optionSelected($event, v, 'teacher')"/>
+          <!-- Lehrer und/oder Fach -->
+          <div class="Subject">
+            <div class="blurOption" v-if="showOption(v, 'Teacher')"></div>
+            
+            <Select :options="teachers" selType="Teacher" v-if="onlyTeacherSelector(v)"
+            @optionSelected="optionSelected($event, v, 'teacher')"/>
 
-          <Select :options="subjectsWithTeacher" selType="VertretungTeacher" v-else
-          @optionSelected="optionSelected($event, v, 'ver')"/>
-        </div>
+            <Select :options="subjectsWithTeacher" selType="VertretungTeacher" v-else
+            @optionSelected="optionSelected($event, v, 'ver')"/>
+          </div>
 
-        <!-- Raum -->
-        <div class="Room">
-          <div class="blurOption" v-if="showOption(v, 'Room')"></div>
-          <select v-model="vertretung.room">
-            <option>-</option>
-            <option v-for="(room, i) in rooms" :key="i">
-              {{ `${room.name} (${room.type})` }}
-            </option>
-          </select>
-        </div>
+          <!-- Raum -->
+          <div class="Room">
+            <div class="blurOption" v-if="showOption(v, 'Room')"></div>
+            <select v-model="vertretung.room">
+              <option>-</option>
+              <option v-for="(room, i) in rooms" :key="i">
+                {{ `${room.name} (${room.type})` }}
+              </option>
+            </select>
+          </div>
 
-        <!-- Info -->
-        <div class="Info">
-          <div class="blurOption" v-if="showOption(v, 'Info')"></div>
-          <input placeholder="Info Text...">
-        </div>
+          <!-- Info -->
+          <div class="Info">
+            <div class="blurOption" v-if="showOption(v, 'Info')"></div>
+            <input placeholder="Info Text...">
+          </div>
 
-        <!-- Löschen -->
-        <div class="Delete">
-          <button>del</button>
-        </div>
+          <!-- Löschen -->
+          <div class="Delete">
+            <button>del</button>
+          </div>
 
-      </li>
+        </li>
+      </transition-group>
 
       <!-- Add new Vertretung -->
       <li>
-        <button @click="addVertretung()">Add</button>
+        <button @click="addVertretung()" class="add">
+          <i class="fas fa-plus-circle"></i>
+        </button>
       </li>
     </ul>
 
@@ -288,6 +292,37 @@ export default {
 <style lang="scss" scoped>
 @import '@/includes/scss/centerXY';
 
+/* Enter and leave animations can use different */
+/* durations and timing functions.              */
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
+}
+
+button.add {
+  margin-top: 15px;
+  background-color: white;
+  height: 30px;
+  width: 30px;
+  border-radius: 100%;
+  transition: .15s ease;
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+i {
+  color: rgb(28, 194, 97);
+  border-radius: 100%;
+  transform: scale(2.5)
+}
+
 #SelectHour {
   width: 45px !important;
   // border-radius: 3px !important;
@@ -314,14 +349,15 @@ select {
 
 .TopperInfo {
   display: flex; justify-content:center; align-items: center;
-  background-color: rgb(98, 132, 160);
+  background-color: rgb(87, 90, 136);
   display: grid;
   height: 50px;
   grid-template-columns: 3fr 3fr 2.5fr 1fr 3fr 3fr 2fr 1fr;
   border-top-left-radius: 7px;
   border-top-right-radius: 7px;
+  color: #f0f0f0;
   div {
-    border: 1px solid black;
+    // border: 1px solid black;
   }
 }
 
@@ -329,11 +365,16 @@ ul#Vertretungen {
   @include centerXY;
   width: 85%;
   height: 80%;
-  background-color: white;
+  // background-color: rgb(66, 78, 98);
+  box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
   border-radius: 7px;
   li.Vertretung {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 5px;
+    color: white;
     display: flex; justify-content:center; align-items: center;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: #305790;
     display: grid;
     height: 35px;
     grid-template-columns: 3fr 3fr 2.5fr 1fr 3fr 3fr 2fr 1fr;
@@ -342,7 +383,7 @@ ul#Vertretungen {
       position: relative;
       height: 100%;
       width: 100%;
-      border: 1px solid black;
+      // border: 1px solid black;
       .blurOption {
         position: absolute;
         width: 100%;
