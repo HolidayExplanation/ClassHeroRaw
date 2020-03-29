@@ -8,6 +8,9 @@
         <span id="selectedVal" v-if="selType === 'Subject'">
           Fach hinzufügen
         </span>
+        <span id="selectedVal" v-if="selType === 'Class'">
+          {{ selected.name }}
+        </span>
         <span id="selectedVal" v-if="selType === 'Teacher'" v-show="selected">
           {{ 
             selected.username?
@@ -23,7 +26,7 @@
         <li class="option" 
         v-for="(option, i) in options" :key="i"
         @click="send(i)">
-          <span >
+          <span>
             {{ option }}
           </span>
         </li>
@@ -35,6 +38,16 @@
         @click="send(i)">
           <span>
             {{ `${option.teacherName} ${option.name}` }}
+          </span>
+        </li>
+      </div>
+
+      <div v-if="listOpen && selType === 'Class'">
+        <li class="option" 
+        v-for="(option, i) in options" :key="i"
+        @click="send(i)">
+          <span>
+            {{ option.name }}
           </span>
         </li>
       </div>
@@ -82,6 +95,7 @@ export default {
     }
   },
   mounted() {
+    log(this.options)
     this.selected = this.options[0]
   }
 }

@@ -1,63 +1,41 @@
 <template>
   <div>
     <div id="blurVertretungen" v-if="!dayIsClicked"></div>
-    <ul id="Vertretungen">
-      <li class="TopperInfo">
-        <div>Art</div>
-        <div>Datum</div>
-        <div>Stunden</div>
-        <div>Klasse</div>
-        <div>Fach</div>
-        <div>Raum</div>
-        <div>Info</div>
-        <div></div>
-      </li>
-      <li class="Vertretung" v-for="(vertretung, v) in vertretungen" :key="v">
 
+    <ul id="Vertretungen">
+      <!-- Topper Info -->
+      <div class="TopperInfo">
+        <li v-for="(topperInfo, t) in topperInfos" :key="t">
+          <div>{{ topperInfo }}</div>
+        </li>
+      </div>
+
+      <!-- Vertretung -->
+      <li class="Vertretung" v-for="(vertretung, v) in vertretungen" :key="v">
         <!-- Art -->
         <div class="Type">
-          <select v-model="vertretung.type">
-            <option v-for="(type, i) in types" :key="i">
-              {{ type }}
-            </option>
-          </select>
+          <Select :options="types" selType="Default"
+          @optionSelected="typeSelected($event, v)"/>
         </div>
-        
         <!-- Datum -->
         <div class="Date">
           <span>{{ vertretung.date }}</span>
           <img src="@/assets/icons/calendar.svg" @click="toggleCalendar(v)">
         </div>
-
         <!-- Stunden -->
         <div class="Hours">
           <!-- From -->
-          <select v-model="vertretung.fHour">
-            <option>-</option>
-            <option v-for="num in 12" :key="num">
-              {{ num }}
-            </option>
-          </select>
-
+          <Select :options="hourNumberList" selType="Default" id="SelectHour"
+          @optionSelected="hourSelected($event, 'fHour', v)"/>
           <span>&</span>
-
           <!-- From -->
-          <select v-model="vertretung.lHour">
-            <option>-</option>
-            <option v-for="num in 12" :key="num">
-              {{ num }}
-            </option>
-          </select>
+          <Select :options="hourNumberList" selType="Default" id="SelectHour"
+          @optionSelected="hourSelected($event, 'lHour', v)"/>
         </div>
-
         <!-- Klasse -->
         <div class="Class">
-          <select v-model="vertretung.class">
-            <option>-</option>
-            <option v-for="(_class, i) in classes" :key="i">
-              {{ _class.name }}
-            </option>
-          </select>
+          <Select :options="classes" selType="Class"
+          @optionSelected="classSelected($event, v)"/>
         </div>
 
         <!-- Lehrer und/oder Fach -->
@@ -125,13 +103,15 @@ import config from '@/includes/js/config'
 import axios from 'axios'
 import { FunctionalCalendar } from 'vue-functional-calendar';
 Vue.use(FunctionalCalendar)
+import Select from '@/components/global/Select'
 const log = console.log
 
 export default {
   name: 'Vertretungen',
-  components: { FunctionalCalendar },
+  components: { FunctionalCalendar, Select },
   data() {
     return {
+      topperInfos: ['Art', 'Datum', 'Stunden', 'Klasse', 'Fach', 'Raum', 'Info', ''],
       vertretungen: [],
       types: ['Vertretung', 'Entfall', 'Raumänderung', 'Info', 'Betreuung', 'Vert. ohne Lehrer'],
       loaded: [],
@@ -158,6 +138,16 @@ export default {
     }
   },
   computed: {
+    hourNumberList() {
+      let list =  [...Array(10).keys()]
+      let newList = list.map(x => {
+        return ++x
+      })
+
+      newList.unshift('-')
+
+      return newList
+    },
     getTodaysDate() {
       const date = new Date()
       const day = date.getDay()+1
@@ -178,6 +168,16 @@ export default {
       'fetchTeachers',
       'fetchRooms'
     ]),
+    classSelected(_class, i) {
+      this.vertretungen[i].class = _class
+    },
+    typeSelected(val, i) {
+      this.vertretungen[i].type = val
+    },
+    hourSelected(val, hourType, i) {
+      if (hourType === 'fHour') this.vertretungen[i].fHour = val
+      else this.vertretungen[i].lHour = val
+    },
     onlyTeacherSelector(i) {
       if (this.vertretungen[i].type === 'Betreuung') {
         return true
@@ -276,6 +276,11 @@ export default {
 <style lang="scss" scoped>
 @import '@/includes/scss/centerXY';
 
+#SelectHour {
+  width: 45px !important;
+  // border-radius: 3px !important;
+}
+
 select {
   border-radius: 4px;
   border: 1px solid rgba(0, 0, 0, 0.2);
@@ -312,7 +317,7 @@ ul#Vertretungen {
   @include centerXY;
   width: 85%;
   height: 80%;
-  background-color: transparent;
+  background-color: white;
   border-radius: 7px;
   li.Vertretung {
     display: flex; justify-content:center; align-items: center;
