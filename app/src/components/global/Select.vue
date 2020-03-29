@@ -11,6 +11,10 @@
         <span id="selectedVal" v-if="selType === 'Class'">
           {{ selected.name }}
         </span>
+        <span id="selectedVal" v-if="selType === 'VertretungTeacher'">
+          {{  `${selected.teacherUname} ${selected.name.substring(0, 3)}` }}
+        </span>
+        
         <span id="selectedVal" v-if="selType === 'Teacher'" v-show="selected">
           {{ 
             selected.username?
@@ -32,12 +36,14 @@
         </li>
       </div>
 
-      <div v-if="listOpen && selType === 'Subject'">
+      <div v-if="listOpen && 
+      (selType === 'Subject' || selType === 'VertretungTeacher')">
         <li class="option" 
         v-for="(option, i) in options" :key="i"
         @click="send(i)">
-          <span>
-            {{ `${option.teacherName} ${option.name}` }}
+          <span class="TeacherSubject">
+            <span>{{ option.teacherUname }}</span>
+            <span class="subject">{{ option.name.substring(0, 3) }}</span>
           </span>
         </li>
       </div>
@@ -51,6 +57,7 @@
           </span>
         </li>
       </div>
+
 
       <div v-else-if="listOpen && selType === 'Teacher'">
         <li class="option" 
@@ -138,6 +145,27 @@ ul#List {
     &:hover {
       background-color: #32c766;
     }
+  }
+}
+
+span.TeacherSubject {
+  display: grid;
+  grid-template-columns: calc(100% - 40px) 40px;
+  span {
+    display: flex;
+    justify-content: start;
+    width: 100%;
+  }
+  .subject {
+    border: 1px solid black;
+    @include flexCenter;
+    background-color: #506694;
+    color: white;
+    padding: 2px;
+    font-size: 14px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    margin-left: 5px;
+    width: 30px !important;
   }
 }
 

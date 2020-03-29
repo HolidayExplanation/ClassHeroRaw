@@ -38,6 +38,10 @@ const classSchema = new mongoose.Schema({
             teacherName: {
                 type: String,
                 required: true
+            },
+            teacherUname: {
+                type: String,
+                required: true
             }
         }
     ],

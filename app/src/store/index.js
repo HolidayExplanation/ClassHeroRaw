@@ -54,6 +54,16 @@ export default new Vuex.Store({
     setRooms(state, rooms) {
       state.rooms = rooms
     },
+    addSubject(state, subject) {
+      state.subjects.unshift(subject)
+    },
+    removeSubject(state, subject) {
+      let filtered = state.subjects.filter(function( obj ) {
+        return obj._id !== subject._id
+      })
+
+      state.subjects = filtered
+    },
     setSubjects(state, subjects) {
       state.subjects = subjects
     },

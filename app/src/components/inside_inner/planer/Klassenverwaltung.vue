@@ -77,7 +77,7 @@
                 </li>
                 <li class="Subject" v-else v-for="(subject, i) in _class.assignedSubjects" :key="i">
                   <div class="subjectText">
-                    <span>{{ adjustedTeacherName(subject) }}</span>
+                    <span>{{ subject.teacherUname }}</span>
                     <span>{{ subject.name.substring(0, 3) }}</span>
                   </div>
                   <i class="fas fa-minus-circle"></i>
@@ -285,9 +285,10 @@ export default {
             filtered.push(subject)
           }
         })
-
+        
         return filtered
       } else {
+        log('filtered', this.subjects)
         return this.subjects
       }
     },

@@ -89,12 +89,15 @@ export default {
           let response = await axios.post(`${config.domain}/create-subject`, {
             name: this.subjectName[index],
             teacherID: this.teachers[index]._id,
-            teacherName: this.teachers[index].name
+            teacherName: this.teachers[index].name,
+            teacherUname: this.teachers[index].username
           }) 
 
           const subject =  {_id: response.data._id, name: this.subjectName[index]}
 
           this.teachers[index].subjects.push(subject)
+
+          this.$store.commit('addSubject', subject)
 
           this.subjectName[index] = null
 
@@ -111,6 +114,8 @@ export default {
 
       if (response.status === 200 && response.data.deletedCount === 1) { 
         this.teachers[teacherIndex].subjects.splice(subjectIndex, 1)
+        
+        this.$store.commit('removeSubject', subject)
       }
 
       this.$forceUpdate()

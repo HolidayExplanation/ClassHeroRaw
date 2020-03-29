@@ -136,7 +136,8 @@ router.post('/create-subject', (req, res, next) => {
           name: req.body.name,
           teacher: req.body.teacherID,
           school: req.planer.schoolID,
-          teacherName: req.body.teacherName
+          teacherName: req.body.teacherName,
+          teacherUname: req.body.teacherUname
       })
       await subject.save()
 
@@ -285,7 +286,7 @@ router.get('/fetch-existing-subjects', (req, res, next) => {
 
   try {
       const fetchedSubjects = await Subject.find({ school: schoolID },
-          `_id name teacherName teacher`)
+          `_id name teacherName teacher teacherUname`)
 
       log(fetchedSubjects)
 

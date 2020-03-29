@@ -44,15 +44,12 @@
         <!-- Lehrer und/oder Fach -->
         <div class="Subject">
           <div class="blurOption" v-if="showOption(v, 'Teacher')"></div>
-          <select class="withoutSubj" v-if="onlyTeacherSelector(v)">
-            <option>-</option>
-             <Select :options="teachers" selType="Teacher"
-            @optionSelected="optionSelected($event, v, 'teacher')"/>
-          </select>
-          <ul class="withSubject" v-if="!onlyTeacherSelector(v)">
-            <Select :options="teachers" selType="Teacher"
-            @optionSelected="optionSelected($event, v, 'teacher')"/>
-          </ul>
+          
+          <Select :options="teachers" selType="Teacher" v-if="onlyTeacherSelector(v)"
+          @optionSelected="optionSelected($event, v, 'teacher')"/>
+
+          <Select :options="subjectsWithTeacher" selType="VertretungTeacher" v-else
+          @optionSelected="optionSelected($event, v, 'ver')"/>
         </div>
 
         <!-- Raum -->
@@ -136,6 +133,21 @@ export default {
     }
   },
   computed: {
+    subjectsWithTeacher() {
+      let subjectsWithTeacher = []
+      this.teachers.forEach(teacher => {
+        teacher.subjects.forEach(subject => {
+          subjectsWithTeacher.push({
+            teacherID: teacher._id,
+            teacherUname: teacher.username,
+            _id: subject._id,
+            name: subject.name
+          })
+        })
+      })
+
+      return subjectsWithTeacher
+    },
     hourNumberList() {
       let list =  [...Array(10).keys()]
       let newList = list.map(x => {
