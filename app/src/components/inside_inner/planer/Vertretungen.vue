@@ -15,7 +15,7 @@
         <!-- Art -->
         <div class="Type">
           <Select :options="types" selType="Default"
-          @optionSelected="typeSelected($event, v)"/>
+          @optionSelected="optionSelected($event, v, 'type')"/>
         </div>
         <!-- Datum -->
         <div class="Date">
@@ -26,16 +26,16 @@
         <div class="Hours">
           <!-- From -->
           <Select :options="hourNumberList" selType="Default" id="SelectHour"
-          @optionSelected="hourSelected($event, 'fHour', v)"/>
+          @optionSelected="optionSelected($event, v, 'hour', 'fHour')"/>
           <span>&</span>
           <!-- From -->
           <Select :options="hourNumberList" selType="Default" id="SelectHour"
-          @optionSelected="hourSelected($event, 'lHour', v)"/>
+          @optionSelected="optionSelected($event, v, 'hour', 'lHour')"/>
         </div>
         <!-- Klasse -->
         <div class="Class">
           <Select :options="classes" selType="Class"
-          @optionSelected="classSelected($event, v)"/>
+          @optionSelected="optionSelected($event, v, 'class')"/>
         </div>
 
         <!-- Lehrer und/oder Fach -->
@@ -48,13 +48,8 @@
             </option>
           </select>
           <ul class="withSubject" v-if="!onlyTeacherSelector(v)">
-            <li v-for="(teacher, i) in teachers" :key="i">
-              <ul>
-                <li v-for="(subj, s) in teacher.subjects" :key="s">
-                  {{ `${teacher.name} ${subj.name}` }}
-                </li>
-              </ul>
-            </li>
+            <Select :options="teachers" selType="Teacher"
+            @optionSelected="optionSelected($event, v, 'teacher')"/>
           </ul>
         </div>
 
@@ -172,11 +167,19 @@ export default {
       this.vertretungen[i].class = _class
     },
     typeSelected(val, i) {
-      this.vertretungen[i].type = val
+      
     },
-    hourSelected(val, hourType, i) {
-      if (hourType === 'fHour') this.vertretungen[i].fHour = val
-      else this.vertretungen[i].lHour = val
+    optionSelected(val, i, type, hourType) {
+      if (type === 'hour') {
+        if (hourType === 'fHour') this.vertretungen[i].fHour = val
+        else this.vertretungen[i].lHour = val
+      } else if (type === 'type') {
+        this.vertretungen[i].type = val
+      } else if (type === 'class') {
+        this.vertretungen[i].class = val
+      } else if (type === 'teacher') {
+        this.vertretungen[i].teacher = val
+      }
     },
     onlyTeacherSelector(i) {
       if (this.vertretungen[i].type === 'Betreuung') {
