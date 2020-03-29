@@ -17,11 +17,13 @@
           <Select :options="types" selType="Default"
           @optionSelected="optionSelected($event, v, 'type')"/>
         </div>
+
         <!-- Datum -->
         <div class="Date">
           <span>{{ vertretung.date }}</span>
           <img src="@/assets/icons/calendar.svg" @click="toggleCalendar(v)">
         </div>
+
         <!-- Stunden -->
         <div class="Hours">
           <!-- From -->
@@ -32,6 +34,7 @@
           <Select :options="hourNumberList" selType="Default" id="SelectHour"
           @optionSelected="optionSelected($event, v, 'hour', 'lHour')"/>
         </div>
+
         <!-- Klasse -->
         <div class="Class">
           <Select :options="classes" selType="Class"
@@ -43,9 +46,8 @@
           <div class="blurOption" v-if="showOption(v, 'Teacher')"></div>
           <select class="withoutSubj" v-if="onlyTeacherSelector(v)">
             <option>-</option>
-            <option v-for="(teacher, i) in teachers" :key="i">
-              {{ teacher.name }}
-            </option>
+             <Select :options="teachers" selType="Teacher"
+            @optionSelected="optionSelected($event, v, 'teacher')"/>
           </select>
           <ul class="withSubject" v-if="!onlyTeacherSelector(v)">
             <Select :options="teachers" selType="Teacher"
@@ -76,6 +78,7 @@
         </div>
 
       </li>
+
       <!-- Add new Vertretung -->
       <li>
         <button @click="addVertretung()">Add</button>
@@ -163,12 +166,6 @@ export default {
       'fetchTeachers',
       'fetchRooms'
     ]),
-    classSelected(_class, i) {
-      this.vertretungen[i].class = _class
-    },
-    typeSelected(val, i) {
-      
-    },
     optionSelected(val, i, type, hourType) {
       if (type === 'hour') {
         if (hourType === 'fHour') this.vertretungen[i].fHour = val
