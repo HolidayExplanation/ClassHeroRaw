@@ -8,7 +8,7 @@
         <span id="selectedVal" v-if="selType === 'Subject'">
           {{ options.length !== 0 ? 
           'Fach hinzufügen':
-          'Alle Fächer wurden hinzugefügt' 
+          'Alle Fächer bereits hinzugefügt' 
           }}
         </span>
         <span id="selectedVal" v-if="selType === 'Class'">
@@ -116,6 +116,7 @@ export default {
 @import '@/includes/scss/flexCenter';
 
 .unavailable {
+  padding: 3px !important;
   color: #7c7676 !important;
   background-color: rgb(58, 61, 61) !important;
 }
