@@ -1,12 +1,15 @@
 <template>
   <div>
     <ul id="List" @click="toggleList()">
-      <li id="selected" v-if="selected">
+      <li id="selected" :class="{unavailable: options.length === 0}">
         <span id="selectedVal" v-if="selType === 'Default'">
           {{ selected }}
         </span>
         <span id="selectedVal" v-if="selType === 'Subject'">
-          Fach hinzufügen
+          {{ options.length !== 0 ? 
+          'Fach hinzufügen':
+          'Alle Fächer wurden hinzugefügt' 
+          }}
         </span>
         <span id="selectedVal" v-if="selType === 'Class'">
           {{ selected.name }}
@@ -58,7 +61,6 @@
         </li>
       </div>
 
-
       <div v-else-if="listOpen && selType === 'Teacher'">
         <li class="option" 
       v-for="(option, i) in options" :key="i"
@@ -68,6 +70,7 @@
         </span>
       </li>
       </div>
+
     </ul>
   </div>
 </template>
@@ -111,6 +114,11 @@ export default {
 <style lang="scss" scoped>
 @import '@/includes/scss/flexCenterY';
 @import '@/includes/scss/flexCenter';
+
+.unavailable {
+  color: #7c7676 !important;
+  background-color: rgb(58, 61, 61) !important;
+}
 
 ul#List {
   height: 30px;

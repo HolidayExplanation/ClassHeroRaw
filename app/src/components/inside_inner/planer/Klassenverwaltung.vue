@@ -175,8 +175,6 @@ export default {
   async created() {
     this.teachers = await this.$store.dispatch('fetchTeachers')
 
-    log("teachers",this.teachers)
-
     this.teachers.forEach((teacher) => {
       if (teacher.subjects.length > 0) {
         teacher.subjects.forEach((subject) => {
@@ -288,7 +286,6 @@ export default {
         
         return filtered
       } else {
-        log('filtered', this.subjects)
         return this.subjects
       }
     },
