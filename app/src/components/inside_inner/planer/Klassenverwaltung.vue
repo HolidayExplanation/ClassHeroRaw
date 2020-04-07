@@ -539,7 +539,7 @@ section#ClassAdder {
       }
       i {
         color: tomato;
-        margin: 0 3px 0 0;
+        margin: 0 3px 0 4px;
         cursor: pointer;
         &:hover {
           color: red;
