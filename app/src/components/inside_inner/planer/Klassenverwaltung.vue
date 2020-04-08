@@ -116,7 +116,8 @@
                 <div v-else>
                   <li class="student" v-for="(student, s) in _class.assignedStudents" :key="s">
                     <span>{{ `${student.name} (${student.username})` }}</span>
-                    <i class="fas fa-archive" @click="archiveStudent(student)"></i>
+                    <i class="fas fa-archive" @click="archiveStudent(student)"
+                    :class="{iconArchived: student.archived}"></i>
                   </li>
                 </div>
               </ul>
@@ -349,6 +350,10 @@ export default {
 @import '@/includes/scss/flexCenter';
 @import '@/includes/scss/flexCenterY';
 
+.iconArchived {
+  background-color: yellow !important;
+}
+
 li.noStudentsFound {
   @include flexCenter;
   color: #f0f0f0;
@@ -380,8 +385,9 @@ ul.StudentList {
       padding: 5px;
       width: 80%;
       i {
-        color: #703535;
+        color: rgba(0, 0, 0, 0.5);
         position: absolute;
+        border: 1px solid rgba(0, 0, 0, 0.3);
         background-color: tomato;
         padding: 4px;
         border-radius: 2px;
@@ -389,7 +395,7 @@ ul.StudentList {
         right: 10px;
         cursor: pointer;
         &:hover {
-          color: #471717;
+          color: rgba(0, 0, 0, 0.7);
         }
       }
     }
