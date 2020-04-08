@@ -116,7 +116,7 @@
                 <div v-else>
                   <li class="student" v-for="(student, s) in _class.assignedStudents" :key="s">
                     <span>{{ `${student.name} (${student.username})` }}</span>
-                    <i class="fas fa-archive" @click="removeStudentFromPush(o)"></i>
+                    <i class="fas fa-archive" @click="archiveStudent(student)"></i>
                   </li>
                 </div>
               </ul>
@@ -203,6 +203,17 @@ export default {
       'fetchClasses',
       'fetchSubjects'
     ]),
+    async archiveStudent(student) {
+      const response = await axios.patch(`${config.domain}/archive-student`, {
+        studentID: student._id
+      })
+
+      if (response.status === 200) {
+        this.setInfo('Schüler archiviert', 'good')
+      } else {
+        this.setInfo('Fehler. Bitte versuchen Sie es erneut.', 'bad')
+      }
+    },
     adjustedTeacherName(subject) {
       const name = subject.teacherName.split(' ')
       const fname = name[0].charAt(0)

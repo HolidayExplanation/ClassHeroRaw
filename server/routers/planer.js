@@ -607,4 +607,23 @@ router.post('/update-schedule', (req, res, next) => {
   }
 })
 
+router.patch('/archive-student', (req, res, next) => {
+  auth(req, res, next, 'planer')
+}, async(req, res) => {
+  const studentID = req.body.studentID
+
+  try {
+    await Student.updateOne(
+      { _id: studentID }, 
+      { 
+        archived: true
+      }
+    )
+
+    return res.send()
+  } catch(err) {
+    return res.send(err)
+  }
+})
+
 module.exports = router
