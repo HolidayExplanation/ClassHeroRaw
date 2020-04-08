@@ -80,7 +80,7 @@
                     <span>{{ subject.teacherUname }}</span>
                     <span>{{ subject.name.substring(0, 3) }}</span>
                   </div>
-                  <i class="fas fa-minus-circle"></i>
+                  <i class="fas fa-minus-circle" @click="removeSubjectFromClass(c, subject._id)"></i>
                 </li>
               </ul>
             </div>
@@ -116,7 +116,7 @@
                 <div v-else>
                   <li class="student" v-for="(student, s) in _class.assignedStudents" :key="s">
                     <span>{{ `${student.name} (${student.username})` }}</span>
-                    <i class="fas fa-archive" @click="archiveStudent(student)"
+                    <i class="fas fa-archive" @click="archiveStudent(student._id)"
                     :class="{iconArchived: student.archived}"></i>
                   </li>
                 </div>
@@ -204,13 +204,33 @@ export default {
       'fetchClasses',
       'fetchSubjects'
     ]),
-    async archiveStudent(student) {
-      const response = await axios.patch(`${config.domain}/archive-student`, {
-        studentID: student._id
+    async removeSubjectFromClass(i, subjectID) {
+      const response = await axios.patch(`${config.domain}/remove-subject-from-class`, {
+        classID: this.classes[i]._id,
+        subjectID
       })
 
       if (response.status === 200) {
-        this.setInfo('Schüler archiviert', 'good')
+        this.setInfo('Fach entfernt!', 'good')
+
+        let filteredSubjects = []
+        this.classes[i].assignedSubjects.forEach(subject => {
+          if (subject._id != subjectID) {
+            filteredSubjects.push(subject)
+          }
+        })
+
+        this.classes[i].assignedSubjects = filteredSubjects
+
+      } else {
+        this.setInfo('Fehler. Bitte versuchen Sie es erneut.', 'bad')
+      }
+    },
+    async archiveStudent(studentID) {
+      const response = await axios.patch(`${config.domain}/archive-student`, {studentID})
+
+      if (response.status === 200) {
+        this.setInfo('Schüler archiviert!', 'good')
       } else {
         this.setInfo('Fehler. Bitte versuchen Sie es erneut.', 'bad')
       }

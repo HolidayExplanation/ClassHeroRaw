@@ -626,4 +626,36 @@ router.patch('/archive-student', (req, res, next) => {
   }
 })
 
+router.patch('/remove-subject-from-class', (req, res, next) => {
+  auth(req, res, next, 'planer')
+}, async(req, res) => {
+  const classID = req.body.classID
+  const subjectID = req.body.subjectID
+
+  let subjects = await Class.findById(classID, {_id: false, assignedSubjects: true})
+  subjects = subjects.assignedSubjects
+// log("subjects", subjects.assignedSubjects)
+
+  // Remove Subject
+  let filteredSubjects = []
+  subjects.forEach(subject => {
+    if (subject._id != subjectID) {
+      filteredSubjects.push(subject)
+    }
+  })
+
+  try {
+    await Class.updateOne(
+      { _id: classID }, 
+      { 
+        assignedSubjects: filteredSubjects
+      }
+    )
+
+    return res.send()
+  } catch(err) {
+    return res.send(err)
+  }
+})
+
 module.exports = router
