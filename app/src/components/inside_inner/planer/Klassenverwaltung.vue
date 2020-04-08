@@ -116,6 +116,7 @@
                 <div v-else>
                   <li class="student" v-for="(student, s) in _class.assignedStudents" :key="s">
                     <span>{{ `${student.name} (${student.username})` }}</span>
+                    <i class="fas fa-archive" @click="removeStudentFromPush(o)"></i>
                   </li>
                 </div>
               </ul>
@@ -359,6 +360,7 @@ ul.StudentList {
   padding-bottom: 15px;
   div {
     li.student {
+      position: relative;
       margin-left: auto;
       margin-right: auto;
       @include flexCenter;
@@ -366,6 +368,19 @@ ul.StudentList {
       border-bottom: 1px solid rgba(0, 0, 0, 0.3);
       padding: 5px;
       width: 80%;
+      i {
+        color: #703535;
+        position: absolute;
+        background-color: tomato;
+        padding: 4px;
+        border-radius: 2px;
+        margin-left: 20px;
+        right: 10px;
+        cursor: pointer;
+        &:hover {
+          color: #471717;
+        }
+      }
     }
   }
 }
