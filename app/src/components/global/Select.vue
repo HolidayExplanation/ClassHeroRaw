@@ -63,12 +63,12 @@
 
       <div v-else-if="listOpen && selType === 'Teacher'">
         <li class="option" 
-      v-for="(option, i) in options" :key="i"
-      @click="send(i)">
-        <span >
-          {{ option.username }}
-        </span>
-      </li>
+        v-for="(option, i) in options" :key="i"
+        @click="send(i)">
+          <span >
+            {{ option.username }}
+          </span>
+        </li>
       </div>
 
     </ul>
@@ -106,6 +106,7 @@ export default {
   },
   mounted() {
     log(this.options)
+    
     this.selected = this.options[0]
   }
 }
